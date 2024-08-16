@@ -1,0 +1,32 @@
+# Build outputs
+/bin
+/obj
+out/
+/bin/Debug
+/bin/Release
+/obj/Debug
+/obj/Release
+
+# NuGet packages
+**/packages/*
+**/*.nupkg
+*.nupkg
+
+# IDE-specific files
+*.sln.ide
+.vscode/
+.idea/
+*.user
+*.vs/
+
+# Logs
+*.log
+logs/
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+
+# Documentation
+docs/
