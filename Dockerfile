@@ -21,4 +21,4 @@ COPY --from=build /app/out .
 
 ENV ASPNETCORE_URLS=http://*:80
 
-CMD dotnet App.dll
+CMD dotnet RelationshipAnalysis.dll
