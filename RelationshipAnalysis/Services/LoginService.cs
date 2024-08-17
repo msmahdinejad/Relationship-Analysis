@@ -25,7 +25,7 @@ public class LoginService(
 
         if (user == null || !passwordVerifier.VerifyPasswordHash(loginModel.Password, user.PasswordHash))
         {
-            result.Data = new MessageDto("Login failed!");
+            result.Data = new MessageDto(Resources.LoginFailedMessage);
             result.StatusCode = StatusCodeType.Unauthorized;
             return result;
         }
@@ -33,7 +33,7 @@ public class LoginService(
         var token = jwtTokenGenerator.GenerateJwtToken(user);
         cookieSetter.SetCookie(response, token);
 
-        result.Data = new MessageDto("Login was successful!");
+        result.Data = new MessageDto(Resources.SuccessfulLoginMessage);
         return result;
     }
 }

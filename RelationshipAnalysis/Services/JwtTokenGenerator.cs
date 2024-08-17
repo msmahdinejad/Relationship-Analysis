@@ -25,7 +25,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     {
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, user.Username)
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
 
         user.UserRoles.ToList().ForEach(ur =>

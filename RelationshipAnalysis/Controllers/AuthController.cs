@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RelationshipAnalysis.Context;
+using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.DTO;
 using RelationshipAnalysis.Services.Abstractions;
 using RelationshipAnalysis.Settings.JWT;
@@ -23,8 +24,8 @@ public class AuthController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginDto loginModel)
     {
-        var responce = await _loginService.LoginAsync(loginModel, Response);
+        var response = await _loginService.LoginAsync(loginModel, Response);
 
-        return StatusCode((int)responce.StatusCode, responce.Data);
+        return StatusCode((int)response.StatusCode, response.Data);
     }
 }

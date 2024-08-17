@@ -34,6 +34,7 @@ public class JwtTokenGeneratorTests
         // Arrange
         var user = new User
         {
+            Id = 1,
             Username = "testuser",
             UserRoles = new List<UserRole>
             {
@@ -46,7 +47,7 @@ public class JwtTokenGeneratorTests
         {
             Subject = new ClaimsIdentity(new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, "1"),
                 new Claim(ClaimTypes.Role, "Admin")
             }),
             Expires = DateTime.UtcNow.AddMinutes(_jwtSettings.ExpireMinutes),

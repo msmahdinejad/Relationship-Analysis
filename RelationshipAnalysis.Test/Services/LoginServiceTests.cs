@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using RelationshipAnalysis.Context;
@@ -92,7 +91,7 @@ public class LoginServiceTests
 
         // Assert
         Assert.Equal(StatusCodeType.Unauthorized, result.StatusCode);
-        Assert.Equal("Login failed!", result.Data.Message);
+        Assert.Equal("Login Failed!", result.Data.Message);
     }
 
     [Fact]
@@ -108,6 +107,6 @@ public class LoginServiceTests
 
         // Assert
         Assert.Equal(StatusCodeType.Unauthorized, result.StatusCode);
-        Assert.Equal("Login failed!", result.Data.Message);
+        Assert.Equal("Login Failed!", result.Data.Message);
     }
 }

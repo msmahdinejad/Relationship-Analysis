@@ -23,7 +23,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             }
 
 
-            services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase(_databaseName); });
+            services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase(_databaseName).UseLazyLoadingProxies(); });
 
 
             var serviceProvider = services.BuildServiceProvider();
@@ -59,14 +59,16 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         var userRole = new UserRole
         {
             Id = 1,
+            RoleId = 1,
             Role = role,
+            UserId = 1,
             User = user
         };
+        dbContext.UserRoles.Add(userRole);
         user.UserRoles.Add(userRole);
         role.UserRoles.Add(userRole);
         dbContext.Users.Add(user);
         dbContext.Roles.Add(role);
-        dbContext.UserRoles.Add(userRole);
         dbContext.SaveChanges();
     }
 }
