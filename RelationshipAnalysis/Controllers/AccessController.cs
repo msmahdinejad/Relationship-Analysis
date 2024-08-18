@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RelationshipAnalysis.Services.Abstractions;
+using RelationshipAnalysis.Services.AccessServices.Abstraction;
 
 namespace RelationshipAnalysis.Controllers;
 

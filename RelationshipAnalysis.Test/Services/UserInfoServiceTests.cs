@@ -3,8 +3,10 @@ using NSubstitute;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Models;
+using RelationshipAnalysis.Models.Auth;
 using RelationshipAnalysis.Services;
-using RelationshipAnalysis.Services.Abstractions;
+using RelationshipAnalysis.Services.AdminPanelServices.Abstraction;
+using RelationshipAnalysis.Services.UserPanelServices;
 
 namespace RelationshipAnalysis.Test.Services
 {

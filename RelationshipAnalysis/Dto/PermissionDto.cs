@@ -1,4 +1,4 @@
-﻿namespace RelationshipAnalysis.DTO;
+﻿namespace RelationshipAnalysis.Dto;
 
 public class PermissionDto
 {

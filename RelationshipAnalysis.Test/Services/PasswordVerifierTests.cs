@@ -1,6 +1,7 @@
 ﻿using Moq;
 using RelationshipAnalysis.Services;
-using RelationshipAnalysis.Services.Abstractions;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices.Abstraction;
 
 namespace RelationshipAnalysis.Test.Services;
 

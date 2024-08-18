@@ -5,7 +5,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Moq;
 using RelationshipAnalysis.Models;
+using RelationshipAnalysis.Models.Auth;
 using RelationshipAnalysis.Services;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices;
 using RelationshipAnalysis.Settings.JWT;
 
 namespace RelationshipAnalysis.Test.Services;

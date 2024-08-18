@@ -1,4 +1,5 @@
 ﻿using RelationshipAnalysis.Services;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices;
 
 namespace RelationshipAnalysis.Test.Services;
 

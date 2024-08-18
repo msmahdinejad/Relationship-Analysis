@@ -24,7 +24,7 @@ namespace RelationshipAnalysis.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("RelationshipAnalysis.Models.Role", b =>
+            modelBuilder.Entity("RelationshipAnalysis.Models.Auth.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,10 +43,13 @@ namespace RelationshipAnalysis.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("RelationshipAnalysis.Models.User", b =>
+            modelBuilder.Entity("RelationshipAnalysis.Models.Auth.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -78,10 +81,16 @@ namespace RelationshipAnalysis.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RelationshipAnalysis.Models.UserRole", b =>
+            modelBuilder.Entity("RelationshipAnalysis.Models.Auth.UserRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -99,20 +108,215 @@ namespace RelationshipAnalysis.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId", "RoleId")
+                        .IsUnique();
 
                     b.ToTable("UserRoles");
                 });
 
-            modelBuilder.Entity("RelationshipAnalysis.Models.UserRole", b =>
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.Edge", b =>
                 {
-                    b.HasOne("RelationshipAnalysis.Models.Role", "Role")
+                    b.Property<int>("EdgeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EdgeId"));
+
+                    b.Property<int>("EdgeCategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EdgeDestinationNodeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EdgeSourceNodeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("EdgeUniqueString")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("EdgeId");
+
+                    b.HasIndex("EdgeDestinationNodeId");
+
+                    b.HasIndex("EdgeSourceNodeId");
+
+                    b.HasIndex("EdgeCategoryId", "EdgeUniqueString")
+                        .IsUnique();
+
+                    b.ToTable("Edges");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.EdgeAttribute", b =>
+                {
+                    b.Property<int>("EdgeAttributeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EdgeAttributeId"));
+
+                    b.Property<string>("EdgeAttributeName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("EdgeAttributeId");
+
+                    b.HasIndex("EdgeAttributeName")
+                        .IsUnique();
+
+                    b.ToTable("EdgeAttributes");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.EdgeCategory", b =>
+                {
+                    b.Property<int>("EdgeCategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EdgeCategoryId"));
+
+                    b.Property<string>("EdgeCategoryName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("EdgeCategoryId");
+
+                    b.HasIndex("EdgeCategoryName")
+                        .IsUnique();
+
+                    b.ToTable("EdgeCategories");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.EdgeValue", b =>
+                {
+                    b.Property<int>("ValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ValueId"));
+
+                    b.Property<int>("EdgeAttributeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("EdgeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ValueData")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ValueId");
+
+                    b.HasIndex("EdgeAttributeId");
+
+                    b.HasIndex("EdgeId", "EdgeAttributeId")
+                        .IsUnique();
+
+                    b.ToTable("EdgeValues");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.Node", b =>
+                {
+                    b.Property<int>("NodeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("NodeId"));
+
+                    b.Property<int>("NodeCategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("NodeUniqueString")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("NodeId");
+
+                    b.HasIndex("NodeCategoryId");
+
+                    b.HasIndex("NodeUniqueString", "NodeCategoryId")
+                        .IsUnique();
+
+                    b.ToTable("Nodes");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.NodeAttribute", b =>
+                {
+                    b.Property<int>("NodeAttributeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("NodeAttributeId"));
+
+                    b.Property<string>("NodeAttributeName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("NodeAttributeId");
+
+                    b.HasIndex("NodeAttributeName")
+                        .IsUnique();
+
+                    b.ToTable("NodeAttributes");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.NodeCategory", b =>
+                {
+                    b.Property<int>("NodeCategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("NodeCategoryId"));
+
+                    b.Property<string>("NodeCategoryName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("NodeCategoryId");
+
+                    b.HasIndex("NodeCategoryName")
+                        .IsUnique();
+
+                    b.ToTable("NodeCategories");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.NodeValue", b =>
+                {
+                    b.Property<int>("ValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ValueId"));
+
+                    b.Property<int>("NodeAttributeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NodeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ValueData")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ValueId");
+
+                    b.HasIndex("NodeAttributeId");
+
+                    b.HasIndex("NodeId", "NodeAttributeId")
+                        .IsUnique();
+
+                    b.ToTable("NodeValues");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Auth.UserRole", b =>
+                {
+                    b.HasOne("RelationshipAnalysis.Models.Auth.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RelationshipAnalysis.Models.User", "User")
+                    b.HasOne("RelationshipAnalysis.Models.Auth.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -123,14 +327,124 @@ namespace RelationshipAnalysis.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RelationshipAnalysis.Models.Role", b =>
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.Edge", b =>
+                {
+                    b.HasOne("RelationshipAnalysis.Models.Graph.EdgeCategory", "EdgeCategory")
+                        .WithMany("Edges")
+                        .HasForeignKey("EdgeCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RelationshipAnalysis.Models.Graph.Node", "NodeDestination")
+                        .WithMany("DestinationEdges")
+                        .HasForeignKey("EdgeDestinationNodeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RelationshipAnalysis.Models.Graph.Node", "NodeSource")
+                        .WithMany("SourceEdges")
+                        .HasForeignKey("EdgeSourceNodeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EdgeCategory");
+
+                    b.Navigation("NodeDestination");
+
+                    b.Navigation("NodeSource");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.EdgeValue", b =>
+                {
+                    b.HasOne("RelationshipAnalysis.Models.Graph.EdgeAttribute", "EdgeAttribute")
+                        .WithMany("EdgeValues")
+                        .HasForeignKey("EdgeAttributeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RelationshipAnalysis.Models.Graph.Edge", "Edge")
+                        .WithMany("EdgeValues")
+                        .HasForeignKey("EdgeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Edge");
+
+                    b.Navigation("EdgeAttribute");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.Node", b =>
+                {
+                    b.HasOne("RelationshipAnalysis.Models.Graph.NodeCategory", "NodeCategory")
+                        .WithMany("Nodes")
+                        .HasForeignKey("NodeCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("NodeCategory");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.NodeValue", b =>
+                {
+                    b.HasOne("RelationshipAnalysis.Models.Graph.NodeAttribute", "NodeAttribute")
+                        .WithMany("Values")
+                        .HasForeignKey("NodeAttributeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RelationshipAnalysis.Models.Graph.Node", "Node")
+                        .WithMany("Values")
+                        .HasForeignKey("NodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Node");
+
+                    b.Navigation("NodeAttribute");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Auth.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("RelationshipAnalysis.Models.User", b =>
+            modelBuilder.Entity("RelationshipAnalysis.Models.Auth.User", b =>
                 {
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.Edge", b =>
+                {
+                    b.Navigation("EdgeValues");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.EdgeAttribute", b =>
+                {
+                    b.Navigation("EdgeValues");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.EdgeCategory", b =>
+                {
+                    b.Navigation("Edges");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.Node", b =>
+                {
+                    b.Navigation("DestinationEdges");
+
+                    b.Navigation("SourceEdges");
+
+                    b.Navigation("Values");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.NodeAttribute", b =>
+                {
+                    b.Navigation("Values");
+                });
+
+            modelBuilder.Entity("RelationshipAnalysis.Models.Graph.NodeCategory", b =>
+                {
+                    b.Navigation("Nodes");
                 });
 #pragma warning restore 612, 618
         }

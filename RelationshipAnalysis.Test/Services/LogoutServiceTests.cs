@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using NSubstitute;
 using RelationshipAnalysis.Services;
+using RelationshipAnalysis.Services.UserPanelServices;
 
 namespace RelationshipAnalysis.Test.Services
 {

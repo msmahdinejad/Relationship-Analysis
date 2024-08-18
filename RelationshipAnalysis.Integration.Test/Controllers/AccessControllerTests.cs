@@ -15,9 +15,11 @@ using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Moq;
 using Newtonsoft.Json;
 using RelationshipAnalysis.Context;
-using RelationshipAnalysis.DTO;
+using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Models;
+using RelationshipAnalysis.Models.Auth;
 using RelationshipAnalysis.Services;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices;
 using RelationshipAnalysis.Settings.JWT;
 
 namespace RelationshipAnalysis.Integration.Test.Controllers;

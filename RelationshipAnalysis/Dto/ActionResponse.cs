@@ -1,6 +1,6 @@
 ﻿using RelationshipAnalysis.Enums;
 
-namespace RelationshipAnalysis.Controllers;
+namespace RelationshipAnalysis.Dto;
 
 public class ActionResponse<T>
 {

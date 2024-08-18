@@ -5,7 +5,14 @@ using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Services;
-using RelationshipAnalysis.Services.Abstractions;
+using RelationshipAnalysis.Services.AccessServices;
+using RelationshipAnalysis.Services.AccessServices.Abstraction;
+using RelationshipAnalysis.Services.AdminPanelServices;
+using RelationshipAnalysis.Services.AdminPanelServices.Abstraction;
+using RelationshipAnalysis.Services.UserPanelServices;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices.Abstraction;
 using RelationshipAnalysis.Settings.JWT;
 
 Env.Load();

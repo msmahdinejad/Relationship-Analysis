@@ -4,8 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
-using RelationshipAnalysis.DTO;
-using RelationshipAnalysis.Services.Abstractions;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices.Abstraction;
 using RelationshipAnalysis.Settings.JWT;
 
 namespace RelationshipAnalysis.Controllers;

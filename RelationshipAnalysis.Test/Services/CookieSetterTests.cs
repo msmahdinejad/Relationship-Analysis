@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Moq;
 using RelationshipAnalysis.Services;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices;
 using RelationshipAnalysis.Settings.JWT;
 
 namespace RelationshipAnalysis.Test.Services;

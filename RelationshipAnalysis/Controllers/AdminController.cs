@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Models;
-using RelationshipAnalysis.Services.Abstractions;
+using RelationshipAnalysis.Services.AdminPanelServices.Abstraction;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction;
 
 namespace RelationshipAnalysis.Controllers;
 

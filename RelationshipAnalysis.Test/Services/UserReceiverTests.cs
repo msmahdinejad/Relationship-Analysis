@@ -2,7 +2,9 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Models;
+using RelationshipAnalysis.Models.Auth;
 using RelationshipAnalysis.Services;
+using RelationshipAnalysis.Services.UserPanelServices;
 
 namespace RelationshipAnalysis.Test.Services
 {

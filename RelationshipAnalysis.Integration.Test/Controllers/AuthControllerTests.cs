@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
-using RelationshipAnalysis.DTO;
+using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Models;
 
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RelationshipAnalysis.DTO;
+namespace RelationshipAnalysis.Dto;
 
 public class LoginDto
 {

@@ -2,11 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using RelationshipAnalysis.Context;
-using RelationshipAnalysis.DTO;
+using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Models;
+using RelationshipAnalysis.Models.Auth;
 using RelationshipAnalysis.Services;
-using RelationshipAnalysis.Services.Abstractions;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices;
+using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices.Abstraction;
 
 namespace RelationshipAnalysis.Test.Services;
 

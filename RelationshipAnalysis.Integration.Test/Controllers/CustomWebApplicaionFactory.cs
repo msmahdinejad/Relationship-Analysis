@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Models;
+using RelationshipAnalysis.Models.Auth;
 
 namespace RelationshipAnalysis.Integration.Test.Controllers;
 
