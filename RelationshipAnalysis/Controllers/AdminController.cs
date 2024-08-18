@@ -40,6 +40,13 @@ public class AdminController(
         return StatusCode((int)result.StatusCode, result.Data);
     }
     
+    [HttpGet()]
+    public IActionResult GetAllUserCount()
+    {
+        var usersCount = userReceiver.ReceiveAllUserCount();
+        return Ok(usersCount);
+    }
+    
     [HttpGet]
     public IActionResult GetAllRoles()
     {
