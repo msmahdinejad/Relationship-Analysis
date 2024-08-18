@@ -28,6 +28,7 @@ public class AllUserService(IMapper mapper, IRoleReceiver rolesReceiver) : IAllU
         {
             var data = new UserOutputInfoDto();
             mapper.Map(user, data);
+            data.Roles = rolesReceiver.ReceiveRoles(user.Id);
             
             userOutputs.Add(data);
         }
