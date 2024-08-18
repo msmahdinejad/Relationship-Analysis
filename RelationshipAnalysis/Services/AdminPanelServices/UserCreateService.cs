@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
@@ -54,10 +55,25 @@ public class UserCreateService(ApplicationDbContext context, IPasswordHasher pas
 
     private async Task AddUserRoles(CreateUserDto createUserDto, User user)
     {
-        var roles = createUserDto.Roles.Select(r => context.Roles
-            .SingleOrDefault(R => R.Name == r));
-        roles.ToList().ForEach(r => context.UserRoles.Add(new UserRole()
-            { RoleId = r.Id, UserId = user.Id }));
+        var roles = new List<Role>();
+        foreach (var roleName in createUserDto.Roles)
+        {
+            var role = await context.Roles
+                .SingleOrDefaultAsync(r => r.Name == roleName);
+        
+            if (role != null)
+            {
+                roles.Add(role);
+            }
+        }
+
+        var userRoles = roles.Select(role => new UserRole
+        {
+            RoleId = role.Id,
+            UserId = user.Id
+        }).ToList();
+
+        await context.UserRoles.AddRangeAsync(userRoles);
         await context.SaveChangesAsync();
     }
 
@@ -71,7 +87,7 @@ public class UserCreateService(ApplicationDbContext context, IPasswordHasher pas
             FirstName = createUserDto.FirstName,
             LastName = createUserDto.LastName,
         };
-        context.Add(user);
+        await context.AddAsync(user);
         await context.SaveChangesAsync();
         return user;
     }
