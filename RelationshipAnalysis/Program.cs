@@ -15,13 +15,13 @@ using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices;
 using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices.Abstraction;
 using RelationshipAnalysis.Settings.JWT;
 
-Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql( builder.Configuration["CONNECTION_STRING"]).UseLazyLoadingProxies());
 
 builder.Services.AddSingleton<ICookieSetter, CookieSetter>()
     .AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>()
@@ -42,8 +42,6 @@ builder.Services.AddSingleton<ICookieSetter, CookieSetter>()
     .AddScoped<IUserUpdateRolesService, UserUpdateRolesService>()
     .AddScoped<IRoleReceiver, RoleReceiver>();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql( Environment.GetEnvironmentVariable("CONNECTION_STRING")).UseLazyLoadingProxies());
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddAutoMapper(typeof(UserUpdateInfoMapper));
@@ -81,7 +79,6 @@ builder.Services.AddAuthentication(options =>
 
 
 var app = builder.Build();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
