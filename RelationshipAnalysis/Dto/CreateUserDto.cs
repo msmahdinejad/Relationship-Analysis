@@ -10,7 +10,7 @@ public class CreateUserDto
     [Required(ErrorMessageResourceName = "PasswordRequired", ErrorMessageResourceType = typeof(Resources))]
     [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
         ErrorMessageResourceName = "InvalidPasswordMessage", ErrorMessageResourceType = typeof(Resources))] 
-    public string Password { get; set; }
+    public string? Password { get; set; }
 
     [Required] public string FirstName { get; set; }
 

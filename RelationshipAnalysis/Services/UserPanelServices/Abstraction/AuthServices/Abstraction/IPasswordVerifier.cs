@@ -2,5 +2,5 @@
 
 public interface IPasswordVerifier
 {
-    bool VerifyPasswordHash(string password, string storedHash);
+    bool VerifyPasswordHash(string? password, string storedHash);
 }
