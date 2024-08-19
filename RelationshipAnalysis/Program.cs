@@ -4,6 +4,7 @@ using System.Text;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using RelationshipAnalysis.Context;
+using RelationshipAnalysis.Middlewares;
 using RelationshipAnalysis.Services;
 using RelationshipAnalysis.Services.AccessServices;
 using RelationshipAnalysis.Services.AccessServices.Abstraction;
@@ -91,7 +92,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseCors(x => x.AllowCredentials().AllowAnyHeader().AllowAnyMethod()
     .SetIsOriginAllowed(x => true));
-
+app.UseMiddleware<SanitizationMiddleware>();
 app.Run();
 
 public partial class Program
