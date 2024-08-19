@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
@@ -20,7 +21,7 @@ public class LoginServiceTests
     private readonly Mock<IJwtTokenGenerator> _mockJwtTokenGenerator;
     private readonly Mock<IPasswordVerifier> _mockPasswordVerifier;
     private readonly Mock<HttpResponse> _mockHttpResponse;
-
+    private readonly IServiceProvider _serviceProvider;
     public LoginServiceTests()
     {
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -38,8 +39,13 @@ public class LoginServiceTests
         _mockHttpResponse = new Mock<HttpResponse>();
         _mockHttpResponse.SetupGet(r => r.Cookies).Returns(mockResponseCookies.Object);
 
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddScoped(_ => _context);
+
+        _serviceProvider = serviceCollection.BuildServiceProvider();
+        
         _sut = new LoginService(
-            _context,
+            _serviceProvider,
             _mockCookieSetter.Object,
             _mockJwtTokenGenerator.Object,
             _mockPasswordVerifier.Object

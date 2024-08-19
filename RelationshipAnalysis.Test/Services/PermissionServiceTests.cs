@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Newtonsoft.Json;
 using RelationshipAnalysis.Context;
@@ -13,39 +14,46 @@ namespace RelationshipAnalysis.Test.Services;
 public class PermissionServiceTests
 {
     private readonly PermissionService _sut;
-    private readonly ApplicationDbContext _context;
-    private readonly List<string> _userRoles = ["Read", "Write"];
-    private readonly List<string> _adminRoles = ["Delete", "Write"];
+    private readonly IServiceProvider _serviceProvider;
+    private readonly List<string> _userRoles = new List<string> { "Read", "Write" };
+    private readonly List<string> _adminRoles = new List<string> { "Delete", "Write" };
 
     public PermissionServiceTests()
     {
+        var serviceCollection = new ServiceCollection();
+
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(databaseName: "TestDatabase")
             .Options;
+        serviceCollection.AddScoped(_ => new ApplicationDbContext(options));
 
-        _context = new ApplicationDbContext(options);
+        _serviceProvider = serviceCollection.BuildServiceProvider();
 
         SeedDatabase();
 
-        _sut = new PermissionService(_context);
+        _sut = new PermissionService(_serviceProvider);
     }
 
     private void SeedDatabase()
     {
-        _context.Roles.AddRange(new List<Role>
+        using (var scope = _serviceProvider.CreateScope())
         {
-            new Role
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            context.Roles.AddRange(new List<Role>
             {
-                Name = "User",
-                Permissions = JsonConvert.SerializeObject(_userRoles)
-            },
-            new Role
-            {
-                Name = "Admin",
-                Permissions = JsonConvert.SerializeObject(_adminRoles)
-            }
-        });
-        _context.SaveChanges();
+                new Role
+                {
+                    Name = "User",
+                    Permissions = JsonConvert.SerializeObject(_userRoles)
+                },
+                new Role
+                {
+                    Name = "Admin",
+                    Permissions = JsonConvert.SerializeObject(_adminRoles)
+                }
+            });
+            context.SaveChanges();
+        }
     }
 
     [Fact]
@@ -60,10 +68,13 @@ public class PermissionServiceTests
 
         // Act
         var result = await _sut.GetPermissionsAsync(userClaims);
+
         var expectedResult = _userRoles.Union(_adminRoles);
+        var expectedPermissions = JsonConvert.SerializeObject(expectedResult);
 
         // Assert
-        var expectedPermissions = JsonConvert.SerializeObject(expectedResult);
+        Assert.NotNull(result);
+        Assert.NotNull(result.Data);
         Assert.Equal(expectedPermissions, result.Data.Permissions);
     }
 }

@@ -9,10 +9,13 @@ using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices.A
 
 namespace RelationshipAnalysis.Services.AdminPanelServices;
 
-public class UserCreateService(ApplicationDbContext context, IPasswordHasher passwordHasher) : IUserCreateService
+public class UserCreateService(IServiceProvider serviceProvider, IPasswordHasher passwordHasher) : IUserCreateService
 {
     public async Task<ActionResponse<MessageDto>> CreateUser(CreateUserDto createUserDto)
     {
+        
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var isUserExist = context.Users.Select(x => x.Username).ToList().Contains(createUserDto.Username);
         if (isUserExist)
         {
@@ -56,8 +59,12 @@ public class UserCreateService(ApplicationDbContext context, IPasswordHasher pas
     private async Task AddUserRoles(CreateUserDto createUserDto, User user)
     {
         var roles = new List<Role>();
+        
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         foreach (var roleName in createUserDto.Roles)
         {
+            
             var role = await context.Roles
                 .SingleOrDefaultAsync(r => r.Name == roleName);
         
@@ -87,6 +94,9 @@ public class UserCreateService(ApplicationDbContext context, IPasswordHasher pas
             FirstName = createUserDto.FirstName,
             LastName = createUserDto.LastName,
         };
+        
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await context.AddAsync(user);
         await context.SaveChangesAsync();
         return user;

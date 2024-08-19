@@ -6,7 +6,7 @@ using RelationshipAnalysis.Services.AdminPanelServices.Abstraction;
 
 namespace RelationshipAnalysis.Services.AdminPanelServices;
 
-public class UserDeleteService(ApplicationDbContext context) : IUserDeleteService
+public class UserDeleteService(IServiceProvider serviceProvider) : IUserDeleteService
 {
     public async Task<ActionResponse<MessageDto>> DeleteUser(User user)
     {
@@ -15,6 +15,8 @@ public class UserDeleteService(ApplicationDbContext context) : IUserDeleteServic
             return NotFoundResult();
         }
 
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         context.Remove(user);
         await context.SaveChangesAsync();
         return SuccessResult();

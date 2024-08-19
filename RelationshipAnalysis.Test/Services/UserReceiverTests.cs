@@ -1,9 +1,8 @@
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
-using RelationshipAnalysis.Models;
 using RelationshipAnalysis.Models.Auth;
-using RelationshipAnalysis.Services;
 using RelationshipAnalysis.Services.UserPanelServices;
 
 namespace RelationshipAnalysis.Test.Services
@@ -12,12 +11,20 @@ namespace RelationshipAnalysis.Test.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly UserReceiver _sut;
+        private readonly IServiceProvider _serviceProvider;
 
         public UserReceiverTests()
         {
             _context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options);
-            _sut = new UserReceiver(_context);
+            
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddScoped(_ => _context);
+
+            _serviceProvider = serviceCollection.BuildServiceProvider();
+
+            
+            _sut = new UserReceiver(_serviceProvider);
             SeedDatabase();
         }
 

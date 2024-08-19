@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Models;
 using RelationshipAnalysis.Models.Auth;
@@ -12,12 +13,17 @@ namespace RelationshipAnalysis.Test.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly RoleReceiver _sut;
-
+        private readonly IServiceProvider _serviceProvider;
         public UserRolesReceiverTests()
         {
             _context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options);
-            _sut = new RoleReceiver(_context);
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddScoped(_ => _context);
+
+            _serviceProvider = serviceCollection.BuildServiceProvider();
+
+            _sut = new RoleReceiver(_serviceProvider);
             SeedDatabase();
         }
 

@@ -7,7 +7,7 @@ using RelationshipAnalysis.Services.AccessServices.Abstraction;
 
 namespace RelationshipAnalysis.Services.AccessServices;
 
-public class PermissionService(ApplicationDbContext context) : IPermissionService
+public class PermissionService(IServiceProvider serviceProvider) : IPermissionService
 {
     public async Task<ActionResponse<PermissionDto>> GetPermissionsAsync(ClaimsPrincipal userClaims)
     {
@@ -32,6 +32,8 @@ public class PermissionService(ApplicationDbContext context) : IPermissionServic
 
         foreach (var roleName in roleNames)
         {
+            using var scope = serviceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var role = await context.Roles
                 .FirstOrDefaultAsync(r => r.Name == roleName);
 

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
@@ -19,14 +20,20 @@ namespace RelationshipAnalysis.Test.Services
         private readonly IPasswordVerifier _passwordVerifier;
         private readonly IPasswordHasher _passwordHasher;
         private readonly IUserPasswordService _sut;
-
+        private readonly IServiceProvider _serviceProvider;
         public UserPasswordServiceTests()
         {
             _context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options);
             _passwordVerifier = Substitute.For<IPasswordVerifier>();
             _passwordHasher = Substitute.For<IPasswordHasher>();
-            _sut = new UserPasswordService(_context, _passwordVerifier, _passwordHasher);
+            
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddScoped(_ => _context);
+
+            _serviceProvider = serviceCollection.BuildServiceProvider();
+
+            _sut = new UserPasswordService(_serviceProvider, _passwordVerifier, _passwordHasher);
             SeedDatabase();
         }
 

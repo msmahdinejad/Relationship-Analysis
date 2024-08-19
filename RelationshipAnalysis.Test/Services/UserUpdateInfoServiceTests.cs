@@ -1,154 +1,156 @@
-
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using NSubstitute;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
-using RelationshipAnalysis.Models;
 using RelationshipAnalysis.Models.Auth;
-using RelationshipAnalysis.Services;
 using RelationshipAnalysis.Services.UserPanelServices;
-using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices.Abstraction;
 
 namespace RelationshipAnalysis.Test.Services
 {
     public class UserUpdateInfoServiceTests
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IMapper _mapper;
-        private readonly ICookieSetter _cookieSetter;
-        private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly UserUpdateInfoService _sut;
-
+        private readonly IServiceProvider _serviceProvider;
+        private readonly User _user = new User
+        {
+            Id = 1,
+            Username = "existinguser",
+            Email = "existing@example.com",
+            PasswordHash = "hashedpassword",
+            FirstName = "John",
+            LastName = "Doe"
+        };
         public UserUpdateInfoServiceTests()
         {
-            _context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()).Options);
+            var serviceCollection = new ServiceCollection();
 
-            _mapper = Substitute.For<IMapper>();
-            _cookieSetter = Substitute.For<ICookieSetter>();
-            _jwtTokenGenerator = Substitute.For<IJwtTokenGenerator>();
-            _sut = new UserUpdateInfoService(_context, _mapper);
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            serviceCollection.AddScoped(_ => new ApplicationDbContext(options));
+            serviceCollection.AddAutoMapper(typeof(UserUpdateInfoService));
+
+            _serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var mapper = _serviceProvider.GetRequiredService<IMapper>();
+            _sut = new UserUpdateInfoService(_serviceProvider, mapper);
+
             SeedDatabase();
         }
 
         private void SeedDatabase()
         {
-            _context.Users.AddRange(new User
+            using (var scope = _serviceProvider.CreateScope())
             {
-                Id = 1,
-                Username = "ExistingUser",
-                Email = "user@example.com",
-                FirstName = "",
-                LastName = "",
-                PasswordHash = "HashedPassword"
-            },
-            new User
-            {
-                Id = 2,
-                Username = "NewUserName",
-                Email = "newemail@example.com",
-                FirstName = "",
-                LastName = "",
-                PasswordHash = "HashedPassword"
-            });
-            _context.SaveChanges();
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                context.Users.AddRange(new List<User>()
+                {
+                    _user,
+                    new User
+                    {
+                        Id = 2,
+                        Username = "existinguser2",
+                        Email = "existing2@example.com",
+                        PasswordHash = "hashedpassword",
+                        FirstName = "John",
+                        LastName = "Doe"
+                    }
+                });
+                context.SaveChanges();
+            }
         }
 
         [Fact]
-        public async Task UpdateUserAsync_ReturnsBadRequest_WhenEmailAlreadyExists()
-        {
-            // Arrange
-            var user = await _context.Users.FindAsync(1);
-            var userUpdateInfoDto = new UserUpdateInfoDto
-            {
-                Username = "ExistingUser", 
-                Email = "newemail@example.com"
-            };
-            var response = Substitute.For<HttpResponse>();
-
-            // Act
-            var result = await _sut.UpdateUserAsync(user, userUpdateInfoDto, response);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(StatusCodeType.BadRequest, result.StatusCode);
-            Assert.Equal(Resources.EmailExistsMessage, result.Data.Message);
-        }
-
-        [Fact]
-        public async Task UpdateUserAsync_ReturnsBadRequest_WhenUsernameAlreadyExists()
-        {
-            // Arrange
-            var user = await _context.Users.FindAsync(1);
-            var userUpdateInfoDto = new UserUpdateInfoDto
-            {
-                Username = "NewUserName",
-                Email = "user@example.com" 
-            };
-            var response = Substitute.For<HttpResponse>();
-
-            // Act
-            var result = await _sut.UpdateUserAsync(user, userUpdateInfoDto, response);
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.Equal(StatusCodeType.BadRequest, result.StatusCode);
-            Assert.Equal(Resources.UsernameExistsMessage, result.Data.Message);
-        }
-
-        [Fact]
-        public async Task UpdateUserAsync_ReturnsNotFound_WhenUserIsNull()
+        public async Task UpdateUserAsync_ShouldReturnNotFound_WhenUserIsNull()
         {
             // Arrange
             User user = null;
-            var userUpdateInfoDto = new UserUpdateInfoDto();
-            var response = Substitute.For<HttpResponse>();
+            var dto = new UserUpdateInfoDto
+            {
+                Username = "newuser",
+                Email = "new@example.com"
+            };
+            var response = new Mock<HttpResponse>().Object;
 
             // Act
-            var result = await _sut.UpdateUserAsync(user, userUpdateInfoDto, response);
+            var result = await _sut.UpdateUserAsync(user, dto, response);
 
             // Assert
-            Assert.NotNull(result);
             Assert.Equal(StatusCodeType.NotFound, result.StatusCode);
             Assert.Equal(Resources.UserNotFoundMessage, result.Data.Message);
         }
 
         [Fact]
-        public async Task UpdateUserAsync_ReturnsSuccess_WhenUserIsUpdated()
+        public async Task UpdateUserAsync_ShouldReturnBadRequest_WhenUsernameExists()
         {
             // Arrange
-            var user = await _context.Users.FindAsync(1);
-            var userUpdateInfoDto = new UserUpdateInfoDto
+            var dto = new UserUpdateInfoDto
             {
-                Username = "UpdatedUserName",
-                Email = "updated@example.com"
+                Username = "existinguser2"
             };
-            var resultUser = new User()
-            {
-                Id = 1,
-                Username = "UpdatedUserName",
-                Email = "updated@example.com",
-                FirstName = "",
-                LastName = "",
-                PasswordHash = "HashedPassword"
-            };
-            _mapper.Map<User>(userUpdateInfoDto).Returns(resultUser);
-            
-            var response = Substitute.For<HttpResponse>();
-            
+            var response = new Mock<HttpResponse>().Object;
+
             // Act
-            var result = await _sut.UpdateUserAsync(user, userUpdateInfoDto, response);
+            var result = await _sut.UpdateUserAsync(_user, dto, response);
 
             // Assert
-            Assert.NotNull(result);
+            Assert.Equal(StatusCodeType.BadRequest, result.StatusCode);
+            Assert.Equal(Resources.UsernameExistsMessage, result.Data.Message);
+        }
+
+        [Fact]
+        public async Task UpdateUserAsync_ShouldReturnBadRequest_WhenEmailExists()
+        {
+            // Arrange
+            var dto = new UserUpdateInfoDto
+            {
+                Email = "existing2@example.com"
+            };
+            var response = new Mock<HttpResponse>().Object;
+
+            // Act
+            var result = await _sut.UpdateUserAsync(_user, dto, response);
+
+            // Assert
+            Assert.Equal(StatusCodeType.BadRequest, result.StatusCode);
+            Assert.Equal(Resources.EmailExistsMessage, result.Data.Message);
+        }
+
+        [Fact]
+        public async Task UpdateUserAsync_ShouldUpdateUserAndReturnSuccess_WhenValidData()
+        {
+            // Arrange
+            var dto = new UserUpdateInfoDto
+            {
+                Username = "newuser",
+                Email = "new@example.com",
+                FirstName = "Jane",
+                LastName = "Smith"
+            };
+            var response = new Mock<HttpResponse>().Object;
+
+            // Act
+            var result = await _sut.UpdateUserAsync(_user, dto, response);
+
+            // Assert
             Assert.Equal(StatusCodeType.Success, result.StatusCode);
             Assert.Equal(Resources.SuccessfulUpdateUserMessage, result.Data.Message);
-            Assert.Equal("ExistingUser", user.Username);
-            Assert.Equal("user@example.com", user.Email);
+
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var updatedUser = context.Users.SingleOrDefault(u => u.Id == _user.Id);
+                Assert.NotNull(updatedUser);
+                Assert.Equal("newuser", updatedUser.Username);
+                Assert.Equal("new@example.com", updatedUser.Email);
+                Assert.Equal("Jane", updatedUser.FirstName);
+                Assert.Equal("Smith", updatedUser.LastName);
+            }
         }
-        
     }
 }

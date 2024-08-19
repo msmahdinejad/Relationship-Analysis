@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
@@ -7,7 +8,7 @@ using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices.A
 namespace RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices;
 
 public class LoginService(
-    ApplicationDbContext context,
+    IServiceProvider serviceProvider,
     ICookieSetter cookieSetter,
     IJwtTokenGenerator jwtTokenGenerator,
     IPasswordVerifier passwordVerifier)
@@ -16,7 +17,8 @@ public class LoginService(
     public async Task<ActionResponse<MessageDto>> LoginAsync(LoginDto loginModel, HttpResponse response)
     {
         var result = new ActionResponse<MessageDto>();
-
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var user = await context.Users
             .SingleOrDefaultAsync(u => u.Username == loginModel.Username);
 

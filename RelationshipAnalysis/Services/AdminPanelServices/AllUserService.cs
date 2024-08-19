@@ -8,10 +8,12 @@ using RelationshipAnalysis.Services.AdminPanelServices.Abstraction;
 
 namespace RelationshipAnalysis.Services.AdminPanelServices;
 
-public class AllUserService(ApplicationDbContext context, IMapper mapper, IRoleReceiver rolesReceiver) : IAllUserService
+public class AllUserService(IServiceProvider serviceProvider, IMapper mapper, IRoleReceiver rolesReceiver) : IAllUserService
 {
     public int ReceiveAllUserCount()
     {
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var users = context.Users.ToList();
         return users.Count;
     }

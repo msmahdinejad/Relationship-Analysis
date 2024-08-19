@@ -26,22 +26,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddSingleton<ICookieSetter, CookieSetter>()
     .AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>()
-    .AddScoped<ILoginService, LoginService>()
-    .AddScoped<IPermissionService, PermissionService>()
+    .AddSingleton<ILoginService, LoginService>()
+    .AddSingleton<IPermissionService, PermissionService>()
     .AddSingleton<IPasswordHasher, CustomPasswordHasher>()
+    .AddSingleton<IAllUserService, AllUserService>()
+    .AddSingleton<IUserUpdateInfoService, UserUpdateInfoService>()
+    .AddSingleton<IUserDeleteService, UserDeleteService>()
+    .AddSingleton<IUserReceiver, UserReceiver>()
+    .AddSingleton<IUserPasswordService, UserPasswordService>()
+    .AddSingleton<IUserInfoService, UserInfoService>()
     .AddSingleton<IPasswordVerifier, PasswordVerifier>()
-    .AddScoped<IAllUserService, AllUserService>()
-    .AddScoped<IUserUpdateInfoService, UserUpdateInfoService>()
-    .AddScoped<IUserDeleteService, UserDeleteService>()
-    .AddScoped<IUserReceiver, UserReceiver>()
-    .AddScoped<IUserPasswordService, UserPasswordService>()
-    .AddScoped<IUserInfoService, UserInfoService>()
-    .AddSingleton<IPasswordVerifier, PasswordVerifier>()
-    .AddScoped<IRoleReceiver, RoleReceiver>()
+    .AddSingleton<IRoleReceiver, RoleReceiver>()
     .AddSingleton<ILogoutService, LogoutService>()
-    .AddScoped<IUserCreateService, UserCreateService>()
-    .AddScoped<IUserUpdateRolesService, UserUpdateRolesService>()
-    .AddScoped<IRoleReceiver, RoleReceiver>();
+    .AddSingleton<IUserCreateService, UserCreateService>()
+    .AddSingleton<IUserUpdateRolesService, UserUpdateRolesService>();
 
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));

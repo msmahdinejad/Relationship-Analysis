@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices.Abstraction;
-using RelationshipAnalysis.Settings.JWT;
 
 namespace RelationshipAnalysis.Controllers;
 

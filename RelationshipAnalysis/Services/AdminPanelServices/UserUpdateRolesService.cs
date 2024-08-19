@@ -8,7 +8,7 @@ using RelationshipAnalysis.Services.AdminPanelServices.Abstraction;
 
 namespace RelationshipAnalysis.Services.AdminPanelServices;
 
-public class UserUpdateRolesService(ApplicationDbContext context) : IUserUpdateRolesService
+public class UserUpdateRolesService(IServiceProvider serviceProvider) : IUserUpdateRolesService
 {
     public async Task<ActionResponse<MessageDto>> UpdateUserRolesAsync(User user, List<string> newRoles)
     {
@@ -17,6 +17,8 @@ public class UserUpdateRolesService(ApplicationDbContext context) : IUserUpdateR
             return BadRequestResult(Resources.EmptyRolesMessage);
         }
 
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var invalidRoles = newRoles.FindAll(r => !context.Roles.Select(R => R.Name)
             .Contains(r));
         if (invalidRoles.Any())
@@ -32,6 +34,9 @@ public class UserUpdateRolesService(ApplicationDbContext context) : IUserUpdateR
     
     private async Task RemoveUserRoles(User user)
     {
+        
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var userRoles = context.UserRoles.ToList().FindAll(r => r.UserId == user.Id);
         context.RemoveRange(userRoles);
         await context.SaveChangesAsync();
@@ -48,6 +53,9 @@ public class UserUpdateRolesService(ApplicationDbContext context) : IUserUpdateR
 
     private async Task AddUserRoles(List<string> newRoles, User user)
     {
+        
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var roles = newRoles.Select(r => context.Roles
             .SingleOrDefaultAsync(R => R.Name == r));
         roles.ToList().ForEach(r => context.UserRoles.Add(new UserRole()

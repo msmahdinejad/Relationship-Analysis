@@ -7,7 +7,7 @@ using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices.A
 
 namespace RelationshipAnalysis.Services.UserPanelServices;
 
-public class UserPasswordService(ApplicationDbContext context, IPasswordVerifier passwordVerifier, IPasswordHasher passwordHasher) : IUserPasswordService
+public class UserPasswordService(IServiceProvider serviceProvider, IPasswordVerifier passwordVerifier, IPasswordHasher passwordHasher) : IUserPasswordService
 {
     public async Task<ActionResponse<MessageDto>> UpdatePasswordAsync(User user, UserPasswordInfoDto passwordInfoDto)
     {
@@ -20,6 +20,9 @@ public class UserPasswordService(ApplicationDbContext context, IPasswordVerifier
             return WrongPasswordResult();
         }
         user.PasswordHash = passwordHasher.HashPassword(passwordInfoDto.NewPassword);
+        
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         context.Update(user);
         await context.SaveChangesAsync();
 
