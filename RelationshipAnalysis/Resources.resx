@@ -72,4 +72,7 @@
     <data name="SuccessfulLoginMessage" xml:space="preserve">
         <value>Login was successful!</value>
     </data>
+    <data name="DeleteAccountAccessErrorMessage" xml:space="preserve">
+        <value>You cant delete your account!</value>
+    </data>
 </root>

@@ -26,10 +26,4 @@ public class UserReceiver(ApplicationDbContext context) : IUserReceiver
         var users = context.Users.Skip(page * size).Take(size).ToList();
         return users;
     }
-
-    public int ReceiveAllUserCount()
-    {
-        var users = context.Users.ToList();
-        return users.Count;
-    }
 }

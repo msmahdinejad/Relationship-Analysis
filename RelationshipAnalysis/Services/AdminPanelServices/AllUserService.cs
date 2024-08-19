@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
+using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Models.Auth;
@@ -7,21 +8,36 @@ using RelationshipAnalysis.Services.AdminPanelServices.Abstraction;
 
 namespace RelationshipAnalysis.Services.AdminPanelServices;
 
-public class AllUserService(IMapper mapper, IRoleReceiver rolesReceiver) : IAllUserService
+public class AllUserService(ApplicationDbContext context, IMapper mapper, IRoleReceiver rolesReceiver) : IAllUserService
 {
-    public ActionResponse<List<UserOutputInfoDto>> GetAllUser(List<User> users)
+    public int ReceiveAllUserCount()
+    {
+        var users = context.Users.ToList();
+        return users.Count;
+    }
+    public ActionResponse<GetAllUsersDto> GetAllUser(List<User> users)
     {
         if (users.IsNullOrEmpty())
         {
             return NotFoundResult();
         }
 
-        var userOutputs = GetAllUserOutputs(users);
+        var usersList = GetAllUsersList(users);
+        var result = GetAllUsersOutPut(usersList);
 
-        return SuccessResult(userOutputs);
+        return SuccessResult(result);
     }
 
-    private List<UserOutputInfoDto> GetAllUserOutputs(List<User> users)
+    private GetAllUsersDto GetAllUsersOutPut(List<UserOutputInfoDto> usersList)
+    {
+        return new GetAllUsersDto()
+        {
+            Users = usersList,
+            AllUserCount = ReceiveAllUserCount()
+        };
+    }
+
+    private List<UserOutputInfoDto> GetAllUsersList(List<User> users)
     {
         var userOutputs = new List<UserOutputInfoDto>();
         foreach (var user in users)
@@ -36,18 +52,18 @@ public class AllUserService(IMapper mapper, IRoleReceiver rolesReceiver) : IAllU
         return userOutputs;
     }
 
-    private ActionResponse<List<UserOutputInfoDto>> SuccessResult(List<UserOutputInfoDto> users)
+    private ActionResponse<GetAllUsersDto> SuccessResult(GetAllUsersDto outPut)
     {
-        return new ActionResponse<List<UserOutputInfoDto>>()
+        return new ActionResponse<GetAllUsersDto>()
         {
-            Data = users,
+            Data = outPut,
             StatusCode = StatusCodeType.Success
         };
     }
     
-    private ActionResponse<List<UserOutputInfoDto>> NotFoundResult()
+    private ActionResponse<GetAllUsersDto> NotFoundResult()
     {
-        return new ActionResponse<List<UserOutputInfoDto>>()
+        return new ActionResponse<GetAllUsersDto>()
         {
             StatusCode = StatusCodeType.NotFound
         };

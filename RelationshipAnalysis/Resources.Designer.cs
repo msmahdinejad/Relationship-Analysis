@@ -152,5 +152,11 @@ namespace RelationshipAnalysis {
                 return ResourceManager.GetString("SuccessfulLoginMessage", resourceCulture);
             }
         }
+        internal static string DeleteAccountAccessErrorMessage {
+            get {
+                return ResourceManager.GetString("DeleteAccountAccessErrorMessage", resourceCulture);
+            }
+        }
+        
     }
 }

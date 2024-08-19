@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
@@ -7,7 +8,6 @@ using RelationshipAnalysis.Services.AdminPanelServices.Abstraction;
 using RelationshipAnalysis.Services.UserPanelServices.Abstraction;
 
 namespace RelationshipAnalysis.Controllers;
-
 
 [Authorize(Roles = nameof(RoleTypes.Admin))]
 [ApiController]
@@ -23,7 +23,6 @@ public class AdminController(
     IUserPasswordService passwordService,
     IUserReceiver userReceiver) : ControllerBase
 {
-    
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetUser(int id)
     {
@@ -31,29 +30,22 @@ public class AdminController(
         var result = userInfoService.GetUser(user);
         return StatusCode((int)result.StatusCode, result.Data);
     }
-    
-    [HttpGet("{page:int}/{size:int}")]
-    public IActionResult GetAllUser(int page, int size)
+
+    [HttpGet]
+    public IActionResult GetAllUser([FromQuery] int page, [FromQuery] int size)
     {
         var users = userReceiver.ReceiveAllUser(page, size);
         var result = allUserService.GetAllUser(users);
         return StatusCode((int)result.StatusCode, result.Data);
     }
-    
-    [HttpGet()]
-    public IActionResult GetAllUserCount()
-    {
-        var usersCount = userReceiver.ReceiveAllUserCount();
-        return Ok(usersCount);
-    }
-    
+
     [HttpGet]
     public IActionResult GetAllRoles()
     {
         var roles = roleReceiver.ReceiveAllRoles();
         return Ok(roles);
     }
-    
+
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateUser(int id, UserUpdateInfoDto userUpdateInfoDto)
     {
@@ -61,7 +53,7 @@ public class AdminController(
         var result = await userUpdateInfoService.UpdateUserAsync(user, userUpdateInfoDto, Response);
         return StatusCode((int)result.StatusCode, result.Data);
     }
-    
+
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdatePassword(int id, UserPasswordInfoDto passwordInfoDto)
     {
@@ -69,22 +61,28 @@ public class AdminController(
         var result = await passwordService.UpdatePasswordAsync(user, passwordInfoDto);
         return StatusCode((int)result.StatusCode, result.Data);
     }
-    
+
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteUser(int id)
     {
+        var currentUser = await userReceiver.ReceiveUserAsync(User);
         var user = await userReceiver.ReceiveUserAsync(id);
+        if (id == currentUser.Id)
+        {
+            return StatusCode((int)StatusCodeType.BadRequest, Resources.DeleteAccountAccessErrorMessage);
+        }
+
         var result = await userDeleteService.DeleteUser(user);
         return StatusCode((int)result.StatusCode, result.Data);
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
     {
         var result = await userCreateService.CreateUser(createUserDto);
         return StatusCode((int)result.StatusCode, result.Data);
     }
-    
+
     [HttpPut("{id:int}")]
     public async Task<IActionResult> UpdateRoles(int id, List<string> newRoles)
     {
