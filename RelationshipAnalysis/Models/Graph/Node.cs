@@ -19,10 +19,10 @@ public class Node
     
     public virtual NodeCategory NodeCategory { get; set; }
 
-    
-    public virtual ICollection<NodeValue> Values { get; set; }
 
-    
-    public virtual ICollection<Edge> SourceEdges { get; set; }
-    public virtual ICollection<Edge> DestinationEdges { get; set; }
+    public virtual ICollection<NodeValue> Values { get; set; } = new List<NodeValue>();
+
+
+    public virtual ICollection<Edge> SourceEdges { get; set; } = new List<Edge>();
+    public virtual ICollection<Edge> DestinationEdges { get; set; } = new List<Edge>();
 }

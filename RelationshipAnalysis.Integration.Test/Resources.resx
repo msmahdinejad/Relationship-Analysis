@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <root>
 
@@ -103,14 +103,5 @@
     </data>
     <data name="DeleteAccountAccessErrorMessage" xml:space="preserve">
         <value>You cant delete your account!</value>
-    </data>
-    <data name="NullDtoErrorMessage" xml:space="preserve">
-        <value>Input Dto can not be null!</value>
-    </data>
-    <data name="NotUniqueCategoryNameErrorMessage" xml:space="preserve">
-        <value>Category Name is not unique!</value>
-    </data>
-    <data name="SuccessfulCreateCategory" xml:space="preserve">
-        <value>Category Created successfylly!</value>
     </data>
 </root>

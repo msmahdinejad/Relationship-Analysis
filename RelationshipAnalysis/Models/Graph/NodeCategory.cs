@@ -12,6 +12,6 @@ public class NodeCategory
     
     [Required] public string NodeCategoryName { get; set; }
 
-    
-    public virtual ICollection<Node> Nodes { get; set; }
+
+    public virtual ICollection<Node> Nodes { get; set; } = new List<Node>();
 }

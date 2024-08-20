@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Models;
@@ -25,7 +26,9 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             }
 
 
-            services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase(_databaseName).UseLazyLoadingProxies(); });
+            services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase(_databaseName)
+                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+                .UseLazyLoadingProxies(); });
 
 
             var serviceProvider = services.BuildServiceProvider();
@@ -73,11 +76,20 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         dbContext.Roles.Add(role);
         dbContext.SaveChanges();
         
-        var nodeCategory1 = new NodeCategory { NodeCategoryName = "Account" };
-        var nodeCategory2 = new NodeCategory { NodeCategoryName = "Person" };
+        var nodeCategory1 = new NodeCategory
+        {
+            NodeCategoryId = 1,
+            NodeCategoryName = "Account"
+        };
+        var nodeCategory2 = new NodeCategory
+        {
+            NodeCategoryId = 2,
+            NodeCategoryName = "Person"
+        };
         
         var node1 = new Node
         {
+            NodeId = 1,
             NodeUniqueString = "Node1",
             NodeCategory = nodeCategory1,
             NodeCategoryId = nodeCategory1.NodeCategoryId
@@ -85,12 +97,17 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
 
         var node2 = new Node
         {
+            NodeId = 2,
             NodeUniqueString = "Node2",
             NodeCategory = nodeCategory2,
             NodeCategoryId = nodeCategory2.NodeCategoryId
         };
 
-        var edgeCategory = new EdgeCategory { EdgeCategoryName = "Transaction"};
+        var edgeCategory = new EdgeCategory
+        {
+            EdgeCategoryId = 1,
+            EdgeCategoryName = "Transaction"
+        };
 
 
         dbContext.NodeCategories.Add(nodeCategory1);
@@ -102,15 +119,16 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         
         var edge = new Edge
         {
+            EdgeId = 1,
             EdgeSourceNodeId = node1.NodeId,
             EdgeDestinationNodeId = node2.NodeId,
             EdgeCategory = edgeCategory,
             EdgeCategoryId = edgeCategory.EdgeCategoryId,
             EdgeUniqueString = "Edge1"
         };
-        
-        dbContext.Edges.Add(edge);
 
+        dbContext.Edges.Add(edge);
+        
         dbContext.SaveChangesAsync();
 
     }

@@ -12,6 +12,6 @@ public class EdgeCategory
     
     [Required] public string EdgeCategoryName { get; set; }
 
-    
-    public virtual ICollection<Edge> Edges { get; set; }
+
+    public virtual ICollection<Edge> Edges { get; set; } = new List<Edge>();
 }

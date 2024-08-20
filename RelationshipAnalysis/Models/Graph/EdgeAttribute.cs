@@ -11,6 +11,6 @@ public class EdgeAttribute
     
     [Required] public string EdgeAttributeName { get; set; }
 
-    
-    public virtual ICollection<EdgeValue> EdgeValues { get; set; }
+
+    public virtual ICollection<EdgeValue> EdgeValues { get; set; } = new List<EdgeValue>();
 }

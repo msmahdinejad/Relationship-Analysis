@@ -24,5 +24,5 @@ public class Edge
     public virtual EdgeCategory EdgeCategory { get; set; }
     public virtual Node NodeSource { get; set; }
     public virtual Node NodeDestination { get; set; }
-    public virtual ICollection<EdgeValue> EdgeValues { get; set; }
+    public virtual ICollection<EdgeValue> EdgeValues { get; set; } = new List<EdgeValue>();
 }

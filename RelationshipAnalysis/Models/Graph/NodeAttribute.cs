@@ -12,6 +12,6 @@ public class NodeAttribute
     
     [Required] public string NodeAttributeName { get; set; }
 
-    
-    public virtual ICollection<NodeValue> Values { get; set; }
+
+    public virtual ICollection<NodeValue> Values { get; set; } = new List<NodeValue>();
 }

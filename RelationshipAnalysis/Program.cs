@@ -8,6 +8,8 @@ using RelationshipAnalysis.Services.AccessServices;
 using RelationshipAnalysis.Services.AccessServices.Abstraction;
 using RelationshipAnalysis.Services.AdminPanelServices;
 using RelationshipAnalysis.Services.AdminPanelServices.Abstraction;
+using RelationshipAnalysis.Services.GraphServices;
+using RelationshipAnalysis.Services.GraphServices.Abstraction;
 using RelationshipAnalysis.Services.CategoryServices.EdgeCategory;
 using RelationshipAnalysis.Services.CategoryServices.EdgeCategory.Abstraction;
 using RelationshipAnalysis.Services.CategoryServices.NodeCategory;
@@ -48,7 +50,14 @@ builder.Services.AddSingleton<ICookieSetter, CookieSetter>()
     .AddSingleton<IEdgeCategoryReceiver, EdgeCategoryReceiver>()
     .AddSingleton<ICreateNodeCategoryService, CreateNodeCategoryService>()
     .AddSingleton<ICreateEdgeCategoryService, CreateEdgeCategoryService>()
-    .AddSingleton<IGraphReceiver, GraphReceiver>();
+    .AddSingleton<IGraphReceiver, GraphReceiver>()
+    .AddSingleton<IUserUpdateRolesService, UserUpdateRolesService>()
+    .AddSingleton<IGraphReceiver, GraphReceiver>()
+    .AddSingleton<INodesAdditionService, NodesAdditionService>()
+    .AddSingleton<ISingleNodeAdditionService, SingleNodeAdditionService>()
+    .AddSingleton<ICsvProcessorService, CsvProcessorService>()
+    .AddSingleton<ICsvValidatorService, CsvValidatorService>();
+    
 
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
@@ -102,9 +111,6 @@ app.UseCors(x => x.AllowCredentials().AllowAnyHeader().AllowAnyMethod()
 app.UseMiddleware<SanitizationMiddleware>();
 app.Run();
 
-namespace RelationshipAnalysis
+public partial class Program
 {
-    public partial class Program
-    {
-    }
 }
