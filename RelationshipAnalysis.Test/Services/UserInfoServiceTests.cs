@@ -24,13 +24,13 @@ namespace RelationshipAnalysis.Test.Services
         }
 
         [Fact]
-        public void GetUserAsync_ReturnsNotFound_WhenUserIsNull()
+        public async Task  GetUserAsync_ReturnsNotFound_WhenUserIsNull()
         {
             // Arrange
             User user = null;
 
             // Act
-            var result = _service.GetUser(user);
+            var result = await _service.GetUser(user);
 
             // Assert
             Assert.Equal(StatusCodeType.NotFound, result.StatusCode);
@@ -38,7 +38,7 @@ namespace RelationshipAnalysis.Test.Services
         }
 
         [Fact]
-        public void GetUserAsync_ReturnsSuccess_WhenUserIsNotNull_()
+        public async Task GetUserAsync_ReturnsSuccess_WhenUserIsNotNull_()
         {
             // Arrange
             var user = new User { Username = "Admin" };
@@ -50,7 +50,7 @@ namespace RelationshipAnalysis.Test.Services
             _rolesReceiver.ReceiveRoles(user.Id).Returns(roles);
 
             // Act
-            var result = _service.GetUser(user);
+            var result = await _service.GetUser(user);
 
             // Assert
             Assert.Equal(StatusCodeType.Success, result.StatusCode);

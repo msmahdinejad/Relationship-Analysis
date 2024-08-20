@@ -5,5 +5,5 @@ namespace RelationshipAnalysis.Services.UserPanelServices.Abstraction;
 
 public interface IUserInfoService
 {
-    ActionResponse<UserOutputInfoDto> GetUser(User user);
+    Task<ActionResponse<UserOutputInfoDto>> GetUser(User user);
 }

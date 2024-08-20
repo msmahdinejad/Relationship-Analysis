@@ -55,13 +55,13 @@ namespace RelationshipAnalysis.Test.Services
         }
 
         [Fact]
-        public void ReceiveRoles_ReturnsRoles_WhenUserIdIsValid()
+        public async Task ReceiveRoles_ReturnsRoles_WhenUserIdIsValid()
         {
             // Arrange
             var userId = 1;
 
             // Act
-            var result = _sut.ReceiveRoles(userId);
+            var result = await  _sut.ReceiveRoles(userId);
 
             // Assert
             Assert.NotNull(result);
@@ -71,13 +71,13 @@ namespace RelationshipAnalysis.Test.Services
         }
 
         [Fact]
-        public void ReceiveRoles_ReturnsEmptyList_WhenUserIdHasNoRoles()
+        public async Task ReceiveRoles_ReturnsEmptyList_WhenUserIdHasNoRoles()
         {
             // Arrange
             var userId = 3; // Non-existent user ID
 
             // Act
-            var result = _sut.ReceiveRoles(userId);
+            var result = await _sut.ReceiveRoles(userId);
 
             // Assert
             Assert.NotNull(result);
@@ -85,13 +85,13 @@ namespace RelationshipAnalysis.Test.Services
         }
 
         [Fact]
-        public void ReceiveRoles_ReturnsEmptyList_WhenUserIdIsInvalid()
+        public async Task ReceiveRoles_ReturnsEmptyList_WhenUserIdIsInvalid()
         {
             // Arrange
             var userId = 99; // Invalid user ID
 
             // Act
-            var result = _sut.ReceiveRoles(userId);
+            var result = await _sut.ReceiveRoles(userId);
 
             // Assert
             Assert.NotNull(result);

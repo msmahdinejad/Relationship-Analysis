@@ -9,20 +9,20 @@ namespace RelationshipAnalysis.Services.UserPanelServices;
 
 public class UserInfoService(IRoleReceiver rolesReceiver, IMapper mapper) : IUserInfoService
 {
-    public ActionResponse<UserOutputInfoDto> GetUser(User user)
+    public async Task<ActionResponse<UserOutputInfoDto>> GetUser(User user)
     {
         if (user is null)
         {
             return NotFoundResult();
         }
-        return SuccessResult(user);
+        return await SuccessResult(user);
     }
 
-    private ActionResponse<UserOutputInfoDto> SuccessResult(User user)
+    private async Task<ActionResponse<UserOutputInfoDto>> SuccessResult(User user)
     {
         var result = new UserOutputInfoDto();
         mapper.Map(user, result);
-        result.Roles = rolesReceiver.ReceiveRoles(user.Id);
+        result.Roles = await rolesReceiver.ReceiveRoles(user.Id);
         
         return new ActionResponse<UserOutputInfoDto>()
         {

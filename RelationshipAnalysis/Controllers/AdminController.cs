@@ -27,15 +27,15 @@ public class AdminController(
     public async Task<IActionResult> GetUser(int id)
     {
         var user = await userReceiver.ReceiveUserAsync(id);
-        var result = userInfoService.GetUser(user);
+        var result = await userInfoService.GetUser(user);
         return StatusCode((int)result.StatusCode, result.Data);
     }
 
     [HttpGet]
-    public IActionResult GetAllUser([FromQuery] int page, [FromQuery] int size)
+    public async Task<IActionResult> GetAllUser([FromQuery] int page, [FromQuery] int size)
     {
         var users = userReceiver.ReceiveAllUser(page, size);
-        var result = allUserService.GetAllUser(users);
+        var result = await allUserService.GetAllUser(users);
         return StatusCode((int)result.StatusCode, result.Data);
     }
 

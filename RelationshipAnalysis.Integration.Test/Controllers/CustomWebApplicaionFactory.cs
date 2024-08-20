@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Models;
 using RelationshipAnalysis.Models.Auth;
+using RelationshipAnalysis.Models.Graph;
 
 namespace RelationshipAnalysis.Integration.Test.Controllers;
 
@@ -71,5 +72,46 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         dbContext.Users.Add(user);
         dbContext.Roles.Add(role);
         dbContext.SaveChanges();
+        
+        var nodeCategory1 = new NodeCategory { NodeCategoryName = "Account" };
+        var nodeCategory2 = new NodeCategory { NodeCategoryName = "Person" };
+        
+        var node1 = new Node
+        {
+            NodeUniqueString = "Node1",
+            NodeCategory = nodeCategory1,
+            NodeCategoryId = nodeCategory1.NodeCategoryId
+        };
+
+        var node2 = new Node
+        {
+            NodeUniqueString = "Node2",
+            NodeCategory = nodeCategory2,
+            NodeCategoryId = nodeCategory2.NodeCategoryId
+        };
+
+        var edgeCategory = new EdgeCategory { EdgeCategoryName = "Transaction"};
+
+
+        dbContext.NodeCategories.Add(nodeCategory1);
+        dbContext.NodeCategories.Add(nodeCategory2);
+        dbContext.Nodes.Add(node1);
+        dbContext.Nodes.Add(node2);
+        dbContext.EdgeCategories.Add(edgeCategory);
+        
+        
+        var edge = new Edge
+        {
+            EdgeSourceNodeId = node1.NodeId,
+            EdgeDestinationNodeId = node2.NodeId,
+            EdgeCategory = edgeCategory,
+            EdgeCategoryId = edgeCategory.EdgeCategoryId,
+            EdgeUniqueString = "Edge1"
+        };
+        
+        dbContext.Edges.Add(edge);
+
+        dbContext.SaveChangesAsync();
+
     }
 }

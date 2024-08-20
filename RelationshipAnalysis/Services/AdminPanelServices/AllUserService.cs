@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
@@ -10,43 +11,43 @@ namespace RelationshipAnalysis.Services.AdminPanelServices;
 
 public class AllUserService(IServiceProvider serviceProvider, IMapper mapper, IRoleReceiver rolesReceiver) : IAllUserService
 {
-    public int ReceiveAllUserCount()
+    public async Task<int> ReceiveAllUserCount()
     {
         using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        var users = context.Users.ToList();
+        var users = await context.Users.ToListAsync();
         return users.Count;
     }
-    public ActionResponse<GetAllUsersDto> GetAllUser(List<User> users)
+    public async Task<ActionResponse<GetAllUsersDto>> GetAllUser(List<User> users)
     {
         if (users.IsNullOrEmpty())
         {
             return NotFoundResult();
         }
 
-        var usersList = GetAllUsersList(users);
-        var result = GetAllUsersOutPut(usersList);
+        var usersList = await GetAllUsersList(users);
+        var result = await GetAllUsersOutPut(usersList);
 
         return SuccessResult(result);
     }
 
-    private GetAllUsersDto GetAllUsersOutPut(List<UserOutputInfoDto> usersList)
+    private async Task<GetAllUsersDto> GetAllUsersOutPut(List<UserOutputInfoDto> usersList)
     {
         return new GetAllUsersDto()
         {
             Users = usersList,
-            AllUserCount = ReceiveAllUserCount()
+            AllUserCount = await ReceiveAllUserCount()
         };
     }
 
-    private List<UserOutputInfoDto> GetAllUsersList(List<User> users)
+    private async Task<List<UserOutputInfoDto>> GetAllUsersList(List<User> users)
     {
         var userOutputs = new List<UserOutputInfoDto>();
         foreach (var user in users)
         {
             var data = new UserOutputInfoDto();
             mapper.Map(user, data);
-            data.Roles = rolesReceiver.ReceiveRoles(user.Id);
+            data.Roles = await rolesReceiver.ReceiveRoles(user.Id);
             
             userOutputs.Add(data);
         }

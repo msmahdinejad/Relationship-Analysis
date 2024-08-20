@@ -1,15 +1,19 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using DotNetEnv;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Middlewares;
-using RelationshipAnalysis.Services;
 using RelationshipAnalysis.Services.AccessServices;
 using RelationshipAnalysis.Services.AccessServices.Abstraction;
 using RelationshipAnalysis.Services.AdminPanelServices;
 using RelationshipAnalysis.Services.AdminPanelServices.Abstraction;
+using RelationshipAnalysis.Services.CategoryServices.EdgeCategory;
+using RelationshipAnalysis.Services.CategoryServices.EdgeCategory.Abstraction;
+using RelationshipAnalysis.Services.CategoryServices.NodeCategory;
+using RelationshipAnalysis.Services.CategoryServices.NodeCategory.Abstraction;
+using RelationshipAnalysis.Services.GraphServices;
+using RelationshipAnalysis.Services.GraphServices.Abstraction;
 using RelationshipAnalysis.Services.UserPanelServices;
 using RelationshipAnalysis.Services.UserPanelServices.Abstraction;
 using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices;
@@ -39,7 +43,12 @@ builder.Services.AddSingleton<ICookieSetter, CookieSetter>()
     .AddSingleton<IRoleReceiver, RoleReceiver>()
     .AddSingleton<ILogoutService, LogoutService>()
     .AddSingleton<IUserCreateService, UserCreateService>()
-    .AddSingleton<IUserUpdateRolesService, UserUpdateRolesService>();
+    .AddSingleton<IUserUpdateRolesService, UserUpdateRolesService>()
+    .AddSingleton<INodeCategoryReceiver, NodeCategoryReceiver>()
+    .AddSingleton<IEdgeCategoryReceiver, EdgeCategoryReceiver>()
+    .AddSingleton<ICreateNodeCategoryService, CreateNodeCategoryService>()
+    .AddSingleton<ICreateEdgeCategoryService, CreateEdgeCategoryService>()
+    .AddSingleton<IGraphReceiver, GraphReceiver>();
 
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
@@ -93,6 +102,9 @@ app.UseCors(x => x.AllowCredentials().AllowAnyHeader().AllowAnyMethod()
 app.UseMiddleware<SanitizationMiddleware>();
 app.Run();
 
-public partial class Program
+namespace RelationshipAnalysis
 {
+    public partial class Program
+    {
+    }
 }

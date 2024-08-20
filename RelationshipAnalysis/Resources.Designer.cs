@@ -158,5 +158,23 @@ namespace RelationshipAnalysis {
             }
         }
         
+        internal static string NullDtoErrorMessage {
+            get {
+                return ResourceManager.GetString("NullDtoErrorMessage", resourceCulture);
+            }
+        }
+        
+        internal static string NotUniqueCategoryNameErrorMessage {
+            get {
+                return ResourceManager.GetString("NotUniqueCategoryNameErrorMessage", resourceCulture);
+            }
+        }
+        
+        internal static string SuccessfulCreateCategory {
+            get {
+                return ResourceManager.GetString("SuccessfulCreateCategory", resourceCulture);
+            }
+        }
+        
     }
 }
