@@ -37,7 +37,8 @@ public class UserUpdateRolesService(IServiceProvider serviceProvider) : IUserUpd
         
         using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        var userRoles = context.UserRoles.ToList().FindAll(r => r.UserId == user.Id);
+        var allUserRoles = await context.UserRoles.ToListAsync();
+        var userRoles = allUserRoles.FindAll(r => r.UserId == user.Id);
         context.RemoveRange(userRoles);
         await context.SaveChangesAsync();
     }
@@ -56,10 +57,18 @@ public class UserUpdateRolesService(IServiceProvider serviceProvider) : IUserUpd
         
         using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        var roles = newRoles.Select(r => context.Roles
-            .SingleOrDefaultAsync(R => R.Name == r));
-        roles.ToList().ForEach(r => context.UserRoles.Add(new UserRole()
-            { RoleId = r.Id, UserId = user.Id }));
+        
+        var allRoles = await context.Roles.ToListAsync();
+        var validRoles = newRoles.
+            Select(r => allRoles.SingleOrDefault(R => R.Name == r)).ToList();
+        var userRolesToAdd = validRoles.Select(r =>
+            new UserRole()
+            {
+                RoleId = r.Id,
+                UserId = user.Id
+            });
+        
+        await context.UserRoles.AddRangeAsync(userRolesToAdd);
         await context.SaveChangesAsync();
     }
 

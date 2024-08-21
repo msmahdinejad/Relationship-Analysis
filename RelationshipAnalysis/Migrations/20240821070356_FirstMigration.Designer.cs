@@ -11,8 +11,8 @@ using RelationshipAnalysis.Context;
 namespace RelationshipAnalysis.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240818162120_initial")]
-    partial class initial
+    [Migration("20240821070356_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

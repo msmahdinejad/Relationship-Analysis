@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RelationshipAnalysis.Dto.Category;
 using RelationshipAnalysis.Services.CategoryServices.EdgeCategory.Abstraction;
@@ -9,39 +8,26 @@ namespace RelationshipAnalysis.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]/[action]")]
-public class CategoryController(
+[Route("api/[controller]")]
+public class EdgeController(
     ICreateEdgeCategoryService createEdgeCategoryService,
-    ICreateNodeCategoryService createNodeCategoryService,
-    IEdgeCategoryReceiver edgeCategoryReceiver,
-    INodeCategoryReceiver nodeCategoryReceiver
-) : ControllerBase
+    IEdgeCategoryReceiver edgeCategoryReceiver)
+    : ControllerBase
 {
-    [HttpGet]
-    public async Task<IActionResult> GetAllNodeCategories()
-    {
-        var result = await nodeCategoryReceiver.GetAllNodeCategories();
-        return Ok(result);
-    }
 
-    [HttpGet]
+    [HttpGet("categories")]
     public async Task<IActionResult> GetAllEdgeCategories()
     {
         var result = await edgeCategoryReceiver.GetAllEdgeCategories();
         return Ok(result);
     }
-
-    [HttpPost]
-    public async Task<IActionResult> CreateNodeCategory([FromBody] CreateNodeCategoryDto createNodeCategoryDto)
-    {
-        var result = await createNodeCategoryService.CreateNodeCategory(createNodeCategoryDto);
-        return StatusCode((int)result.StatusCode, result.Data);
-    }
-
-    [HttpPost]
+    
+    [HttpPost("categories")]
     public async Task<IActionResult> CreateEdgeCategory([FromBody] CreateEdgeCategoryDto createEdgeCategoryDto)
     {
         var result = await createEdgeCategoryService.CreateEdgeCategory(createEdgeCategoryDto);
         return StatusCode((int)result.StatusCode, result.Data);
     }
+    
+    //...
 }

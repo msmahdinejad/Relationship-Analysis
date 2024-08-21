@@ -33,7 +33,7 @@ public class UserControllerTests : IClassFixture<CustomWebApplicationFactory<Pro
     public async Task GetUser_ShouldReturnUser_WhenUserIsAuthorized()
     {
         // Arrange
-        var request = new HttpRequestMessage(HttpMethod.Get, "/api/user/getuser");
+        var request = new HttpRequestMessage(HttpMethod.Get, "/api/user");
         var jwtSettings = new JwtSettings
         {
             Key = "kajbdiuhdqhpjQE89HBSDJIABFCIWSGF89GW3EJFBWEIUBCZNMXCJNLZDKNJKSNJKFBIGW3EASHHDUIASZGCUI",
@@ -73,7 +73,7 @@ public class UserControllerTests : IClassFixture<CustomWebApplicationFactory<Pro
         _client.DefaultRequestHeaders.Authorization = null;
 
         // Act
-        var response = await _client.GetAsync("/api/user/getuser");
+        var response = await _client.GetAsync("/api/user");
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -110,7 +110,7 @@ public class UserControllerTests : IClassFixture<CustomWebApplicationFactory<Pro
         Mock<IOptions<JwtSettings>> mockJwtSettings = new();
         mockJwtSettings.Setup(m => m.Value).Returns(jwtSettings);
 
-        var request = new HttpRequestMessage(HttpMethod.Put, "/api/user/updateuser");
+        var request = new HttpRequestMessage(HttpMethod.Put, "/api/user");
         request.Content = new StringContent(
             JsonSerializer.Serialize<UserUpdateInfoDto>(userUpdateInfoDto), 
             Encoding.UTF8, 
@@ -159,7 +159,7 @@ public class UserControllerTests : IClassFixture<CustomWebApplicationFactory<Pro
         Mock<IOptions<JwtSettings>> mockJwtSettings = new();
         mockJwtSettings.Setup(m => m.Value).Returns(jwtSettings);
 
-        var request = new HttpRequestMessage(HttpMethod.Put, "/api/user/updatepassword");
+        var request = new HttpRequestMessage(HttpMethod.Patch, "/api/user/password");
         request.Content = new StringContent(
             JsonSerializer.Serialize<UserPasswordInfoDto>(passwordInfo), 
             Encoding.UTF8, 
@@ -215,5 +215,51 @@ public class UserControllerTests : IClassFixture<CustomWebApplicationFactory<Pro
         response.EnsureSuccessStatusCode();
         var responseData = await response.Content.ReadFromJsonAsync<UserOutputInfoDto>();
         Assert.NotNull(responseData);
+    }
+    
+    [Fact]
+    public async Task GetPermissions_ShouldReturnPermissions_WhenUserIsAuthorized()
+    {
+        // Arrange
+        var request = new HttpRequestMessage(HttpMethod.Get, "/api/user/permissions");
+        var jwtSettings = new JwtSettings
+        {
+            Key = "kajbdiuhdqhpjQE89HBSDJIABFCIWSGF89GW3EJFBWEIUBCZNMXCJNLZDKNJKSNJKFBIGW3EASHHDUIASZGCUI",
+            ExpireMinutes = 60
+        };
+        Mock<IOptions<JwtSettings>> mockJwtSettings = new();
+        mockJwtSettings.Setup(m => m.Value).Returns(jwtSettings);
+
+
+        var user = new User()
+        {
+            Username = "Test",
+            UserRoles = new List<UserRole>() { new UserRole() { Role = new Role() { Name = "admin" } } }
+        };
+
+        var token = new JwtTokenGenerator(mockJwtSettings.Object).GenerateJwtToken(user);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        // Act
+        var response = await _client.SendAsync(request);
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+        var responseData = await response.Content.ReadFromJsonAsync<PermissionDto>();
+        Assert.NotNull(responseData);
+        Assert.NotEmpty(responseData.Permissions);
+    }
+
+    [Fact]
+    public async Task GetPermissions_ShouldReturnUnauthorized_WhenUserIsNotAuthorized()
+    {
+        // Arrange
+        _client.DefaultRequestHeaders.Authorization = null;
+
+        // Act
+        var response = await _client.GetAsync("/api/user/permissions");
+
+        // Assert
+        Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
     }
 }

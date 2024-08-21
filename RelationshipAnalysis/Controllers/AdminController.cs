@@ -11,7 +11,7 @@ namespace RelationshipAnalysis.Controllers;
 
 [Authorize(Roles = nameof(RoleTypes.Admin))]
 [ApiController]
-[Route("api/[controller]/[action]")]
+[Route("api/[controller]")]
 public class AdminController(
     IUserUpdateRolesService userUpdateRolesService,
     IUserCreateService userCreateService,
@@ -23,7 +23,7 @@ public class AdminController(
     IUserPasswordService passwordService,
     IUserReceiver userReceiver) : ControllerBase
 {
-    [HttpGet("{id:int}")]
+    [HttpGet("users/{id:int}")]
     public async Task<IActionResult> GetUser(int id)
     {
         var user = await userReceiver.ReceiveUserAsync(id);
@@ -31,7 +31,7 @@ public class AdminController(
         return StatusCode((int)result.StatusCode, result.Data);
     }
 
-    [HttpGet]
+    [HttpGet("users")]
     public async Task<IActionResult> GetAllUser([FromQuery] int page, [FromQuery] int size)
     {
         var users = userReceiver.ReceiveAllUser(page, size);
@@ -39,14 +39,14 @@ public class AdminController(
         return StatusCode((int)result.StatusCode, result.Data);
     }
 
-    [HttpGet]
-    public IActionResult GetAllRoles()
+    [HttpGet("roles")]
+    public async Task<IActionResult> GetAllRoles()
     {
-        var roles = roleReceiver.ReceiveAllRoles();
+        var roles = await  roleReceiver.ReceiveAllRoles();
         return Ok(roles);
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPut("users/{id:int}")]
     public async Task<IActionResult> UpdateUser(int id, UserUpdateInfoDto userUpdateInfoDto)
     {
         var user = await userReceiver.ReceiveUserAsync(id);
@@ -54,7 +54,7 @@ public class AdminController(
         return StatusCode((int)result.StatusCode, result.Data);
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPatch("users/{id:int}/password")]
     public async Task<IActionResult> UpdatePassword(int id, UserPasswordInfoDto passwordInfoDto)
     {
         var user = await userReceiver.ReceiveUserAsync(id);
@@ -62,7 +62,7 @@ public class AdminController(
         return StatusCode((int)result.StatusCode, result.Data);
     }
 
-    [HttpDelete("{id:int}")]
+    [HttpDelete("users/{id:int}")]
     public async Task<IActionResult> DeleteUser(int id)
     {
         var currentUser = await userReceiver.ReceiveUserAsync(User);
@@ -76,14 +76,14 @@ public class AdminController(
         return StatusCode((int)result.StatusCode, result.Data);
     }
 
-    [HttpPost]
+    [HttpPost("users")]
     public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
     {
         var result = await userCreateService.CreateUser(createUserDto);
         return StatusCode((int)result.StatusCode, result.Data);
     }
 
-    [HttpPut("{id:int}")]
+    [HttpPatch("users/{id:int}/roles")]
     public async Task<IActionResult> UpdateRoles(int id, List<string> newRoles)
     {
         var user = await userReceiver.ReceiveUserAsync(id);

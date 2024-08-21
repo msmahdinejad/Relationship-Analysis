@@ -4,12 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Middlewares;
-using RelationshipAnalysis.Services.AccessServices;
-using RelationshipAnalysis.Services.AccessServices.Abstraction;
 using RelationshipAnalysis.Services.AdminPanelServices;
 using RelationshipAnalysis.Services.AdminPanelServices.Abstraction;
-using RelationshipAnalysis.Services.GraphServices;
-using RelationshipAnalysis.Services.GraphServices.Abstraction;
 using RelationshipAnalysis.Services.CategoryServices.EdgeCategory;
 using RelationshipAnalysis.Services.CategoryServices.EdgeCategory.Abstraction;
 using RelationshipAnalysis.Services.CategoryServices.NodeCategory;
@@ -111,6 +107,9 @@ app.UseCors(x => x.AllowCredentials().AllowAnyHeader().AllowAnyMethod()
 app.UseMiddleware<SanitizationMiddleware>();
 app.Run();
 
-public partial class Program
+namespace RelationshipAnalysis
 {
+    public partial class Program
+    {
+    }
 }

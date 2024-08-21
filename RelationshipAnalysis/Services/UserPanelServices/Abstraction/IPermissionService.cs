@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using RelationshipAnalysis.Dto;
 
-namespace RelationshipAnalysis.Services.AccessServices.Abstraction;
+namespace RelationshipAnalysis.Services.UserPanelServices.Abstraction;
 
 public interface IPermissionService
 {
