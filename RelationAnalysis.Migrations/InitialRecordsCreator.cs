@@ -15,21 +15,19 @@ public class InitialRecordsCreator(ApplicationDbContext context, IConfiguration 
             {
                 Name = "Admin",
                 Permissions =
-                    "[\"/api/Access/GetPermissions\",\"/api/Admin/GetUser/{id}\",\"/api/Admin/GetAllUser\",\"/api/Admin/GetAllRoles\",\"/api/Admin/UpdateUser/{id}\",\"/api/Admin/UpdatePassword/{id}\",\"/api/Admin/DeleteUser/{id}\",\"/api/Admin/CreateUser\",\"/api/Admin/UpdateRoles/{id}\",\"/api/Auth/Login\", \"/api/User/GetUser\",\"/api/User/UpdateUser\",\"/api/User/UpdatePassword\",\"/api/User/Logout\"]",
+                    "[\"/api/Admin\",\"/api/Auth\", \"/api/User\", \"/api/Edge\", \"/api/Graph\", \"/api/Node\"]",
                 Id = 1
             },
             new Role()
             {
                 Name = "DataAdmin",
-                Permissions =
-                    "[\"/api/Access/GetPermissions\",\"/api/Auth/Login\",\"/api/User/GetUser\",\"/api/User/UpdateUser\",\"/api/User/UpdatePassword\",\"/api/User/Logout\"]",
+                Permissions = "[\"/api/Auth\", \"/api/User\", \"/api/Edge\", \"/api/Graph\", \"/api/Node\"]",
                 Id = 2
             },
             new Role()
             {
                 Name = "DataAnalyst",
-                Permissions =
-                    "[\"/api/Access/GetPermissions\",\"/api/Auth/Login\",\"/api/User/GetUser\",\"/api/User/UpdateUser\",\"/api/User/UpdatePassword\",\"/api/User/Logout\"]",
+                Permissions = "[\"/api/Auth\", \"/api/User\", \"/api/Edge\", \"/api/Graph\", \"/api/Node\"]",
                 Id = 3
             }
         };
