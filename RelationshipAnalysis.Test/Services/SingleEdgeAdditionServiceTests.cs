@@ -89,12 +89,13 @@ public class SingleEdgeAdditionServiceTests
             { "Attribute1", "Value1" }
         };
 
-        // Act
-        await _sut.AddSingleEdge(record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
-
-        // Assert
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        // Act
+        await _sut.AddSingleEdge(context, record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
+
+        // Assert
         var edge = await context.Edges.SingleOrDefaultAsync(e => e.EdgeUniqueString == "TestEdge");
         Assert.NotNull(edge);
         Assert.Equal(1, edge.EdgeSourceNodeId);
@@ -121,12 +122,14 @@ public class SingleEdgeAdditionServiceTests
             { "Attribute2", "Value2" }
         };
 
-        // Act
-        await _sut.AddSingleEdge(record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
-
-        // Assert
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        
+        // Act
+        await _sut.AddSingleEdge(context, record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
+
+        // Assert
         var edge = await context.Edges.SingleOrDefaultAsync(e => e.EdgeUniqueString == "tran1");
         Assert.NotNull(edge);
         Assert.Equal(1, edge.EdgeSourceNodeId);
@@ -154,9 +157,13 @@ public class SingleEdgeAdditionServiceTests
             { "Attribute1", "Value1" }
         };
         
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        
         // Act
         var action = () =>
-            _sut.AddSingleEdge(record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
+            _sut.AddSingleEdge(context, record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
         
         // Assert
         await Assert.ThrowsAsync<Exception>(action);
@@ -174,10 +181,14 @@ public class SingleEdgeAdditionServiceTests
             { "TargetNode", "acc2" },
             { "Attribute1", "Value1" }
         };
+
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
         
         // Act
         var action = () =>
-            _sut.AddSingleEdge(record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
+            _sut.AddSingleEdge(context, record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
         
         // Assert
         await Assert.ThrowsAsync<Exception>(action);
@@ -196,9 +207,12 @@ public class SingleEdgeAdditionServiceTests
             { "Attribute1", "Value1" }
         };
         
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
         // Act
         var action = () =>
-            _sut.AddSingleEdge(record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
+            _sut.AddSingleEdge(context, record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
         
         // Assert
         await Assert.ThrowsAsync<Exception>(action);
@@ -215,9 +229,13 @@ public class SingleEdgeAdditionServiceTests
             { "Attribute1", "Value1" }
         };
     
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        
         // Act
         var action = () =>
-            _sut.AddSingleEdge(record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
+            _sut.AddSingleEdge(context, record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
     
         // Assert 
         await Assert.ThrowsAsync<Exception>(action);
@@ -234,10 +252,14 @@ public class SingleEdgeAdditionServiceTests
             { "TargetNode", "NotExist" },
             { "Attribute1", "Value1" }
         };
+        
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
     
         // Act
         var action = () =>
-            _sut.AddSingleEdge(record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
+            _sut.AddSingleEdge(context, record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
     
         // Assert 
         await Assert.ThrowsAsync<Exception>(action);
@@ -255,9 +277,12 @@ public class SingleEdgeAdditionServiceTests
             { "att1", "dsjsdnfukj" }
         };
     
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
         // Act 
         var action = () =>
-            _sut.AddSingleEdge(record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
+            _sut.AddSingleEdge(context, record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
         
         
         // Assert
@@ -275,10 +300,14 @@ public class SingleEdgeAdditionServiceTests
             { "TargetNode", "acc2" },
             { "att2", "dsjsdnfukj" }
         };
-    
+
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        
         // Act 
         var action = () =>
-            _sut.AddSingleEdge(record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
+            _sut.AddSingleEdge(context, record, "UniqueEdge", "SourceNode", "TargetNode", 1, 1, 1);
         
         
         // Assert

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using NSubstitute;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
@@ -143,43 +144,52 @@ public class NodesAdditionServiceTests
         Assert.Equivalent(expected, result);
     }
 
-//     // TODO
-//     [Fact]
-//     public async Task AddNodes_ShouldReturnBadRequestAndRollBack_WhenDbFailsToAddData()
-//     {
-//         // Arrange
-//         var expected = new ActionResponse<MessageDto>()
-//         {
-//             Data = new MessageDto(Resources.FailedAddRecordsMessage),
-//             StatusCode = StatusCodeType.BadRequest
-//         };
-//         var csvContent = @"""AccountID"",""CardID"",""IBAN""
-// ""6534454617"",""6104335000000190"",""IR120778801496000000198""
-// ""6534454617"",""6104335000000190"",""IR120778801496000000198""
-// ""4000000028"",""6037699000000020"",""IR033880987114000000028""
-// ";
-//         var fileToBeSend = CreateFileMock(csvContent);
-//
-//         var validatorMock = NSubstitute.Substitute.For<ICsvValidatorService>();
-//         validatorMock.Validate(fileToBeSend, "AccountID").Returns(expected);
-//         var processorMock = NSubstitute.Substitute.For<ICsvProcessorService>();
-//         processorMock.ProcessCsvAsync(fileToBeSend).Returns(new List<dynamic>());
-//         var additionServiceMock = NSubstitute.Substitute.For<ISingleNodeAdditionService>();
-//         _sut = new NodesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock);
-//
-//         // Act
-//         var result = await _sut.AddNodes(new UploadNodeDto()
-//         {
-//             File = fileToBeSend,
-//             NodeCategoryName = "Account",
-//             UniqueKeyHeaderName = "AccountID"
-//         });
-//         // Assert
-//         Assert.Equivalent(expected, result);
-//         using var scope = _serviceProvider.CreateScope();
-//         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-//         Assert.Equal(0, context.Nodes.Count());
-//     }
+    // TODO
+    [Fact]
+    public async Task AddNodes_ShouldReturnBadRequestAndRollBack_WhenDbFailsToAddData()
+    {
+        // Arrange
+        var expected = new ActionResponse<MessageDto>()
+        {
+            Data = new MessageDto(Resources.ValidFileMessage),
+            StatusCode = StatusCodeType.Success
+        };
+        var csvContent = @"""AccountID"",""CardID"",""IBAN""
+""6534454617"",""6104335000000190"",""IR120778801496000000198""
+""6534454617"",""6104335000000190"",""IR120778801496000000198""
+""4000000028"",""6037699000000020"",""IR033880987114000000028""
+";
+        var fileToBeSend = CreateFileMock(csvContent);
+
+        var validatorMock = NSubstitute.Substitute.For<ICsvValidatorService>();
+        validatorMock.Validate(fileToBeSend, "AccountID").Returns(expected);
+        var processorMock = NSubstitute.Substitute.For<ICsvProcessorService>();
+        processorMock.ProcessCsvAsync(fileToBeSend).Returns(new List<dynamic>(){ new Dictionary<string, object>() });
+        var additionServiceMock = new Mock<ISingleNodeAdditionService>();
+        
+        additionServiceMock
+            .Setup(service => service.AddSingleNode(
+                It.IsAny<ApplicationDbContext>(),
+                It.IsAny<IDictionary<string, object>>(),
+                It.IsAny<string>(),
+                It.IsAny<int>()
+            ))
+            .ThrowsAsync(new Exception("Custom exception message"));
+        _sut = new NodesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock.Object);
+
+        // Act
+        var result = await _sut.AddNodes(new UploadNodeDto()
+        {
+            File = fileToBeSend,
+            NodeCategoryName = "Account",
+            UniqueKeyHeaderName = "AccountID"
+        });
+        // Assert
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        Assert.Equal(0, context.Nodes.Count());
+        Assert.Equal("Custom exception message", result.Data.Message);
+    }
     
     
     private IFormFile CreateFileMock(string csvContent)

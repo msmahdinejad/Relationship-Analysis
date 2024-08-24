@@ -8,10 +8,8 @@ namespace RelationshipAnalysis.Services.GraphServices;
 
 public class SingleNodeAdditionService(IServiceProvider serviceProvider) : ISingleNodeAdditionService
 {
-    public async Task AddSingleNode(IDictionary<string, object> record, string uniqueHeaderName, int nodeCategoryId)
+    public async Task AddSingleNode(ApplicationDbContext context, IDictionary<string, object> record, string uniqueHeaderName, int nodeCategoryId)
     {
-        using var scope = serviceProvider.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         if (((string)record[uniqueHeaderName]).IsNullOrEmpty())
         {
             throw new Exception(Resources.FailedAddRecordsMessage);

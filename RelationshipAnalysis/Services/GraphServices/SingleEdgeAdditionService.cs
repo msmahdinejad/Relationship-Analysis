@@ -9,13 +9,10 @@ namespace RelationshipAnalysis.Services.GraphServices;
 public class SingleEdgeAdditionService(IServiceProvider serviceProvider) : ISingleEdgeAdditionService
 
 {
-    public async Task AddSingleEdge(IDictionary<string, object> record, string uniqueHeaderName,
+    public async Task AddSingleEdge(ApplicationDbContext context, IDictionary<string, object> record, string uniqueHeaderName,
         string uniqueSourceHeaderName,
         string uniqueTargetHeaderName, int edgeCategoryId, int sourceNodeCategoryId, int targetNodeCategoryId)
     {
-        using var scope = serviceProvider.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
         if (((string)record[uniqueHeaderName]).IsNullOrEmpty())
         {
             throw new Exception(Resources.FailedAddRecordsMessage);

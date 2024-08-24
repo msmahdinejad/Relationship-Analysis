@@ -63,12 +63,14 @@ public class SingleNodeAdditionServiceTests
             { "Attribute1", "Value1" }
         };
 
-        // Act
-        await _sut.AddSingleNode(record, "UniqueName", 1);
-
-        // Assert
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        // Act
+        await _sut.AddSingleNode(context, record, "UniqueName", 1);
+
+        // Assert
+       
         var node = await context.Nodes.SingleOrDefaultAsync(n => n.NodeUniqueString == "TestNode2");
         Assert.NotNull(node);
         Assert.Equal(1, node.NodeCategoryId);
@@ -91,12 +93,14 @@ public class SingleNodeAdditionServiceTests
             { "Attribute2", "Value2" }
         };
 
-        // Act
-        await _sut.AddSingleNode(record, "UniqueName", 1);
-
-        // Assert
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        // Act
+        await _sut.AddSingleNode(context, record, "UniqueName", 1);
+
+        // Assert
+        
         var node = await context.Nodes.SingleOrDefaultAsync(n => n.NodeUniqueString == "TestNode");
         Assert.NotNull(node);
         Assert.Equal(1, node.NodeCategoryId);
@@ -119,8 +123,11 @@ public class SingleNodeAdditionServiceTests
             { "Attribute1", "Value1" }
         };
 
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
         // Act
-        var action = () => _sut.AddSingleNode(record, "UniqueName", 1);
+        var action = () => _sut.AddSingleNode(context, record, "UniqueName", 1);
 
         // Assert
         await Assert.ThrowsAsync<Exception>(action);
@@ -136,8 +143,11 @@ public class SingleNodeAdditionServiceTests
             { "Attribute1", "ExistingValue" },
         };
 
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
         // Act
-        var action = () => _sut.AddSingleNode(record, "UniqueName", 1);
+        var action = () => _sut.AddSingleNode(context, record, "UniqueName", 1);
 
         // Assert
         await Assert.ThrowsAsync<Exception>(action);

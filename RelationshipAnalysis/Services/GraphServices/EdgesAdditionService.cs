@@ -48,13 +48,17 @@ public class EdgesAdditionService(
 
         var objects = await csvProcessorService.ProcessCsvAsync(file);
 
-        using (var transaction = await context.Database.BeginTransactionAsync())
+        await using (var transaction = await context.Database.BeginTransactionAsync())
         {
             try
-            {
-                objects.ForEach(ob =>
-                    singleEdgeAdditionService.AddSingleEdge((IDictionary<string, object>)ob, uniqueHeader, uniqueSourceHeader, uniqueTargetHeader,
-                        edgeCategory.EdgeCategoryId, sourceNodeCategory.NodeCategoryId ,targetNodeCategory.NodeCategoryId));
+            { 
+                foreach (var obj in objects)
+                {
+                    await singleEdgeAdditionService.AddSingleEdge(context, (IDictionary<string, object>)obj,
+                        uniqueHeader, uniqueSourceHeader, uniqueTargetHeader,
+                        edgeCategory.EdgeCategoryId, sourceNodeCategory.NodeCategoryId,
+                        targetNodeCategory.NodeCategoryId);
+                }
                 await transaction.CommitAsync();
             }
             catch (Exception e)

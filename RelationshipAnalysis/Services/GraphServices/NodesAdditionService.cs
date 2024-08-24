@@ -34,13 +34,15 @@ public class NodesAdditionService(
 
         var objects = await csvProcessorService.ProcessCsvAsync(file);
 
-        using (var transaction = await context.Database.BeginTransactionAsync())
+        await using (var transaction = await context.Database.BeginTransactionAsync())
         {
             try
             {
-                objects.ForEach(ob =>
-                    singleNodeAdditionService.AddSingleNode((IDictionary<string, object>)ob, uniqueHeader,
-                        nodeCategory.NodeCategoryId));
+                foreach (var obj in objects)
+                {
+                    await singleNodeAdditionService.AddSingleNode(context, (IDictionary<string, object>)obj, uniqueHeader,
+                        nodeCategory.NodeCategoryId);
+                }
                 await transaction.CommitAsync();
             }
             catch (Exception e)
