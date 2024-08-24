@@ -1,7 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
-
+    <data name="InvalidTargetNodeCategory">
+        <value>Target Node category is invalid!</value>
+    </data>
+    <data name="InvalidSourceNodeCategory">
+        <value>Source Node category is invalid!</value>
+    </data>
+    <data name="InvalidEdgeCategory">
+        <value>Edge category is invalid!</value>
+    </data>
+    <data name="SuccessfulEdgeAdditionMessage">
+        <value>Edges added successfully!</value>
+    </data>
+    
+    
     <data name="ValidFileMessage">
         <value>File is valid!</value>
     </data>

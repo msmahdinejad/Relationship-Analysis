@@ -7,7 +7,7 @@ public class UploadNodeDto
     [Required]
     public string NodeCategoryName { get; set; }
     [Required]
-    public string UniqueAttributeHeaderName { get; set; }
+    public string UniqueKeyHeaderName { get; set; }
     [Required]
     public IFormFile File { get; set; }
 }

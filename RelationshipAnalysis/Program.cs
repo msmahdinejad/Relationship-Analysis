@@ -19,7 +19,9 @@ using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices.A
 using RelationshipAnalysis.Settings.JWT;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Configuration
+    .AddJsonFile("appsettings.json")
+    .AddEnvironmentVariables();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -52,6 +54,8 @@ builder.Services.AddSingleton<ICookieSetter, CookieSetter>()
     .AddSingleton<INodesAdditionService, NodesAdditionService>()
     .AddSingleton<ISingleNodeAdditionService, SingleNodeAdditionService>()
     .AddSingleton<ICsvProcessorService, CsvProcessorService>()
+    .AddSingleton<ISingleEdgeAdditionService, SingleEdgeAdditionService>()
+    .AddSingleton<IEdgesAdditionService, EdgesAdditionService>()
     .AddSingleton<ICsvValidatorService, CsvValidatorService>();
     
 

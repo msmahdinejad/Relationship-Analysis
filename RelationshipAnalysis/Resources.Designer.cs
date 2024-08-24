@@ -214,5 +214,30 @@ namespace RelationshipAnalysis {
             }
         }
         
+        
+        internal static string SuccessfulEdgeAdditionMessage {
+            get {
+                return ResourceManager.GetString("SuccessfulEdgeAdditionMessage", resourceCulture);
+            }
+        }
+        
+        internal static string InvalidEdgeCategory {
+            get {
+                return ResourceManager.GetString("InvalidEdgeCategory", resourceCulture);
+            }
+        }
+        
+        internal static string InvalidSourceNodeCategory {
+            get {
+                return ResourceManager.GetString("InvalidSourceNodeCategory", resourceCulture);
+            }
+        }
+        
+        internal static string InvalidTargetNodeCategory {
+            get {
+                return ResourceManager.GetString("InvalidTargetNodeCategory", resourceCulture);
+            }
+        }
+        
     }
 }

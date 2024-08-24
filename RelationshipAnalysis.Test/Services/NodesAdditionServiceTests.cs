@@ -22,26 +22,30 @@ public class NodesAdditionServiceTests
 
     public NodesAdditionServiceTests()
     {
-        _context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>()
+        var serviceCollection = new ServiceCollection();
+
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
-            .Options);
-            
-        var serviceCollection = new ServiceCollection();
-        serviceCollection.AddScoped(_ => _context);
+            .Options;
+        
+        serviceCollection.AddScoped(_ => new ApplicationDbContext(options));
+
+        _serviceProvider = serviceCollection.BuildServiceProvider();
 
         SeedDatabase();
-        _serviceProvider = serviceCollection.BuildServiceProvider();
     }
 
     private void SeedDatabase()
     {
-        _context.Add(new NodeCategory()
+        using var scope = _serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        context.Add(new NodeCategory()
         {
             NodeCategoryName = "Account",
             NodeCategoryId = 1
         });
-        _context.SaveChanges();
+        context.SaveChanges();
     }
 
     [Fact]
@@ -70,7 +74,7 @@ public class NodesAdditionServiceTests
         {
             File = fileToBeSend,
             NodeCategoryName = "Account",
-            UniqueAttributeHeaderName = "SomeHeaderThatDoesntExist"
+            UniqueKeyHeaderName = "SomeHeaderThatDoesntExist"
         });
         // Assert
         Assert.Equivalent(expected, result);
@@ -100,7 +104,7 @@ public class NodesAdditionServiceTests
         {
             File = fileToBeSend,
             NodeCategoryName = "SomeNodeCategoryThatDoesntExist",
-            UniqueAttributeHeaderName = "AccountID"
+            UniqueKeyHeaderName = "AccountID"
         });
         // Assert
         Assert.Equivalent(expected, result);
@@ -133,13 +137,51 @@ public class NodesAdditionServiceTests
         {
             File = fileToBeSend,
             NodeCategoryName = "Account",
-            UniqueAttributeHeaderName = "AccountID"
+            UniqueKeyHeaderName = "AccountID"
         });
         // Assert
         Assert.Equivalent(expected, result);
     }
 
-
+//     // TODO
+//     [Fact]
+//     public async Task AddNodes_ShouldReturnBadRequestAndRollBack_WhenDbFailsToAddData()
+//     {
+//         // Arrange
+//         var expected = new ActionResponse<MessageDto>()
+//         {
+//             Data = new MessageDto(Resources.FailedAddRecordsMessage),
+//             StatusCode = StatusCodeType.BadRequest
+//         };
+//         var csvContent = @"""AccountID"",""CardID"",""IBAN""
+// ""6534454617"",""6104335000000190"",""IR120778801496000000198""
+// ""6534454617"",""6104335000000190"",""IR120778801496000000198""
+// ""4000000028"",""6037699000000020"",""IR033880987114000000028""
+// ";
+//         var fileToBeSend = CreateFileMock(csvContent);
+//
+//         var validatorMock = NSubstitute.Substitute.For<ICsvValidatorService>();
+//         validatorMock.Validate(fileToBeSend, "AccountID").Returns(expected);
+//         var processorMock = NSubstitute.Substitute.For<ICsvProcessorService>();
+//         processorMock.ProcessCsvAsync(fileToBeSend).Returns(new List<dynamic>());
+//         var additionServiceMock = NSubstitute.Substitute.For<ISingleNodeAdditionService>();
+//         _sut = new NodesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock);
+//
+//         // Act
+//         var result = await _sut.AddNodes(new UploadNodeDto()
+//         {
+//             File = fileToBeSend,
+//             NodeCategoryName = "Account",
+//             UniqueKeyHeaderName = "AccountID"
+//         });
+//         // Assert
+//         Assert.Equivalent(expected, result);
+//         using var scope = _serviceProvider.CreateScope();
+//         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+//         Assert.Equal(0, context.Nodes.Count());
+//     }
+    
+    
     private IFormFile CreateFileMock(string csvContent)
     {
         var csvFileName = "test.csv";

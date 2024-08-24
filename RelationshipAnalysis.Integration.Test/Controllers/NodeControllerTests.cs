@@ -110,7 +110,7 @@ public class NodeControllerTests : IClassFixture<CustomWebApplicationFactory<Pro
         
         var formDataContent = new MultipartFormDataContent();
         formDataContent.Add(new StringContent("Account"), "NodeCategoryName");
-        formDataContent.Add(new StringContent("AccountID"), "UniqueAttributeHeaderName");
+        formDataContent.Add(new StringContent("AccountID"), "UniqueKeyHeaderName");
         formDataContent.Add(fileContent, "file", mockFile.FileName);
 
         var request = new HttpRequestMessage(HttpMethod.Post, "api/node");
