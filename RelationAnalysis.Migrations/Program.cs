@@ -33,6 +33,7 @@ namespace RelationAnalysis.Migrations
 
             var configuration = host.Services.GetRequiredService<IConfiguration>();
             Console.WriteLine(configuration.GetValue<string>("CONNECTION_STRING"));
+            Console.WriteLine(configuration.GetValue<string>("DefaultPassword"));
 
             using (var scope = host.Services.CreateScope())
             {
