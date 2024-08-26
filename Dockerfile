@@ -26,5 +26,6 @@ FROM base AS final
 
 COPY --from=build /app/publish .
 COPY --from=build /app/build/RelationAnalysis.Migrations.dll ./RelationAnalysis.Migrations.dll
-
+ENV ASPNETCORE_URLS=http://*:80
+ENV ASPNETCORE_ENVIRONMENT=Development
 CMD ["dotnet", "RelationshipAnalysis.dll"]
