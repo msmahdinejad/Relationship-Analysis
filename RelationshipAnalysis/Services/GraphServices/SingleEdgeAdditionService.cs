@@ -49,7 +49,7 @@ public class SingleEdgeAdditionService(IServiceProvider serviceProvider) : ISing
             && e.EdgeUniqueString == (string)record[uniqueHeaderName]);
         if (newEdge == null)
         {
-            newEdge = new Edge()
+            newEdge = new Models.Graph.Edge()
             {
                 EdgeUniqueString = (string)record[uniqueHeaderName],
                 EdgeSourceNodeId = source.NodeId,

@@ -20,7 +20,7 @@ public class SingleNodeAdditionService(IServiceProvider serviceProvider) : ISing
             && n.NodeCategoryId == nodeCategoryId);
         if (newNode == null)
         {
-            newNode = new Node()
+            newNode = new Models.Graph.Node()
             {
                 NodeUniqueString = (string)record[uniqueHeaderName],
                 NodeCategoryId = nodeCategoryId,
