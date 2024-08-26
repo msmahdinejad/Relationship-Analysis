@@ -23,11 +23,6 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASS }}
 
-      - name: Build migration Docker image
-        id: migration_image
-        run: |
-          docker build --target migrate -t ${{ vars.DOCKERHUB_USERNAME }}/negar-migration:latest . 
-
       - name: Build the Docker image
         id: build_image
         run: |
@@ -38,12 +33,6 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push migration Docker image
-        run : |
-          docker push ${{ vars.DOCKERHUB_USERNAME }}/negar-migration:latest
-          docker tag ${{ vars.DOCKERHUB_USERNAME }}/negar-migration:latest ${{ vars.DOCKERHUB_USERNAME }}/negar-migration:${{ steps.tag_version.outputs.new_tag }}
-          docker push ${{ vars.DOCKERHUB_USERNAME }}/negar-migration:${{ steps.tag_version.outputs.new_tag }}
 
       - name: Push the Docker image
         run: |
