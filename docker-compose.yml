@@ -10,38 +10,39 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:  
-      test: ["CMD", "pg_isready", "-U", "postgres"]  
-      interval: 30s  
-      timeout: 10s  
-      retries: 5  
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 
-  migrate:
-    image: mhchah/negar-migration:latest
-    # build:  
-    #   context: .
-    #   dockerfile: Dockerfile
-    #   target: migrate
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      CONNECTION_STRING: Host=postgres;Database=postgres;Username=postgres;Password=postgres;
-
-
-  build:
+  migration:
     image: mhchah/negar-backend:latest
     # build:
     #   context: .
     #   dockerfile: Dockerfile
     depends_on:
-      migrate:
+      postgres:
+        condition: service_healthy
+    environment:
+      CONNECTION_STRING: Host=postgres;Database=postgres;Username=postgres;Password=postgres;
+    # command: ["cat", "appsettings.json"]
+    command: ["dotnet", "./RelationAnalysis.Migrations.dll"]
+
+
+  app:
+    image: mhchah/negar-backend:latest
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    depends_on:
+      migration:
         condition: service_completed_successfully
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       CONNECTION_STRING: Host=postgres;Database=postgres;Username=postgres;Password=postgres;
     ports:
-      - "8085:80"
+      - "8080:8080"
 
 volumes:
   pgdata:
