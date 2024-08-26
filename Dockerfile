@@ -25,5 +25,6 @@ RUN dotnet publish RelationshipAnalysis.sln -c Release -o publish
 FROM base AS final
 
 COPY --from=build /app/publish .
+COPY --from=build /app/build/RelationAnalysis.Migrations.dll ./RelationAnalysis.Migrations.dll
 
 CMD ["dotnet", "RelationshipAnalysis.dll"]
