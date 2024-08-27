@@ -40,10 +40,9 @@ jobs:
           docker tag ${{ vars.DOCKERHUB_USERNAME }}/negar-backend:latest ${{ vars.DOCKERHUB_USERNAME }}/negar-backend:${{ steps.tag_version.outputs.new_tag }}  
           docker push ${{ vars.DOCKERHUB_USERNAME }}/negar-backend:${{ steps.tag_version.outputs.new_tag }}  
 
-      - name: Install GitHub CLI and yq 
+      - name: Install yq 
         run: |  
           sudo apt-get update
-          sudo apt-get install -y gh
           sudo snap install yq
 
       - name: Clone Deployment Repository
@@ -63,28 +62,11 @@ jobs:
           git config --local user.email "m.h.chah4@gmail.com"  
           git config --local user.name "muhuchah"  
           
-          # Create a new branch for the changes  
-          NEW_BRANCH="update-backend-tag-${{ steps.tag_version.outputs.new_tag }}"  
-          git checkout -b $NEW_BRANCH  
           git add values.yaml  
           git commit -m "Update backend tag to ${{ steps.tag_version.outputs.new_tag }}"  
 
-      - name: Push changes to new branch
+      - name: Push changes
         run: |
           cd Summer1403-Project-Group04-Deployment
           git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/Star-Academy/Summer1403-Project-Group04-Deployment.git
-          git push --set-upstream origin $NEW_BRANCH
-
-      - name: Create Pull Request  
-        run: |  
-          cd helm-chart-repo  
-          gh pr create --base main --head $NEW_BRANCH --title "Update backend tag to ${{ steps.tag_version.outputs.new_tag }}" --body "This PR updates the backend image tag to version ${{ steps.tag_version.outputs.new_tag }}."  
-        env:  
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-
-      # - name: Deploy the Helm chart  
-      #   run: |  
-      #     cd helm-chart-repo  
-      #     helm repo add my-repo <your-git-repo-url>  
-      #     helm repo update  
-      #     helm upgrade --install my-app my-repo/my-app --values values.yaml
+          git push origin main
