@@ -71,7 +71,7 @@ jobs:
 
       - name: Push changes to new branch
         run: |
-          ls
+          cd Summer1403-Project-Group04-Deployment
           git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/Star-Academy/Summer1403-Project-Group04-Deployment.git
           git push --set-upstream origin $NEW_BRANCH
 
