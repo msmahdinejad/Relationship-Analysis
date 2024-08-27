@@ -40,29 +40,26 @@ jobs:
           docker tag ${{ vars.DOCKERHUB_USERNAME }}/negar-backend:latest ${{ vars.DOCKERHUB_USERNAME }}/negar-backend:${{ steps.tag_version.outputs.new_tag }}  
           docker push ${{ vars.DOCKERHUB_USERNAME }}/negar-backend:${{ steps.tag_version.outputs.new_tag }}  
 
-      - name: Install GitHub CLI and yq  
+      - name: Install GitHub CLI and yq 
         run: |  
-          sudo apt-get update  
-          sudo apt-get install -y gh  
-          sudo snap install yq  
-        
-      - name: Authenticate GitHub CLI  
-        run: |  
-          echo "Authenticating GitHub CLI..."  
-          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token  
+          sudo apt-get update\
+          sudo apt-get install -y gh
+          sudo snap install yq
 
-
-      - name: Clone Helm Chart Repository  
-        run: |  
-          git clone https://github.com/Star-Academy/Summer1403-Project-Group04-Deployment helm-chart-repo  
-          cd helm-chart-repo  
-          git checkout main  
+      - name: Clone Deployment Repository
+        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
+        with:
+          depth: 1
+          branch: 'main'
+          owner: 'Star-Academy'
+          repository: 'Summer1403-Project-Group04-Deployment'
 
       - name: Update values.yaml for backend  
         run: |  
           echo "Updating values.yaml for backend..."  
-          cd helm-chart-repo  
+          cd Summer1403-Project-Group04-Deployment 
           yq eval ".backend.tag = \"${{ steps.tag_version.outputs.new_tag }}\"" -i values.yaml  
+
           git config --local user.email "m.h.chah4@gmail.com"  
           git config --local user.name "muhuchah"  
           
@@ -72,11 +69,11 @@ jobs:
           git add values.yaml  
           git commit -m "Update backend tag to ${{ steps.tag_version.outputs.new_tag }}"  
 
-      - name: Push changes to new branch  
-        run: |  
-          cd helm-chart-repo  
-          git remote | cat
-          git push --set-upstream origin $NEW_BRANCH  
+      - name: Push changes to new branch
+        run: |
+          cd Summer1403-Project-Group03-Deployment
+          git remote set-url origin https://x-access-token:${{ secrets.PAT }}@github.com/Star-Academy/Summer1403-Project-Group04-Deployment.git
+          git push --set-upstream origin $NEW_BRANCH
 
       - name: Create Pull Request  
         run: |  
