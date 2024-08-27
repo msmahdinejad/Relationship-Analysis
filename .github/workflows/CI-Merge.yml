@@ -69,6 +69,7 @@ jobs:
       - name: Push changes to new branch  
         run: |  
           cd helm-chart-repo  
+          git branch | cat
           git push --set-upstream origin $NEW_BRANCH  
 
       - name: Create Pull Request  
