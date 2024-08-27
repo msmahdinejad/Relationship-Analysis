@@ -42,7 +42,7 @@ jobs:
 
       - name: Install GitHub CLI and yq 
         run: |  
-          sudo apt-get update\
+          sudo apt-get update
           sudo apt-get install -y gh
           sudo snap install yq
 
