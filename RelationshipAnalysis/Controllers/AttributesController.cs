@@ -10,15 +10,15 @@ namespace RelationshipAnalysis.Controllers;
 public class AttributesController([FromKeyedServices("node")] IAttributesReceiver nodeAttributeReceiver,[FromKeyedServices("edge")] IAttributesReceiver edgeAttributeReceiver) : ControllerBase
 {
     [HttpGet("nodes")]
-    public async Task<IActionResult> GetNodeAttributes(int nodeCategoryId)
+    public async Task<IActionResult> GetNodeAttributes(string nodeCategoryName)
     {
-        var result = await nodeAttributeReceiver.GetAllAttributes(nodeCategoryId);
+        var result = await nodeAttributeReceiver.GetAllAttributes(nodeCategoryName);
         return Ok(result);
     }
     [HttpGet("edges")]
-    public async Task<IActionResult> GetEdgeAttributes(int edgeCategoryId)
+    public async Task<IActionResult> GetEdgeAttributes(string edgeCategoryName)
     {
-        var result = await edgeAttributeReceiver.GetAllAttributes(edgeCategoryId);
+        var result = await edgeAttributeReceiver.GetAllAttributes(edgeCategoryName);
         return Ok(result);
     }
 }

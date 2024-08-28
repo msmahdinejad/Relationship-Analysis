@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <root>
+    <data name="InvalidClauseInSourceCategory">
+        <value>One or more given attributes in source category is invalid</value>
+    </data>
+    <data name="InvalidClauseInDestinationCategory">
+        <value>One or more given attributes in target category is invalid</value>
+    </data>
+    <data name="InvalidClauseInEdgeCategory">
+        <value>One or more given attributes in edge category is invalid</value>
+    </data>
+
     <data name="InvalidTargetNodeCategory">
         <value>Target Node category is invalid!</value>
     </data>

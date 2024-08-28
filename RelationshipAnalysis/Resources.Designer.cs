@@ -50,7 +50,23 @@ namespace RelationshipAnalysis {
                 return ResourceManager.GetString("InvalidPasswordMessage", resourceCulture);
             }
         }
-        
+
+        internal static string InvalidClauseInSourceCategory {
+            get {
+                return ResourceManager.GetString("InvalidClauseInSourceCategory", resourceCulture);
+            }
+        }
+        internal static string InvalidClauseInDestinationCategory {
+            get {
+                return ResourceManager.GetString("InvalidClauseInDestinationCategory", resourceCulture);
+            }
+        }
+        internal static string InvalidClauseInEdgeCategory {
+            get {
+                return ResourceManager.GetString("InvalidClauseInEdgeCategory", resourceCulture);
+            }
+        }
+
         internal static string SuccessfulLogoutMessage {
             get {
                 return ResourceManager.GetString("SuccessfulLogoutMessage", resourceCulture);
