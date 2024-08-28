@@ -3,6 +3,7 @@ using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto.Graph;
 using RelationshipAnalysis.Services.GraphServices.Abstraction;
 using RelationshipAnalysis.Services.GraphServices.Graph.Abstraction;
+using IGraphDtoCreator = RelationshipAnalysis.Services.GraphServices.Graph.Abstraction.IGraphDtoCreator;
 
 namespace RelationshipAnalysis.Services.GraphServices.Graph;
 

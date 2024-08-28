@@ -108,7 +108,15 @@ builder.Services.AddSingleton<ICookieSetter, CookieSetter>()
     .AddSingleton<INodeValueAdditionService, NodeValueAdditionService>()
     .AddSingleton<IEdgeValueAdditionService, EdgeValueAdditionService>()
     .AddSingleton<IContextEdgesAdditionService, ContextEdgesAdditionService>()
-    .AddSingleton<IContextNodesAdditionService, ContextNodesAdditionService>();
+    .AddSingleton<IContextNodesAdditionService, ContextNodesAdditionService>()
+    .AddSingleton<ICsvValidatorService, CsvValidatorService>()
+    .AddSingleton<IExpansionGraphReceiver, ExpansionGraphReceiver>()
+    .AddSingleton<IGraphDtoCreator, GraphDtoCreator>()
+    .AddKeyedSingleton<IInfoReceiver, NodeInfoReceiver>("node")
+    .AddKeyedSingleton<IInfoReceiver, EdgeInfoReceiver>("edge")
+    .AddKeyedSingleton<IAttributesReceiver, NodeAttributesReceiver>("node")
+    .AddKeyedSingleton<IAttributesReceiver, EdgeAttributesReceiver>("edge");
+    
 
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
@@ -136,7 +144,10 @@ builder.Services.AddAuthentication(options =>
             OnMessageReceived = context =>
             {
                 var cookie = context.Request.Cookies[jwtSettings.CookieName];
-                if (!string.IsNullOrEmpty(cookie)) context.Token = cookie;
+                if (!string.IsNullOrEmpty(cookie))
+                {
+                    context.Token = cookie;
+                }
                 return Task.CompletedTask;
             }
         };
@@ -161,7 +172,7 @@ app.Run();
 
 namespace RelationshipAnalysis
 {
-    public class Program
+    public partial class Program
     {
     }
 }
