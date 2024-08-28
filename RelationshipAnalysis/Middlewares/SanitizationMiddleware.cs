@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Newtonsoft.Json;
 
 namespace RelationshipAnalysis.Middlewares;
+
 public class SanitizationMiddleware
 {
     private readonly RequestDelegate _next;
@@ -19,9 +20,9 @@ public class SanitizationMiddleware
     {
         if (context.Request.ContentType != null && context.Request.ContentType.Contains("application/json"))
         {
-            context.Request.EnableBuffering(); 
+            context.Request.EnableBuffering();
             var body = await new StreamReader(context.Request.Body).ReadToEndAsync();
-            context.Request.Body.Position = 0; 
+            context.Request.Body.Position = 0;
 
             var type = GetRequestDtoType(context);
             if (type != null)
@@ -37,7 +38,7 @@ public class SanitizationMiddleware
                     var dto = JsonConvert.DeserializeObject(body, type);
                     sanitizedDto = SanitizeDto(dto);
                 }
-                
+
                 var sanitizedBody = JsonConvert.SerializeObject(sanitizedDto);
                 var buffer = Encoding.UTF8.GetBytes(sanitizedBody);
                 context.Request.Body = new MemoryStream(buffer);
@@ -54,9 +55,11 @@ public class SanitizationMiddleware
         if (actionDescriptor != null)
         {
             var parameters = actionDescriptor.Parameters;
-            var dtoParameter = parameters.FirstOrDefault(p => p.ParameterType.IsClass && p.ParameterType != typeof(string));
+            var dtoParameter =
+                parameters.FirstOrDefault(p => p.ParameterType.IsClass && p.ParameterType != typeof(string));
             return dtoParameter?.ParameterType;
         }
+
         return null;
     }
 
@@ -64,17 +67,16 @@ public class SanitizationMiddleware
     {
         return dto.Select(str => _sanitizer.Sanitize(str));
     }
+
     private object SanitizeDto(object dto)
     {
-        var properties = dto.GetType().GetProperties().Where(p => p.PropertyType == typeof(string) && p.CanWrite && p.CanRead);
+        var properties = dto.GetType().GetProperties()
+            .Where(p => p.PropertyType == typeof(string) && p.CanWrite && p.CanRead);
 
         foreach (var property in properties)
         {
             var value = (string)property.GetValue(dto);
-            if (value != null)
-            {
-                property.SetValue(dto, _sanitizer.Sanitize(value));
-            }
+            if (value != null) property.SetValue(dto, _sanitizer.Sanitize(value));
         }
 
         return dto;

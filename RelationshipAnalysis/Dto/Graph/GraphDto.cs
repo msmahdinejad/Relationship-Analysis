@@ -1,7 +1,10 @@
+using RelationshipAnalysis.Dto.Graph.Edge;
+using RelationshipAnalysis.Dto.Graph.Node;
+
 namespace RelationshipAnalysis.Dto.Graph;
 
 public class GraphDto
 {
-    public List<NodeDto> nodes { get; set; } = new List<NodeDto>();
-    public List<EdgeDto> edges { get; set; } = new List<EdgeDto>();
+    public List<NodeDto> Nodes { get; set; } = [];
+    public List<EdgeDto> Edges { get; set; } = [];
 }

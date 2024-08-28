@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Models.Auth;
-using RelationshipAnalysis.Services.UserPanelServices.Abstraction.AuthServices;
+using RelationshipAnalysis.Services.AuthServices;
 
 namespace RelationAnalysis.Migrations;
 
@@ -9,49 +9,49 @@ public class InitialRecordsCreator(ApplicationDbContext context, IConfiguration 
 {
     public async Task AddInitialRecords()
     {
-        var roles = new List<Role>()
+        var roles = new List<Role>
         {
-            new Role()
+            new()
             {
                 Name = "Admin",
                 Permissions =
                     "[\"/api/Admin\",\"/api/Auth\", \"/api/User\", \"/api/Edge\", \"/api/Graph\", \"/api/Node\"]",
                 Id = 1
             },
-            new Role()
+            new()
             {
                 Name = "DataAdmin",
                 Permissions = "[\"/api/Auth\", \"/api/User\", \"/api/Edge\", \"/api/Graph\", \"/api/Node\"]",
                 Id = 2
             },
-            new Role()
+            new()
             {
                 Name = "DataAnalyst",
                 Permissions = "[\"/api/Auth\", \"/api/User\", \"/api/Edge\", \"/api/Graph\", \"/api/Node\"]",
                 Id = 3
             }
         };
-        var userRoles = new List<UserRole>()
+        var userRoles = new List<UserRole>
         {
-            new UserRole()
+            new()
             {
                 UserId = 1,
                 RoleId = 1
             },
-            new UserRole()
+            new()
             {
                 UserId = 1,
                 RoleId = 2
             },
-            new UserRole()
+            new()
             {
                 UserId = 1,
                 RoleId = 3
             }
         };
-        var users = new List<User>()
+        var users = new List<User>
         {
-            new User()
+            new()
             {
                 Username = "admin",
                 PasswordHash = new CustomPasswordHasher()
@@ -59,7 +59,7 @@ public class InitialRecordsCreator(ApplicationDbContext context, IConfiguration 
                 FirstName = "FirstName",
                 LastName = "LastName",
                 Email = "admin@gmail.com",
-                Id = 1,
+                Id = 1
             }
         };
         try

@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
-using RelationshipAnalysis.Models;
 using RelationshipAnalysis.Models.Auth;
-using RelationshipAnalysis.Models.Graph;
+using RelationshipAnalysis.Models.Graph.Edge;
+using RelationshipAnalysis.Models.Graph.Node;
 
 namespace RelationshipAnalysis.Integration.Test.Controllers;
 
@@ -20,15 +20,15 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         {
             var descriptor =
                 services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
-            if (descriptor != null)
+            if (descriptor != null) services.Remove(descriptor);
+
+
+            services.AddDbContext<ApplicationDbContext>(options =>
             {
-                services.Remove(descriptor);
-            }
-
-
-            services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase(_databaseName)
-                .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
-                .UseLazyLoadingProxies(); });
+                options.UseInMemoryDatabase(_databaseName)
+                    .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning))
+                    .UseLazyLoadingProxies();
+            });
 
 
             var serviceProvider = services.BuildServiceProvider();
@@ -59,7 +59,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         {
             Id = 1,
             Name = "admin",
-            Permissions = "[\"AdminPermissions\"]",
+            Permissions = "[\"AdminPermissions\"]"
         };
         var userRole = new UserRole
         {
@@ -75,7 +75,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         dbContext.Users.Add(user);
         dbContext.Roles.Add(role);
         dbContext.SaveChanges();
-        
+
         var nodeCategory1 = new NodeCategory
         {
             NodeCategoryId = 1,
@@ -86,7 +86,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             NodeCategoryId = 2,
             NodeCategoryName = "Person"
         };
-        
+
         var node1 = new Node
         {
             NodeId = 1,
@@ -115,8 +115,8 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         dbContext.Nodes.Add(node1);
         dbContext.Nodes.Add(node2);
         dbContext.EdgeCategories.Add(edgeCategory);
-        
-        
+
+
         var edge = new Edge
         {
             EdgeId = 1,
@@ -128,8 +128,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         };
 
         dbContext.Edges.Add(edge);
-        
-        dbContext.SaveChangesAsync();
 
+        dbContext.SaveChangesAsync();
     }
 }

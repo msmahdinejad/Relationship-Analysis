@@ -5,11 +5,12 @@ using CsvHelper.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
+using RelationshipAnalysis.Services.Abstraction;
 using RelationshipAnalysis.Services.GraphServices.Abstraction;
 
 namespace RelationshipAnalysis.Services.GraphServices;
 
-public class CsvValidatorService : ICsvValidatorService
+public class CsvValidatorService(IMessageResponseCreator responseCreator) : ICsvValidatorService
 {
     public ActionResponse<MessageDto> Validate(IFormFile file, params string[] uniqueHeaderNames)
     {
@@ -20,44 +21,17 @@ public class CsvValidatorService : ICsvValidatorService
             csv.ReadHeader();
             var headers = csv.HeaderRecord;
             if (headers.SingleOrDefault(h => h == string.Empty) != null || headers.IsNullOrEmpty())
-            {
-                return BadRequestResult(Resources.InvalidHeaderAttribute);
-            }
+                return responseCreator.Create(StatusCodeType.BadRequest, Resources.InvalidHeaderAttribute);
 
             if (headers.Distinct().Count() != headers.Length)
-            {
-                return BadRequestResult(Resources.TwoSameHeadersMessage);
-            }
+                return responseCreator.Create(StatusCodeType.BadRequest, Resources.TwoSameHeadersMessage);
 
             if (uniqueHeaderNames.Count(h => headers.Contains(h)) != uniqueHeaderNames.Length)
-            {
-                return BadRequestResult(Resources.InvalidHeaderAttribute);
-            }
+                return responseCreator.Create(StatusCodeType.BadRequest, Resources.InvalidHeaderAttribute);
         }
 
-        return SuccessResult(Resources.ValidFileMessage);
+        return responseCreator.Create(StatusCodeType.Success, Resources.ValidFileMessage);
     }
 
-    private ActionResponse<MessageDto> SuccessResult(string message)
-    {
-        return new ActionResponse<MessageDto>()
-        {
-            Data = new MessageDto(message),
-            StatusCode = StatusCodeType.Success
-        };
-    }
-
-
-    private ActionResponse<MessageDto> BadRequestResult(string message)
-    {
-        return new ActionResponse<MessageDto>()
-        {
-            Data = new MessageDto(message),
-            StatusCode = StatusCodeType.BadRequest
-        };
-    }
     
-    
-
-
 }

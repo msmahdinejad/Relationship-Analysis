@@ -12,14 +12,14 @@
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.0"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8" />
-        <PackageReference Include="Moq" Version="4.20.70" />
-        <PackageReference Include="NSubstitute" Version="5.1.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8"/>
+        <PackageReference Include="Moq" Version="4.20.70"/>
+        <PackageReference Include="NSubstitute" Version="5.1.0"/>
         <PackageReference Include="xunit" Version="2.5.3"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3"/>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0" />
-        <PackageReference Include="xunit" Version="2.5.0" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.0"/>
+        <PackageReference Include="xunit" Version="2.5.0"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -27,28 +27,28 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RelationshipAnalysis\RelationshipAnalysis.csproj" />
+        <ProjectReference Include="..\RelationshipAnalysis\RelationshipAnalysis.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Resources.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+        <EmbeddedResource Update="Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Resources.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Resources.resx</DependentUpon>
-      </Compile>
+        <Compile Update="Resources.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="NSubstitute">
-        <HintPath>..\..\..\..\.nuget\packages\nsubstitute\5.1.0\lib\net6.0\NSubstitute.dll</HintPath>
-      </Reference>
+        <Reference Include="NSubstitute">
+            <HintPath>..\..\..\..\.nuget\packages\nsubstitute\5.1.0\lib\net6.0\NSubstitute.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>
