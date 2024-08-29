@@ -55,10 +55,19 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
             LastName = "User",
             Email = "admin@example.com"
         };
+        var user2 = new User
+        {
+            Id = 2,
+            Username = "admin2",
+            PasswordHash = "74b2c5bd3a8de69c8c7c643e8b5c49d6552dc636aeb0995aff6f01a1f661a979",
+            FirstName = "Admin2",
+            LastName = "User2",
+            Email = "admin2@example.com"
+        };
         var role = new Role
         {
             Id = 1,
-            Name = "admin",
+            Name = "Admin",
             Permissions = "[\"AdminPermissions\"]"
         };
         var userRole = new UserRole
@@ -73,6 +82,7 @@ public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStar
         user.UserRoles.Add(userRole);
         role.UserRoles.Add(userRole);
         dbContext.Users.Add(user);
+        dbContext.Users.Add(user2);
         dbContext.Roles.Add(role);
         dbContext.SaveChanges();
 

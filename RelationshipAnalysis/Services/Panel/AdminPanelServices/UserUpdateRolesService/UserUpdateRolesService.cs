@@ -12,7 +12,6 @@ public class UserUpdateRolesService(
     IUserUpdateRolesServiceValidator validator,
     IRoleReceiver roleReceiver,
     IUserRolesAdder userRolesAdder,
-    IMessageResponseCreator messageResponseCreator,
     IUserRolesRemover userRolesRemover) : IUserUpdateRolesService
 {
     public async Task<ActionResponse<MessageDto>> UpdateUserRolesAsync(User user, List<string> newRoles)
