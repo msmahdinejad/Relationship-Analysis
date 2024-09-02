@@ -1,4 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto.Graph;
 using RelationshipAnalysis.Models.Graph;
@@ -14,19 +19,17 @@ public class ExpansionGraphReceiver(IServiceProvider serviceProvider, IGraphDtoC
         using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         
-        var inputNodes = await GetInputNodes(sourceCategoryName);
-        var outputNodes = await GetOutputNodes(targetCategoryName);
-        var validEdges = await GetValidEdges(edgeCategoryName, inputNodes, outputNodes);
+        var inputNodes = await GetInputNodes(context, sourceCategoryName);
+        var outputNodes = await GetOutputNodes(context, targetCategoryName);
+        var validEdges = await GetValidEdges(context, edgeCategoryName, inputNodes, outputNodes);
 
         return graphDtoCreator.CreateResultGraphDto(inputNodes.Union(outputNodes).ToList(), validEdges);
     }
 
-    private async Task<List<Models.Graph.Edge.Edge>> GetValidEdges(string edgeCategoryName, List<Models.Graph.Node.Node> inputNodes,
+    private async Task<List<Models.Graph.Edge.Edge>> GetValidEdges(ApplicationDbContext context, string edgeCategoryName, List<Models.Graph.Node.Node> inputNodes,
         List<Models.Graph.Node.Node> outputNodes)
     {
-        using var scope = serviceProvider.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
+        
         var validEdges = await context.Edges.Where(e =>
             e.EdgeCategory.EdgeCategoryName == edgeCategoryName &&
             inputNodes.Contains(e.NodeSource) &&
@@ -34,21 +37,15 @@ public class ExpansionGraphReceiver(IServiceProvider serviceProvider, IGraphDtoC
         return validEdges;
     }
 
-    private async Task<List<Models.Graph.Node.Node>> GetOutputNodes(string targetCategoryName)
+    private async Task<List<Models.Graph.Node.Node>> GetOutputNodes(ApplicationDbContext context, string targetCategoryName)
     {
-        using var scope = serviceProvider.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
         var outputNodes =
             await context.Nodes.Where(n => n.NodeCategory.NodeCategoryName == targetCategoryName).ToListAsync();
         return outputNodes;
     }
 
-    private async Task<List<Models.Graph.Node.Node>> GetInputNodes(string sourceCategoryName)
+    private async Task<List<Models.Graph.Node.Node>> GetInputNodes(ApplicationDbContext context, string sourceCategoryName)
     {
-        using var scope = serviceProvider.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
         var inputNodes =
             await context.Nodes.Where(n => n.NodeCategory.NodeCategoryName == sourceCategoryName).ToListAsync();
         return inputNodes;

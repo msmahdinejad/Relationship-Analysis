@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace RelationshipAnalysis.Services.CRUD.Role.Abstraction;
 
 public interface IRoleReceiver

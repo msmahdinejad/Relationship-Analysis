@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using RelationshipAnalysis.Dto.Auth;
 using RelationshipAnalysis.Services.AuthServices.Abstraction;
 

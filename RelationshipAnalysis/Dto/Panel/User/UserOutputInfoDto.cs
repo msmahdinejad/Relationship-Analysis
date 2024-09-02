@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace RelationshipAnalysis.Dto.Panel.User;
 
 public class UserOutputInfoDto

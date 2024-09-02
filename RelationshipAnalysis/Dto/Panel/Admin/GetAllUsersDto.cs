@@ -1,4 +1,5 @@
-﻿using RelationshipAnalysis.Dto.Panel.User;
+﻿using System.Collections.Generic;
+using RelationshipAnalysis.Dto.Panel.User;
 
 namespace RelationshipAnalysis.Dto.Panel.Admin;
 

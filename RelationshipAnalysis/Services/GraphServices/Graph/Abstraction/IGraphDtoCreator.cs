@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RelationshipAnalysis.Dto.Graph;
 
 namespace RelationshipAnalysis.Services.GraphServices.Graph.Abstraction;

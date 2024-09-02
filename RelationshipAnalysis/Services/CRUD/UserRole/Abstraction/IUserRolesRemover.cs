@@ -1,4 +1,6 @@
-﻿namespace RelationshipAnalysis.Services.CRUD.UserRole.Abstraction;
+﻿using System.Threading.Tasks;
+
+namespace RelationshipAnalysis.Services.CRUD.UserRole.Abstraction;
 
 public interface IUserRolesRemover
 {

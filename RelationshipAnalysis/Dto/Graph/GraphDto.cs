@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RelationshipAnalysis.Dto.Graph.Edge;
 using RelationshipAnalysis.Dto.Graph.Node;
 

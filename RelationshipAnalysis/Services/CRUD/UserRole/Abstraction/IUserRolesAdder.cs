@@ -1,4 +1,7 @@
-﻿namespace RelationshipAnalysis.Services.CRUD.UserRole.Abstraction;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace RelationshipAnalysis.Services.CRUD.UserRole.Abstraction;
 
 public interface IUserRolesAdder
 {

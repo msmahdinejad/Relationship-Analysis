@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using RelationshipAnalysis.Services.AuthServices.Abstraction;
 using RelationshipAnalysis.Settings.JWT;
 
