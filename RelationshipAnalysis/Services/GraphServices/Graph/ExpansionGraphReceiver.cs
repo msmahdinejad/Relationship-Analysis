@@ -21,16 +21,17 @@ public class ExpansionGraphReceiver(IServiceProvider serviceProvider, IGraphDtoC
         
         var inputNodes = await GetInputNodes(context, sourceCategoryName);
         var outputNodes = await GetOutputNodes(context, targetCategoryName);
-        var validEdges = await GetValidEdges(context, edgeCategoryName, inputNodes, outputNodes);
+        var validEdges = await GetValidEdges(nodeId, context, edgeCategoryName, inputNodes, outputNodes);
 
         return graphDtoCreator.CreateResultGraphDto(inputNodes.Union(outputNodes).ToList(), validEdges);
     }
 
-    private async Task<List<Models.Graph.Edge.Edge>> GetValidEdges(ApplicationDbContext context, string edgeCategoryName, List<Models.Graph.Node.Node> inputNodes,
+    private async Task<List<Models.Graph.Edge.Edge>> GetValidEdges(int nodeId, ApplicationDbContext context, string edgeCategoryName, List<Models.Graph.Node.Node> inputNodes,
         List<Models.Graph.Node.Node> outputNodes)
     {
         
         var validEdges = await context.Edges.Where(e =>
+            (e.EdgeSourceNodeId == nodeId || e.EdgeDestinationNodeId == nodeId) &&
             e.EdgeCategory.EdgeCategoryName == edgeCategoryName &&
             inputNodes.Contains(e.NodeSource) &&
             outputNodes.Contains(e.NodeDestination)).ToListAsync();
