@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Panel.User;
 using RelationshipAnalysis.Enums;
@@ -19,7 +18,7 @@ public class UserUpdatePasswordService(
         var validateResult = await validator.Validate(user, passwordInfoDto);
         if (validateResult.StatusCode != StatusCodeType.Success)
             return validateResult;
-        
+
         await UpdatePassword(user, passwordInfoDto);
 
         return validateResult;

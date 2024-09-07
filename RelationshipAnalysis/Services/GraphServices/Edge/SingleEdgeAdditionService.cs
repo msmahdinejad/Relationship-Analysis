@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Services.GraphServices.Edge.Abstraction;
@@ -16,39 +13,23 @@ public class SingleEdgeAdditionService(IEdgeValueAdditionService edgeValueAdditi
         string uniqueSourceHeaderName,
         string uniqueTargetHeaderName, int edgeCategoryId, int sourceNodeCategoryId, int targetNodeCategoryId)
     {
-        if (((string)record[uniqueHeaderName]).IsNullOrEmpty())
-        {
-            throw new Exception(Resources.FailedAddRecordsMessage);
-        }
+        if (((string)record[uniqueHeaderName]).IsNullOrEmpty()) throw new Exception(Resources.FailedAddRecordsMessage);
         if (((string)record[uniqueSourceHeaderName]).IsNullOrEmpty())
-        {
             throw new Exception(Resources.FailedAddRecordsMessage);
-        }
         if (((string)record[uniqueTargetHeaderName]).IsNullOrEmpty())
-        {
             throw new Exception(Resources.FailedAddRecordsMessage);
-        }
 
         var source = await GetSourceNode(context, record, uniqueSourceHeaderName, sourceNodeCategoryId);
-        if (source == null)
-        {
-            throw new Exception(Resources.FailedAddRecordsMessage);
-        }
+        if (source == null) throw new Exception(Resources.FailedAddRecordsMessage);
 
         var target = await GetTargetNode(context, record, uniqueTargetHeaderName, targetNodeCategoryId);
-        if (target == null)
-        {
-            throw new Exception(Resources.FailedAddRecordsMessage);
-        }
+        if (target == null) throw new Exception(Resources.FailedAddRecordsMessage);
 
         var newEdge = await GetNewEdge(context, edgeCategoryId, uniqueHeaderName, source, target, record);
         if (newEdge.EdgeSourceNodeId != source.NodeId || newEdge.EdgeDestinationNodeId != target.NodeId)
-        {
             throw new Exception(Resources.FailedAddRecordsMessage);
-        }
 
         foreach (var kvp in record)
-        {
             try
             {
                 await edgeValueAdditionService.AddKvpToValues(context, kvp, newEdge);
@@ -57,10 +38,11 @@ public class SingleEdgeAdditionService(IEdgeValueAdditionService edgeValueAdditi
             {
                 throw e;
             }
-        }
     }
 
-    private async Task<Models.Graph.Edge.Edge> GetNewEdge(ApplicationDbContext context, int edgeCategoryId, string uniqueHeaderName, Models.Graph.Node.Node source, Models.Graph.Node.Node target, IDictionary<string, object> record)
+    private async Task<Models.Graph.Edge.Edge> GetNewEdge(ApplicationDbContext context, int edgeCategoryId,
+        string uniqueHeaderName, Models.Graph.Node.Node source, Models.Graph.Node.Node target,
+        IDictionary<string, object> record)
     {
         var newEdge = await context.Edges.SingleOrDefaultAsync(e =>
             e.EdgeCategoryId == edgeCategoryId
@@ -81,7 +63,8 @@ public class SingleEdgeAdditionService(IEdgeValueAdditionService edgeValueAdditi
         return newEdge;
     }
 
-    private async Task<Models.Graph.Node.Node?> GetTargetNode(ApplicationDbContext context, IDictionary<string, object> record, string uniqueTargetHeaderName,
+    private async Task<Models.Graph.Node.Node?> GetTargetNode(ApplicationDbContext context,
+        IDictionary<string, object> record, string uniqueTargetHeaderName,
         int targetNodeCategoryId)
     {
         var target =
@@ -90,7 +73,8 @@ public class SingleEdgeAdditionService(IEdgeValueAdditionService edgeValueAdditi
         return target;
     }
 
-    private async Task<Models.Graph.Node.Node?> GetSourceNode(ApplicationDbContext context, IDictionary<string, object> record, string uniqueSourceHeaderName,
+    private async Task<Models.Graph.Node.Node?> GetSourceNode(ApplicationDbContext context,
+        IDictionary<string, object> record, string uniqueSourceHeaderName,
         int sourceNodeCategoryId)
     {
         var source =

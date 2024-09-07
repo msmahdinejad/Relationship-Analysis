@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using RelationshipAnalysis.Dto;
+﻿using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Panel.Admin;
 using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Services.CRUD.Role.Abstraction;
@@ -31,6 +30,6 @@ public class UserCreateService(
         var user = mapper.Map(createUserDto);
         await userAdder.AddUserAsync(user);
         var roles = await roleReceiver.ReceiveRolesListAsync(createUserDto.Roles);
-        await userRolesAdder.AddUserRoles(roles , user);
+        await userRolesAdder.AddUserRoles(roles, user);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using RelationshipAnalysis.Dto;
-using RelationshipAnalysis.Dto.Panel.User;
+﻿using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Models.Auth;
 using PermissionDto = RelationshipAnalysis.Dto.Panel.User.PermissionDto;
 

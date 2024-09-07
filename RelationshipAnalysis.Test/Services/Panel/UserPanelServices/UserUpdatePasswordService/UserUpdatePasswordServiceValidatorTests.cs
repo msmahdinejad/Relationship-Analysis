@@ -12,8 +12,8 @@ namespace RelationshipAnalysis.Test.Services.Panel.UserPanelServices.UserUpdateP
 
 public class UserUpdatePasswordServiceValidatorTests
 {
-    private readonly Mock<IPasswordVerifier> _passwordVerifierMock;
     private readonly Mock<IMessageResponseCreator> _messageResponseCreatorMock;
+    private readonly Mock<IPasswordVerifier> _passwordVerifierMock;
     private readonly UserUpdatePasswordServiceValidator _sut;
 
     public UserUpdatePasswordServiceValidatorTests()

@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using NSubstitute;
-using NSubstitute.Exceptions;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Models.Graph.Edge;
 using RelationshipAnalysis.Models.Graph.Node;
@@ -15,7 +13,8 @@ public class SingleEdgeAdditionServiceTests
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly SingleEdgeAdditionService _sut;
-    private IEdgeValueAdditionService _edgeValueAdditionService;
+    private readonly IEdgeValueAdditionService _edgeValueAdditionService;
+
     public SingleEdgeAdditionServiceTests()
     {
         var serviceCollection = new ServiceCollection();
@@ -108,8 +107,8 @@ public class SingleEdgeAdditionServiceTests
         Assert.Equal(2, edge.EdgeDestinationNodeId);
         Assert.Equal(1, edge.EdgeCategoryId);
 
-        _edgeValueAdditionService.Received().AddKvpToValues(context, Arg.Any<KeyValuePair<string, object>>(), Arg.Any<Models.Graph.Edge.Edge>());
-
+        _edgeValueAdditionService.Received().AddKvpToValues(context, Arg.Any<KeyValuePair<string, object>>(),
+            Arg.Any<Models.Graph.Edge.Edge>());
     }
     //
     // [Fact]
@@ -264,6 +263,7 @@ public class SingleEdgeAdditionServiceTests
         // Assert 
         await Assert.ThrowsAsync<Exception>(action);
     }
+
     //
     // [Fact]
     // public async Task AddSingleEdge_ShouldThrowException_WhenEdgeValueAlreadyExists()

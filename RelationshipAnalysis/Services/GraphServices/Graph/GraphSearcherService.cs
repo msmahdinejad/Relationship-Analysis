@@ -1,10 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Graph;
 using RelationshipAnalysis.Enums;
-using RelationshipAnalysis.Models.Graph.Edge;
-using RelationshipAnalysis.Models.Graph.Node;
 using RelationshipAnalysis.Services.GraphServices.Abstraction;
 using RelationshipAnalysis.Services.GraphServices.Graph.Abstraction;
 using ApplicationDbContext = RelationshipAnalysis.Context.ApplicationDbContext;
@@ -28,15 +25,12 @@ public class GraphSearcherService(
         var edgeAttributes = await edgeCategoryReceiver.GetAllAttributes(searchGraphDto.EdgeCategoryName);
 
         var validation = await AreClausesValid(searchGraphDto, sourceAttributes, targetAttributes, edgeAttributes);
-        if (validation.StatusCode != StatusCodeType.Success)
-        {
-            return validation;
-        }
+        if (validation.StatusCode != StatusCodeType.Success) return validation;
 
         var sourceNodes = await context.Nodes
-            .Where(n => searchGraphDto.SourceCategoryName == (n.NodeCategory.NodeCategoryName)).ToListAsync();
+            .Where(n => searchGraphDto.SourceCategoryName == n.NodeCategory.NodeCategoryName).ToListAsync();
         var targetNodes = await context.Nodes
-            .Where(n => searchGraphDto.TargetCategoryName == (n.NodeCategory.NodeCategoryName)).ToListAsync();
+            .Where(n => searchGraphDto.TargetCategoryName == n.NodeCategory.NodeCategoryName).ToListAsync();
 
         sourceNodes = sourceNodes.Where(sn => IsNodeValid(sn, searchGraphDto.SourceCategoryClauses)).ToList();
         targetNodes = targetNodes.Where(tn => IsNodeValid(tn, searchGraphDto.TargetCategoryClauses)).ToList();
@@ -91,10 +85,10 @@ public class GraphSearcherService(
 
         var edges = await context.Edges.Include(e => e.EdgeValues)
             .ThenInclude(ev => ev.EdgeAttribute)
-            .Where(e => edgeCategory == (e.EdgeCategory.EdgeCategoryName) &&
+            .Where(e => edgeCategory == e.EdgeCategory.EdgeCategoryName &&
                         sourceNodeIds.Contains(e.EdgeSourceNodeId) &&
                         targetNodeIds.Contains(e.EdgeDestinationNodeId))
-                        .ToListAsync();
+            .ToListAsync();
         return edges;
     }
 
@@ -103,26 +97,20 @@ public class GraphSearcherService(
         List<string> edgeAttributes)
     {
         if (!searchGraphDto.SourceCategoryClauses.Keys.All(item => sourceAttributes.Contains(item)))
-        {
             return NotFoundResult(Resources.InvalidClauseInSourceCategory);
-        }
 
         if (!searchGraphDto.TargetCategoryClauses.Keys.All(item => targetAttributes.Contains(item)))
-        {
             return NotFoundResult(Resources.InvalidClauseInDestinationCategory);
-        }
 
         if (!searchGraphDto.EdgeCategoryClauses.Keys.All(item => edgeAttributes.Contains(item)))
-        {
             return NotFoundResult(Resources.InvalidClauseInDestinationCategory);
-        }
 
         return SuccessResult();
     }
 
     private ActionResponse<GraphDto> SuccessResult()
     {
-        return new ActionResponse<GraphDto>()
+        return new ActionResponse<GraphDto>
         {
             StatusCode = StatusCodeType.Success,
             Data = null
@@ -131,10 +119,10 @@ public class GraphSearcherService(
 
     private ActionResponse<GraphDto> NotFoundResult(string message)
     {
-        return new ActionResponse<GraphDto>()
+        return new ActionResponse<GraphDto>
         {
             StatusCode = StatusCodeType.NotFound,
-            Data = new GraphDto()
+            Data = new GraphDto
             {
                 Message = message
             }

@@ -11,15 +11,16 @@ namespace RelationshipAnalysis.Test.Services.Panel.AdminPanelServices.AllUserSer
 
 public class AllUserServiceTests
 {
-    private readonly Mock<IAllUserServiceValidator> _validatorMock;
     private readonly Mock<IAllUserDtoCreator> _allUserDtoCreatorMock;
     private readonly RelationshipAnalysis.Services.Panel.AdminPanelServices.AllUserService.AllUserService _service;
+    private readonly Mock<IAllUserServiceValidator> _validatorMock;
 
     public AllUserServiceTests()
     {
         _validatorMock = new Mock<IAllUserServiceValidator>();
         _allUserDtoCreatorMock = new Mock<IAllUserDtoCreator>();
-        _service = new RelationshipAnalysis.Services.Panel.AdminPanelServices.AllUserService.AllUserService(_validatorMock.Object, _allUserDtoCreatorMock.Object);
+        _service = new RelationshipAnalysis.Services.Panel.AdminPanelServices.AllUserService.AllUserService(
+            _validatorMock.Object, _allUserDtoCreatorMock.Object);
     }
 
     [Fact]
@@ -28,7 +29,7 @@ public class AllUserServiceTests
         // Arrange
         var users = new List<User>
         {
-            new User { Id = 1, Username = "user1", Email = "user1@example.com" }
+            new() { Id = 1, Username = "user1", Email = "user1@example.com" }
         };
         var getAllUsersDto = new GetAllUsersDto
         {
@@ -65,7 +66,7 @@ public class AllUserServiceTests
         // Arrange
         var users = new List<User>
         {
-            new User { Id = 1, Username = "user1", Email = "user1@example.com" }
+            new() { Id = 1, Username = "user1", Email = "user1@example.com" }
         };
 
         _validatorMock.Setup(v => v.Validate(It.IsAny<List<User>>()))

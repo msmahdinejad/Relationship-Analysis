@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using RelationshipAnalysis.Dto.Panel.Admin;
 using RelationshipAnalysis.Dto.Panel.User;
 using RelationshipAnalysis.Models.Auth;
@@ -25,7 +23,7 @@ public class AllUserDtoCreator(IMapper mapper, IRoleReceiver rolesReceiver, IUse
             userOutputs.Add(data);
         }
 
-        return new GetAllUsersDto()
+        return new GetAllUsersDto
         {
             Users = userOutputs,
             AllUserCount = await userReceiver.ReceiveAllUserCountAsync()

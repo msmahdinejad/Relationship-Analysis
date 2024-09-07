@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Http;
-
 namespace RelationshipAnalysis.Services.Panel.UserPanelServices.LogoutService.Abstraction;
 
 public interface ILogoutService

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Services.CRUD.User.Abstraction;
 
@@ -45,8 +40,8 @@ public class UserReceiver(IServiceProvider serviceProvider) : IUserReceiver
             .Include(u => u.UserRoles)
             .ThenInclude(ur => ur.Role)
             .SingleOrDefaultAsync(u => u.Username == username);
-                
-    
+
+
         return user;
     }
 

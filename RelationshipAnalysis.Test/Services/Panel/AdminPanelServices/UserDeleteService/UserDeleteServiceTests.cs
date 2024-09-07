@@ -9,15 +9,19 @@ namespace RelationshipAnalysis.Test.Services.Panel.AdminPanelServices.UserDelete
 
 public class UserDeleteServiceTests
 {
-    private readonly Mock<IUserDeleteServiceValidator> _mockValidator;
     private readonly Mock<IUserDeleter> _mockUserDeleter;
-    private readonly RelationshipAnalysis.Services.Panel.AdminPanelServices.UserDeleteService.UserDeleteService _userDeleteService;
+    private readonly Mock<IUserDeleteServiceValidator> _mockValidator;
+
+    private readonly RelationshipAnalysis.Services.Panel.AdminPanelServices.UserDeleteService.UserDeleteService
+        _userDeleteService;
 
     public UserDeleteServiceTests()
     {
         _mockValidator = new Mock<IUserDeleteServiceValidator>();
         _mockUserDeleter = new Mock<IUserDeleter>();
-        _userDeleteService = new RelationshipAnalysis.Services.Panel.AdminPanelServices.UserDeleteService.UserDeleteService(_mockValidator.Object, _mockUserDeleter.Object);
+        _userDeleteService =
+            new RelationshipAnalysis.Services.Panel.AdminPanelServices.UserDeleteService.UserDeleteService(
+                _mockValidator.Object, _mockUserDeleter.Object);
     }
 
     [Fact]
@@ -53,7 +57,7 @@ public class UserDeleteServiceTests
             Username = "testuser",
             Email = "test@example.com"
         };
-        
+
         var validationResponse = new ActionResponse<MessageDto>
         {
             StatusCode = StatusCodeType.Success,

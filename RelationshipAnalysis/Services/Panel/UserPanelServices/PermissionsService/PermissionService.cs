@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Panel.User;
 using RelationshipAnalysis.Models.Auth;

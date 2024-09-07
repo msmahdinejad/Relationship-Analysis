@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
@@ -19,28 +14,25 @@ public class EdgeInfoReceiver(IServiceProvider serviceProvider) : IInfoReceiver
 
         var result = new Dictionary<string, string>();
         var selectedEdge = context.Edges.SingleOrDefault(e => e.EdgeId == edgeId);
-        if (selectedEdge == null)
-        {
-            return NotFoundResult();
-        }
+        if (selectedEdge == null) return NotFoundResult();
         selectedEdge.EdgeValues.ToList().ForEach(v => result.Add(v.EdgeAttribute.EdgeAttributeName, v.ValueData));
         return SuccessResult(result);
     }
 
     private async Task<ActionResponse<IDictionary<string, string>>> NotFoundResult()
     {
-        return new ActionResponse<IDictionary<string, string>>()
+        return new ActionResponse<IDictionary<string, string>>
         {
             StatusCode = StatusCodeType.NotFound
         };
     }
-    
+
     private async Task<ActionResponse<IDictionary<string, string>>> SuccessResult(Dictionary<string, string> result)
     {
-        return new ActionResponse<IDictionary<string, string>>()
+        return new ActionResponse<IDictionary<string, string>>
         {
             StatusCode = StatusCodeType.Success,
-            Data =  result
+            Data = result
         };
     }
 }

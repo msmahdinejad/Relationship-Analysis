@@ -27,7 +27,6 @@ public class GraphReceiverTests
         serviceCollection.AddScoped(_ => _context);
 
         _serviceProvider = serviceCollection.BuildServiceProvider();
-
     }
 
     [Fact]
@@ -99,14 +98,15 @@ public class GraphReceiverTests
             }
         };
 
-        
+
         var allNodes = await _context.Nodes.ToListAsync();
         var allEdges = await _context.Edges.ToListAsync();
         var graphDtoCreatorMock = Substitute.For<IGraphDtoCreator>();
-        
-        graphDtoCreatorMock.CreateResultGraphDto(Arg.Any<List<Models.Graph.Node.Node>>(), Arg.Any<List<Models.Graph.Edge.Edge>>())
+
+        graphDtoCreatorMock.CreateResultGraphDto(Arg.Any<List<Models.Graph.Node.Node>>(),
+                Arg.Any<List<Models.Graph.Edge.Edge>>())
             .Returns(new GraphDto { Edges = expectedEdges, Nodes = expectedNodes });
-        
+
         // Act
         _sut = new GraphReceiver(_serviceProvider, graphDtoCreatorMock);
         var resultGraph = await _sut.GetGraph();

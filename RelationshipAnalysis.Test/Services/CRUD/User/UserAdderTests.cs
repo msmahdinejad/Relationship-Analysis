@@ -33,7 +33,7 @@ public class UserAdderTests
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         context.Users.AddRange(new List<Models.Auth.User>
         {
-            new Models.Auth.User
+            new()
             {
                 Id = 1,
                 Username = "existinguser1",
@@ -42,7 +42,7 @@ public class UserAdderTests
                 FirstName = "Jane",
                 LastName = "Doe"
             },
-            new Models.Auth.User
+            new()
             {
                 Id = 2,
                 Username = "existinguser2",

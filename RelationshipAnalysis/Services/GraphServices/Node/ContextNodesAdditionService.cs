@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
@@ -10,10 +7,12 @@ using RelationshipAnalysis.Services.GraphServices.Node.Abstraction;
 
 namespace RelationshipAnalysis.Services.GraphServices.Node;
 
-public class ContextNodesAdditionService(IMessageResponseCreator responseCreator, 
-ISingleNodeAdditionService singleNodeAdditionService) : IContextNodesAdditionService
+public class ContextNodesAdditionService(
+    IMessageResponseCreator responseCreator,
+    ISingleNodeAdditionService singleNodeAdditionService) : IContextNodesAdditionService
 {
-    public async Task<ActionResponse<MessageDto>> AddToContext(string uniqueKeyHeaderName, ApplicationDbContext context, List<dynamic> objects, NodeCategory nodeCategory)
+    public async Task<ActionResponse<MessageDto>> AddToContext(string uniqueKeyHeaderName, ApplicationDbContext context,
+        List<dynamic> objects, NodeCategory nodeCategory)
     {
         await using (var transaction = await context.Database.BeginTransactionAsync())
         {

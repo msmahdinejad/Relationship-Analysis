@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using RelationshipAnalysis.Context;
+﻿using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Panel.User;
 using RelationshipAnalysis.Enums;
@@ -18,17 +14,22 @@ public class UserUpdateInfoServiceValidator(
 {
     public Task<ActionResponse<MessageDto>> Validate(User user, UserUpdateInfoDto userUpdateInfoDto)
     {
-        if (user == null) return Task.FromResult(messageResponseCreator.Create(StatusCodeType.NotFound, Resources.UserNotFoundMessage));
+        if (user == null)
+            return Task.FromResult(
+                messageResponseCreator.Create(StatusCodeType.NotFound, Resources.UserNotFoundMessage));
 
         if (!IsUsernameUnique(user.Username, userUpdateInfoDto.Username))
-            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest, Resources.UsernameExistsMessage));
+            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest,
+                Resources.UsernameExistsMessage));
 
         if (!IsEmailUnique(user.Email, userUpdateInfoDto.Email))
-            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest, Resources.EmailExistsMessage));
-        
-        return Task.FromResult(messageResponseCreator.Create(StatusCodeType.Success, Resources.SuccessfulUpdateUserMessage));
+            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest,
+                Resources.EmailExistsMessage));
+
+        return Task.FromResult(messageResponseCreator.Create(StatusCodeType.Success,
+            Resources.SuccessfulUpdateUserMessage));
     }
-    
+
     private bool IsUsernameUnique(string currentValue, string newValue)
     {
         if (currentValue == newValue) return true;

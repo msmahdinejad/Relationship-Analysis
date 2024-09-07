@@ -1,11 +1,6 @@
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Middlewares;
@@ -124,7 +119,6 @@ builder.Services.AddSingleton<ICookieSetter, CookieSetter>()
     .AddKeyedSingleton<IInfoReceiver, EdgeInfoReceiver>("edge")
     .AddKeyedSingleton<IAttributesReceiver, NodeAttributesReceiver>("node")
     .AddKeyedSingleton<IAttributesReceiver, EdgeAttributesReceiver>("edge");
-    
 
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
@@ -152,10 +146,7 @@ builder.Services.AddAuthentication(options =>
             OnMessageReceived = context =>
             {
                 var cookie = context.Request.Cookies[jwtSettings.CookieName];
-                if (!string.IsNullOrEmpty(cookie))
-                {
-                    context.Token = cookie;
-                }
+                if (!string.IsNullOrEmpty(cookie)) context.Token = cookie;
                 return Task.CompletedTask;
             }
         };
@@ -180,7 +171,7 @@ app.Run();
 
 namespace RelationshipAnalysis
 {
-    public partial class Program
+    public class Program
     {
     }
 }

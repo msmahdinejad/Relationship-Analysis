@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.Options;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Panel.User;
 using RelationshipAnalysis.Models.Auth;
@@ -38,7 +39,7 @@ public class UserControllerIntegrationTests : IClassFixture<CustomWebApplication
             Email = "admin@example.com"
         };
 
-        return new JwtTokenGenerator(new Microsoft.Extensions.Options.OptionsWrapper<JwtSettings>(jwtSettings)).GenerateJwtToken(user);
+        return new JwtTokenGenerator(new OptionsWrapper<JwtSettings>(jwtSettings)).GenerateJwtToken(user);
     }
 
     [Fact]

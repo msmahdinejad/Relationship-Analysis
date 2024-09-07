@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace RelationshipAnalysis.Services.AuthServices.Abstraction;
+﻿namespace RelationshipAnalysis.Services.AuthServices.Abstraction;
 
 public interface ICookieSetter
 {

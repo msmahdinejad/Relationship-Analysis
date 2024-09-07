@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using Microsoft.Extensions.Options;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Panel.Admin;
 using RelationshipAnalysis.Dto.Panel.User;
@@ -37,10 +38,10 @@ public class AdminControllerIntegrationTests : IClassFixture<CustomWebApplicatio
             FirstName = "Admin",
             LastName = "User",
             Email = "admin@example.com",
-            UserRoles = new List<UserRole> { new UserRole { Role = new Role { Name = "Admin" } } }
+            UserRoles = new List<UserRole> { new() { Role = new Role { Name = "Admin" } } }
         };
 
-        return new JwtTokenGenerator(new Microsoft.Extensions.Options.OptionsWrapper<JwtSettings>(jwtSettings))
+        return new JwtTokenGenerator(new OptionsWrapper<JwtSettings>(jwtSettings))
             .GenerateJwtToken(user);
     }
 
@@ -92,7 +93,6 @@ public class AdminControllerIntegrationTests : IClassFixture<CustomWebApplicatio
         Assert.NotNull(responseData);
         Assert.True(responseData.AllUserCount > 0);
         Assert.True(responseData.Users.Count > 0);
-
     }
 
     [Fact]
@@ -126,7 +126,7 @@ public class AdminControllerIntegrationTests : IClassFixture<CustomWebApplicatio
             FirstName = "New",
             LastName = "User",
             Email = "newuser@example.com",
-            Roles = [ "Admin" ]
+            Roles = ["Admin"]
         };
 
         var request = new HttpRequestMessage(HttpMethod.Post, "/api/admin/users");
@@ -160,7 +160,7 @@ public class AdminControllerIntegrationTests : IClassFixture<CustomWebApplicatio
             FirstName = "Existing",
             LastName = "User",
             Email = "existinguser@example.com",
-            Roles = [ "Admin" ]
+            Roles = ["Admin"]
         };
 
         var request = new HttpRequestMessage(HttpMethod.Post, "/api/admin/users");

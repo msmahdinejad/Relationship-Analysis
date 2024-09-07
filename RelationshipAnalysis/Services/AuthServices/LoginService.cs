@@ -1,8 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using RelationshipAnalysis.Context;
-using RelationshipAnalysis.Dto;
+﻿using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Auth;
 using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Services.Abstraction;
@@ -25,7 +21,7 @@ public class LoginService(
 
         if (user == null || !passwordVerifier.VerifyPasswordHash(loginModel.Password, user.PasswordHash))
             return messageResponseCreator.Create(StatusCodeType.Unauthorized, Resources.LoginFailedMessage);
-        
+
         var token = jwtTokenGenerator.GenerateJwtToken(user);
         cookieSetter.SetCookie(response, token);
 

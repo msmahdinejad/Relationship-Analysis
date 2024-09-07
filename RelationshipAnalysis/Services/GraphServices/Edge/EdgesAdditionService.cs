@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Graph.Edge;
@@ -12,7 +9,6 @@ using RelationshipAnalysis.Services.Abstraction;
 using RelationshipAnalysis.Services.GraphServices.Abstraction;
 using RelationshipAnalysis.Services.GraphServices.Edge.Abstraction;
 using IEdgesAdditionService = RelationshipAnalysis.Services.GraphServices.Edge.Abstraction.IEdgesAdditionService;
-using ISingleEdgeAdditionService = RelationshipAnalysis.Services.GraphServices.Edge.Abstraction.ISingleEdgeAdditionService;
 
 namespace RelationshipAnalysis.Services.GraphServices.Edge;
 
@@ -31,41 +27,32 @@ public class EdgesAdditionService(
         var targetCategory = await GetTargetCategory(uploadEdgeDto, context);
         var sourceCategory = await GetSourceCategory(uploadEdgeDto, context);
         var edgeCategory = await GetEdgeCategory(uploadEdgeDto, context);
-        
-        var nullCheckResponse = CheckForNullValues(edgeCategory, sourceCategory, targetCategory);
-        if (nullCheckResponse.StatusCode == StatusCodeType.BadRequest)
-        {
-            return nullCheckResponse;
-        }
 
-        var validationResult = csvValidatorService.Validate(uploadEdgeDto.File, uploadEdgeDto.UniqueKeyHeaderName, uploadEdgeDto.SourceNodeHeaderName, uploadEdgeDto.TargetNodeHeaderName);
-        if (validationResult.StatusCode == StatusCodeType.BadRequest)
-        {
-            return validationResult;
-        }
+        var nullCheckResponse = CheckForNullValues(edgeCategory, sourceCategory, targetCategory);
+        if (nullCheckResponse.StatusCode == StatusCodeType.BadRequest) return nullCheckResponse;
+
+        var validationResult = csvValidatorService.Validate(uploadEdgeDto.File, uploadEdgeDto.UniqueKeyHeaderName,
+            uploadEdgeDto.SourceNodeHeaderName, uploadEdgeDto.TargetNodeHeaderName);
+        if (validationResult.StatusCode == StatusCodeType.BadRequest) return validationResult;
 
         var objects = await csvProcessorService.ProcessCsvAsync(uploadEdgeDto.File);
 
-        return await contextEdgesAdditionService.AddToContext(context, edgeCategory, sourceCategory, targetCategory, objects,
+        return await contextEdgesAdditionService.AddToContext(context, edgeCategory, sourceCategory, targetCategory,
+            objects,
             uploadEdgeDto);
     }
 
-    private ActionResponse<MessageDto> CheckForNullValues(EdgeCategory? edgeCategory, NodeCategory? sourceCategory, NodeCategory? targetCategory)
+    private ActionResponse<MessageDto> CheckForNullValues(EdgeCategory? edgeCategory, NodeCategory? sourceCategory,
+        NodeCategory? targetCategory)
     {
         if (edgeCategory == null)
-        {
             return responseCreator.Create(StatusCodeType.BadRequest, Resources.InvalidEdgeCategory);
-        }
 
         if (sourceCategory == null)
-        {
             return responseCreator.Create(StatusCodeType.BadRequest, Resources.InvalidSourceNodeCategory);
-        }
 
         if (targetCategory == null)
-        {
             return responseCreator.Create(StatusCodeType.BadRequest, Resources.InvalidTargetNodeCategory);
-        }
 
         return responseCreator.Create(StatusCodeType.Success, string.Empty);
     }

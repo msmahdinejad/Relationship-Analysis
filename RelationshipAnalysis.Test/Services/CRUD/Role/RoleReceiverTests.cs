@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
-using RelationshipAnalysis.Models.Auth;
 using RelationshipAnalysis.Services.CRUD.Role;
 
 namespace RelationshipAnalysis.Test.Services.CRUD.Role;
@@ -35,18 +34,18 @@ public class RoleReceiverTests
 
         context.Roles.AddRange(new List<Models.Auth.Role>
         {
-            new Models.Auth.Role { Id = 1, Name = "Admin", Permissions = "" },
-            new Models.Auth.Role { Id = 2, Name = "User", Permissions = "" }
+            new() { Id = 1, Name = "Admin", Permissions = "" },
+            new() { Id = 2, Name = "User", Permissions = "" }
         });
 
         context.Users.AddRange(new List<Models.Auth.User>
         {
-            new Models.Auth.User
+            new()
             {
                 Id = 1, Username = "user1", Email = "user1@example.com", PasswordHash = "hash1", FirstName = "User",
                 LastName = "One"
             },
-            new Models.Auth.User
+            new()
             {
                 Id = 2, Username = "user2", Email = "user2@example.com", PasswordHash = "hash2", FirstName = "User",
                 LastName = "Two"
@@ -55,9 +54,9 @@ public class RoleReceiverTests
 
         context.UserRoles.AddRange(new List<Models.Auth.UserRole>
         {
-            new Models.Auth.UserRole { UserId = 1, RoleId = 1 },
-            new Models.Auth.UserRole { UserId = 1, RoleId = 2 },
-            new Models.Auth.UserRole { UserId = 2, RoleId = 2 }
+            new() { UserId = 1, RoleId = 1 },
+            new() { UserId = 1, RoleId = 2 },
+            new() { UserId = 2, RoleId = 2 }
         });
 
         context.SaveChanges();

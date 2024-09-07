@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Panel.Admin;
@@ -22,26 +18,22 @@ public class UserCreateServiceValidator(
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
         if (context.Users.Select(x => x.Username).ToList().Contains(createUserDto.Username))
-        {
-            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest, Resources.UsernameExistsMessage));
-        }
-        
+            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest,
+                Resources.UsernameExistsMessage));
+
         if (context.Users.Select(x => x.Email).ToList().Contains(createUserDto.Email))
-        {
-            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest, Resources.EmailExistsMessage));
-        }
+            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest,
+                Resources.EmailExistsMessage));
 
         if (createUserDto.Roles.IsNullOrEmpty())
-        {
-            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest, Resources.EmptyRolesMessage));
-        }
+            return Task.FromResult(
+                messageResponseCreator.Create(StatusCodeType.BadRequest, Resources.EmptyRolesMessage));
 
         var invalidRoles = createUserDto.Roles.FindAll(r => !context.Roles.Select(role => role.Name)
             .Contains(r));
         if (invalidRoles.Any())
-        {
-            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest, Resources.InvalidRolesListMessage));
-        }
+            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest,
+                Resources.InvalidRolesListMessage));
 
         return Task.FromResult(messageResponseCreator.Create(StatusCodeType.Success, Resources.SucceddfulCreateUser));
     }

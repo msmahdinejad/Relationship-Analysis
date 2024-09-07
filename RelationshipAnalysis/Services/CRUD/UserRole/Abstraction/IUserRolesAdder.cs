@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace RelationshipAnalysis.Services.CRUD.UserRole.Abstraction;
+﻿namespace RelationshipAnalysis.Services.CRUD.UserRole.Abstraction;
 
 public interface IUserRolesAdder
 {

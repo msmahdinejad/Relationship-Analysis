@@ -12,10 +12,13 @@ namespace RelationshipAnalysis.Test.Services.Panel.UserPanelServices.UserUpdateP
 
 public class UserUpdatePasswordServiceTests
 {
-    private readonly Mock<IUserUpdatePasswordServiceValidator> _validatorMock;
-    private readonly Mock<IUserUpdater> _userUpdaterMock;
     private readonly Mock<IPasswordHasher> _passwordHasherMock;
-    private readonly RelationshipAnalysis.Services.Panel.UserPanelServices.UserUpdatePasswordService.UserUpdatePasswordService _sut;
+
+    private readonly RelationshipAnalysis.Services.Panel.UserPanelServices.UserUpdatePasswordService.
+        UserUpdatePasswordService _sut;
+
+    private readonly Mock<IUserUpdater> _userUpdaterMock;
+    private readonly Mock<IUserUpdatePasswordServiceValidator> _validatorMock;
 
     public UserUpdatePasswordServiceTests()
     {
@@ -23,7 +26,9 @@ public class UserUpdatePasswordServiceTests
         _userUpdaterMock = new Mock<IUserUpdater>();
         _passwordHasherMock = new Mock<IPasswordHasher>();
 
-        _sut = new RelationshipAnalysis.Services.Panel.UserPanelServices.UserUpdatePasswordService.UserUpdatePasswordService(_validatorMock.Object, _userUpdaterMock.Object, _passwordHasherMock.Object);
+        _sut =
+            new RelationshipAnalysis.Services.Panel.UserPanelServices.UserUpdatePasswordService.
+                UserUpdatePasswordService(_validatorMock.Object, _userUpdaterMock.Object, _passwordHasherMock.Object);
     }
 
     [Fact]

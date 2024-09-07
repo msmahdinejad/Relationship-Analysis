@@ -1,18 +1,14 @@
-using System;
-using System.Collections.Generic;
 using RelationshipAnalysis.Dto.Graph;
 using RelationshipAnalysis.Dto.Graph.Edge;
 using RelationshipAnalysis.Dto.Graph.Node;
-using RelationshipAnalysis.Services.GraphServices.Abstraction;
-using RelationshipAnalysis.Services.GraphServices.Graph.Abstraction;
 using IGraphDtoCreator = RelationshipAnalysis.Services.GraphServices.Graph.Abstraction.IGraphDtoCreator;
 
 namespace RelationshipAnalysis.Services.GraphServices.Graph;
 
 public class GraphDtoCreator : IGraphDtoCreator
 {
-    
-    public GraphDto CreateResultGraphDto(List<Models.Graph.Node.Node> contextNodes, List<Models.Graph.Edge.Edge> contextEdges)
+    public GraphDto CreateResultGraphDto(List<Models.Graph.Node.Node> contextNodes,
+        List<Models.Graph.Edge.Edge> contextEdges)
     {
         if (contextEdges == null || contextNodes == null) throw new ArgumentNullException();
         var resultGraphDto = new GraphDto();

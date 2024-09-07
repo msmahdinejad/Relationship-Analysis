@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Panel.User;
 using RelationshipAnalysis.Enums;
@@ -21,7 +19,7 @@ public class UserUpdateInfoService(
         var validateResult = await validator.Validate(user, userUpdateInfoDto);
         if (validateResult.StatusCode != StatusCodeType.Success)
             return validateResult;
-        
+
         await UpdateInfo(user, userUpdateInfoDto);
 
         return validateResult;

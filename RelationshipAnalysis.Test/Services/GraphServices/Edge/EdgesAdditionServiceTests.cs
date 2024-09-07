@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using NSubstitute;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
@@ -74,7 +73,8 @@ public class EdgesAdditionServiceTests
             .Returns(expected);
         var processorMock = Substitute.For<ICsvProcessorService>();
         var additionServiceMock = Substitute.For<IContextEdgesAdditionService>();
-        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock, new MessageResponseCreator());
+        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock,
+            new MessageResponseCreator());
         // Act 
         var result = await _sut.AddEdges(new UploadEdgeDto
         {
@@ -109,7 +109,8 @@ public class EdgesAdditionServiceTests
             .Returns(expected);
         var processorMock = Substitute.For<ICsvProcessorService>();
         var additionServiceMock = Substitute.For<IContextEdgesAdditionService>();
-        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock, new MessageResponseCreator());
+        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock,
+            new MessageResponseCreator());
         // Act 
         var result = await _sut.AddEdges(new UploadEdgeDto
         {
@@ -145,7 +146,8 @@ public class EdgesAdditionServiceTests
         ICsvProcessorService processorMock;
         processorMock = Substitute.For<ICsvProcessorService>();
         var additionServiceMock = Substitute.For<IContextEdgesAdditionService>();
-        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock, new MessageResponseCreator());
+        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock,
+            new MessageResponseCreator());
         // Act 
         var result = await _sut.AddEdges(new UploadEdgeDto
         {
@@ -179,7 +181,8 @@ public class EdgesAdditionServiceTests
         var validatorMock = Substitute.For<ICsvValidatorService>();
         var processorMock = Substitute.For<ICsvProcessorService>();
         var additionServiceMock = Substitute.For<IContextEdgesAdditionService>();
-        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock, new MessageResponseCreator());
+        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock,
+            new MessageResponseCreator());
         // Act
         var result = await _sut.AddEdges(new UploadEdgeDto
         {
@@ -212,7 +215,8 @@ public class EdgesAdditionServiceTests
         var validatorMock = Substitute.For<ICsvValidatorService>();
         var processorMock = Substitute.For<ICsvProcessorService>();
         var additionServiceMock = Substitute.For<IContextEdgesAdditionService>();
-        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock, new MessageResponseCreator());
+        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock,
+            new MessageResponseCreator());
         // Act
         var result = await _sut.AddEdges(new UploadEdgeDto
         {
@@ -245,7 +249,8 @@ public class EdgesAdditionServiceTests
         var validatorMock = Substitute.For<ICsvValidatorService>();
         var processorMock = Substitute.For<ICsvProcessorService>();
         var additionServiceMock = Substitute.For<IContextEdgesAdditionService>();
-        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock, new MessageResponseCreator());
+        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock,
+            new MessageResponseCreator());
         // Act
         var result = await _sut.AddEdges(new UploadEdgeDto
         {
@@ -282,8 +287,10 @@ public class EdgesAdditionServiceTests
         processorMock.ProcessCsvAsync(fileToBeSend).Returns(new List<dynamic>());
         var additionServiceMock = Substitute.For<IContextEdgesAdditionService>();
         additionServiceMock.AddToContext(Arg.Any<ApplicationDbContext>(), Arg.Any<EdgeCategory>(),
-            Arg.Any<NodeCategory>(), Arg.Any<NodeCategory>(), Arg.Any<List<dynamic>>(), Arg.Any<UploadEdgeDto>()).Returns(expected);
-        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock, new MessageResponseCreator());
+                Arg.Any<NodeCategory>(), Arg.Any<NodeCategory>(), Arg.Any<List<dynamic>>(), Arg.Any<UploadEdgeDto>())
+            .Returns(expected);
+        _sut = new EdgesAdditionService(_serviceProvider, validatorMock, processorMock, additionServiceMock,
+            new MessageResponseCreator());
         // Act
         var result = await _sut.AddEdges(new UploadEdgeDto
         {

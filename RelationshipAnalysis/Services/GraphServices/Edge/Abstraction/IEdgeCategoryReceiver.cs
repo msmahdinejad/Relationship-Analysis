@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace RelationshipAnalysis.Services.GraphServices.Edge.Abstraction;
+﻿namespace RelationshipAnalysis.Services.GraphServices.Edge.Abstraction;
 
 public interface IEdgeCategoryReceiver
 {

@@ -20,8 +20,8 @@ public class AllUserServiceValidatorTests
         // Arrange
         var users = new List<User>
         {
-            new User { Id = 1, Username = "user1", Email = "user1@example.com" },
-            new User { Id = 2, Username = "user2", Email = "user2@example.com" }
+            new() { Id = 1, Username = "user1", Email = "user1@example.com" },
+            new() { Id = 2, Username = "user2", Email = "user2@example.com" }
         };
 
         // Act

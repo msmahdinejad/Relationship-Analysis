@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Services.GraphServices.Abstraction;
 
@@ -13,7 +8,6 @@ public class EdgeAttributesReceiver(IServiceProvider serviceProvider) : IAttribu
 {
     public async Task<List<string>> GetAllAttributes(string name)
     {
-        
         using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 

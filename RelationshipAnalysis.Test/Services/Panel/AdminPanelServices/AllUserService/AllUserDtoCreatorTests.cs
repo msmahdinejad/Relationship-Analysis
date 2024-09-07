@@ -13,8 +13,8 @@ public class AllUserDtoCreatorTests
 {
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<IRoleReceiver> _rolesReceiverMock;
-    private readonly Mock<IUserReceiver> _userReceiverMock;
     private readonly AllUserDtoCreator _sut;
+    private readonly Mock<IUserReceiver> _userReceiverMock;
 
     public AllUserDtoCreatorTests()
     {
@@ -31,8 +31,8 @@ public class AllUserDtoCreatorTests
         // Arrange
         var users = new List<User>
         {
-            new User { Id = 1, Username = "user1", Email = "user1@example.com" },
-            new User { Id = 2, Username = "user2", Email = "user2@example.com" }
+            new() { Id = 1, Username = "user1", Email = "user1@example.com" },
+            new() { Id = 2, Username = "user2", Email = "user2@example.com" }
         };
 
         _mapperMock

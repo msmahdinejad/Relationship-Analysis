@@ -11,10 +11,7 @@ public class UserUpdateInfoMapperTests
 
     public UserUpdateInfoMapperTests()
     {
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<UserUpdateInfoMapper>();
-        });
+        var config = new MapperConfiguration(cfg => { cfg.AddProfile<UserUpdateInfoMapper>(); });
         _mapper = config.CreateMapper();
     }
 

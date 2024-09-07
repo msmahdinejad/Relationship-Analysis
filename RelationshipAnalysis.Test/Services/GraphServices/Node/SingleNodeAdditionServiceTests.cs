@@ -12,8 +12,8 @@ namespace RelationshipAnalysis.Test.Services.GraphServices.Node;
 public class SingleNodeAdditionServiceTests
 {
     private readonly IServiceProvider _serviceProvider;
-    private SingleNodeAdditionService _sut;
     private INodeValueAdditionService _nodeValueAdditionService;
+    private SingleNodeAdditionService _sut;
 
     public SingleNodeAdditionServiceTests()
     {
@@ -68,16 +68,15 @@ public class SingleNodeAdditionServiceTests
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         _nodeValueAdditionService = Substitute.For<INodeValueAdditionService>();
-        
+
         _sut = new SingleNodeAdditionService(_nodeValueAdditionService);
 
         // Act
         await _sut.AddSingleNode(context, record, "UniqueName", 1);
 
         // Assert
-        await _nodeValueAdditionService.Received().AddKvpToValues(Arg.Any<ApplicationDbContext>(), Arg.Any<KeyValuePair<string, object>>(), Arg.Any<Models.Graph.Node.Node>());
-        
-        
+        await _nodeValueAdditionService.Received().AddKvpToValues(Arg.Any<ApplicationDbContext>(),
+            Arg.Any<KeyValuePair<string, object>>(), Arg.Any<Models.Graph.Node.Node>());
     }
 
     [Fact]
@@ -92,17 +91,17 @@ public class SingleNodeAdditionServiceTests
 
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        
+
         _nodeValueAdditionService = Substitute.For<INodeValueAdditionService>();
-        
+
         _sut = new SingleNodeAdditionService(_nodeValueAdditionService);
 
         // Act
         await _sut.AddSingleNode(context, record, "UniqueName", 1);
 
         // Assert
-        await _nodeValueAdditionService.Received().AddKvpToValues(Arg.Any<ApplicationDbContext>(), Arg.Any<KeyValuePair<string, object>>(), Arg.Any<Models.Graph.Node.Node>());
-     
+        await _nodeValueAdditionService.Received().AddKvpToValues(Arg.Any<ApplicationDbContext>(),
+            Arg.Any<KeyValuePair<string, object>>(), Arg.Any<Models.Graph.Node.Node>());
     }
 
     [Fact]
@@ -117,12 +116,12 @@ public class SingleNodeAdditionServiceTests
 
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        
+
         _nodeValueAdditionService = Substitute.For<INodeValueAdditionService>();
 
         _nodeValueAdditionService.AddKvpToValues(Arg.Any<ApplicationDbContext>(),
             Arg.Any<KeyValuePair<string, object>>(), Arg.Any<Models.Graph.Node.Node>()).Throws(new Exception());
-        
+
         _sut = new SingleNodeAdditionService(_nodeValueAdditionService);
 
         // Act
@@ -144,12 +143,12 @@ public class SingleNodeAdditionServiceTests
 
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        
+
         _nodeValueAdditionService = Substitute.For<INodeValueAdditionService>();
 
         _nodeValueAdditionService.AddKvpToValues(Arg.Any<ApplicationDbContext>(),
             Arg.Any<KeyValuePair<string, object>>(), Arg.Any<Models.Graph.Node.Node>()).ThrowsAsync(new Exception());
-        
+
         _sut = new SingleNodeAdditionService(_nodeValueAdditionService);
 
 

@@ -1,7 +1,5 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Dto.Graph.Node;
 using RelationshipAnalysis.Services.GraphServices.Abstraction;
 using RelationshipAnalysis.Services.GraphServices.Node.Abstraction;
@@ -24,7 +22,7 @@ public class NodeController(
         var result = await nodeCategoryReceiver.GetAllNodeCategories();
         return Ok(result);
     }
-    
+
     [HttpGet]
     public async Task<IActionResult> GetInfo(int nodeId)
     {
@@ -38,14 +36,12 @@ public class NodeController(
         var result = await createNodeCategoryService.CreateNodeCategory(createNodeCategoryDto);
         return StatusCode((int)result.StatusCode, result.Data);
     }
-    
+
     [HttpPost]
     public async Task<IActionResult> UploadNode([FromForm] UploadNodeDto uploadNodeDto)
     {
         if (uploadNodeDto.File == null || uploadNodeDto.File.Length == 0)
-        {
             return BadRequest(Resources.NoFileUploadedMessage);
-        }
 
         var result = await nodesAdditionService.AddNodes(uploadNodeDto);
         return StatusCode((int)result.StatusCode, result.Data);

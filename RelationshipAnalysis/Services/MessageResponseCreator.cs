@@ -8,7 +8,7 @@ public class MessageResponseCreator : IMessageResponseCreator
 {
     public ActionResponse<MessageDto> Create(StatusCodeType statusCodeType, string message)
     {
-        return new ActionResponse<MessageDto>()
+        return new ActionResponse<MessageDto>
         {
             StatusCode = statusCodeType,
             Data = new MessageDto(message)

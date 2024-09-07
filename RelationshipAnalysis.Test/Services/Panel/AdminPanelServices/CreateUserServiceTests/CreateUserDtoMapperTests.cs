@@ -8,8 +8,8 @@ namespace RelationshipAnalysis.Test.Services.Panel.AdminPanelServices.CreateUser
 
 public class CreateUserDtoMapperTests
 {
-    private readonly Mock<IPasswordHasher> _passwordHasherMock;
     private readonly CreateUserDtoMapper _mapper;
+    private readonly Mock<IPasswordHasher> _passwordHasherMock;
 
     public CreateUserDtoMapperTests()
     {

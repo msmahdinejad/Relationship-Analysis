@@ -14,11 +14,11 @@ namespace RelationshipAnalysis.Test.Services.Panel.UserPanelServices.UserUpdateI
 
 public class UserUpdateInfoServiceValidatorTests
 {
+    private readonly Mock<IMessageResponseCreator> _messageResponseCreatorMock;
     private readonly IServiceProvider _serviceProvider;
     private readonly UserUpdateInfoServiceValidator _sut;
-    private readonly Mock<IMessageResponseCreator> _messageResponseCreatorMock;
 
-    private readonly User _user1 = new User
+    private readonly User _user1 = new()
     {
         Id = 1,
         Username = "test",
@@ -28,7 +28,7 @@ public class UserUpdateInfoServiceValidatorTests
         LastName = "Doe"
     };
 
-    private readonly User _user2 = new User
+    private readonly User _user2 = new()
     {
         Id = 2,
         Username = "existinguser",

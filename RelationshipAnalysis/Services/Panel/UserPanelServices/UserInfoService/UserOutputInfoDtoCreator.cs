@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using RelationshipAnalysis.Dto.Panel.User;
 using RelationshipAnalysis.Models.Auth;
 using RelationshipAnalysis.Services.CRUD.Role.Abstraction;

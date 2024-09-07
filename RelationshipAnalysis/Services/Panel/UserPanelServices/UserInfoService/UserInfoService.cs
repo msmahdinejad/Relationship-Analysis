@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Panel.User;
 using RelationshipAnalysis.Enums;
@@ -18,7 +17,7 @@ public class UserInfoService(
             return validateResult;
 
         validateResult.Data = await userOutputInfoDtoCreator.Create(user);
-        
+
         return validateResult;
     }
 }

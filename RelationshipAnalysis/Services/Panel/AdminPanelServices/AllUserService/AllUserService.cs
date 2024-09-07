@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using RelationshipAnalysis.Dto;
+﻿using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Panel.Admin;
 using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Models.Auth;
@@ -17,8 +15,8 @@ public class AllUserService(
     {
         var validateResult = await validator.Validate(users);
         if (validateResult.StatusCode != StatusCodeType.Success) return validateResult;
-        
-        
+
+
         var userOutPuts = await allUserDtoCreator.Create(users);
 
 

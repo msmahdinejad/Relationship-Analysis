@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using RelationshipAnalysis.Dto;
+﻿using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Models.Auth;
 using RelationshipAnalysis.Services.Abstraction;
@@ -12,10 +11,10 @@ public class UserDeleteServiceValidator(IMessageResponseCreator messageResponseC
     public Task<ActionResponse<MessageDto>> Validate(User user)
     {
         if (user is null)
-        {
-            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.NotFound, Resources.UserNotFoundMessage));
-        }
-        
-        return Task.FromResult(messageResponseCreator.Create(StatusCodeType.Success, Resources.SuccessfulDeleteUserMessage));
+            return Task.FromResult(
+                messageResponseCreator.Create(StatusCodeType.NotFound, Resources.UserNotFoundMessage));
+
+        return Task.FromResult(messageResponseCreator.Create(StatusCodeType.Success,
+            Resources.SuccessfulDeleteUserMessage));
     }
 }

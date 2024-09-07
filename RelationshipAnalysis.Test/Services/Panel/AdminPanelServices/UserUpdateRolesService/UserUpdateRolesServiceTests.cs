@@ -10,11 +10,13 @@ namespace RelationshipAnalysis.Test.Services.Panel.AdminPanelServices.UserUpdate
 
 public class UserUpdateRolesServiceTests
 {
-    private readonly Mock<IUserUpdateRolesServiceValidator> _mockValidator;
     private readonly Mock<IRoleReceiver> _mockRoleReceiver;
     private readonly Mock<IUserRolesAdder> _mockUserRolesAdder;
     private readonly Mock<IUserRolesRemover> _mockUserRolesRemover;
-    private readonly RelationshipAnalysis.Services.Panel.AdminPanelServices.UserUpdateRolesService.UserUpdateRolesService _service;
+    private readonly Mock<IUserUpdateRolesServiceValidator> _mockValidator;
+
+    private readonly
+        RelationshipAnalysis.Services.Panel.AdminPanelServices.UserUpdateRolesService.UserUpdateRolesService _service;
 
     public UserUpdateRolesServiceTests()
     {
@@ -23,11 +25,12 @@ public class UserUpdateRolesServiceTests
         _mockUserRolesAdder = new Mock<IUserRolesAdder>();
         _mockUserRolesRemover = new Mock<IUserRolesRemover>();
 
-        _service = new RelationshipAnalysis.Services.Panel.AdminPanelServices.UserUpdateRolesService.UserUpdateRolesService(
-            _mockValidator.Object,
-            _mockRoleReceiver.Object,
-            _mockUserRolesAdder.Object,
-            _mockUserRolesRemover.Object);
+        _service =
+            new RelationshipAnalysis.Services.Panel.AdminPanelServices.UserUpdateRolesService.UserUpdateRolesService(
+                _mockValidator.Object,
+                _mockRoleReceiver.Object,
+                _mockUserRolesAdder.Object,
+                _mockUserRolesRemover.Object);
     }
 
     [Fact]
@@ -61,8 +64,8 @@ public class UserUpdateRolesServiceTests
         var newRoles = new List<string> { "Admin", "User" };
         var roleList = new List<Role>
         {
-            new Role { Name = "Admin" },
-            new Role { Name = "User" }
+            new() { Name = "Admin" },
+            new() { Name = "User" }
         };
 
         _mockValidator.Setup(v => v.Validate(user, newRoles))

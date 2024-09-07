@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Models.Graph.Node;
@@ -10,8 +7,8 @@ namespace RelationshipAnalysis.Services.GraphServices.Node;
 
 public class NodeValueAdditionService : INodeValueAdditionService
 {
-    
-    public async Task AddKvpToValues(ApplicationDbContext context, KeyValuePair<string, object> kvp, Models.Graph.Node.Node newNode)
+    public async Task AddKvpToValues(ApplicationDbContext context, KeyValuePair<string, object> kvp,
+        Models.Graph.Node.Node newNode)
     {
         var newNodeAttribute = await GetNewNodeAttribute(context, kvp);
 
@@ -30,7 +27,8 @@ public class NodeValueAdditionService : INodeValueAdditionService
         await context.SaveChangesAsync();
     }
 
-    private async Task<NodeValue?> GetNodeValue(ApplicationDbContext context, Models.Graph.Node.Node newNode, NodeAttribute newNodeAttribute)
+    private async Task<NodeValue?> GetNodeValue(ApplicationDbContext context, Models.Graph.Node.Node newNode,
+        NodeAttribute newNodeAttribute)
     {
         var value = await context.NodeValues.SingleOrDefaultAsync(nv =>
             nv.NodeAttributeId == newNodeAttribute.NodeAttributeId &&
@@ -38,7 +36,8 @@ public class NodeValueAdditionService : INodeValueAdditionService
         return value;
     }
 
-    private async Task<NodeAttribute> GetNewNodeAttribute(ApplicationDbContext context, KeyValuePair<string, object> kvp)
+    private async Task<NodeAttribute> GetNewNodeAttribute(ApplicationDbContext context,
+        KeyValuePair<string, object> kvp)
     {
         var newNodeAttribute = await context.NodeAttributes.SingleOrDefaultAsync(na =>
             na.NodeAttributeName == kvp.Key);

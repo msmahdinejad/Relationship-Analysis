@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using RelationshipAnalysis.Context;
@@ -14,8 +13,8 @@ namespace RelationshipAnalysis.Test.Services.Panel.AdminPanelServices.CreateUser
 
 public class UserCreateServiceValidatorTests
 {
-    private readonly IServiceProvider _serviceProvider;
     private readonly Mock<IMessageResponseCreator> _messageResponseCreatorMock;
+    private readonly IServiceProvider _serviceProvider;
     private readonly UserCreateServiceValidator _validator;
 
     public UserCreateServiceValidatorTests()
@@ -43,7 +42,7 @@ public class UserCreateServiceValidatorTests
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        context.Users.Add(new Models.Auth.User
+        context.Users.Add(new User
         {
             Id = 1, Username = "user1", Email = "user1@example.com", PasswordHash = "hash1", FirstName = "User",
             LastName = "One"
@@ -51,8 +50,8 @@ public class UserCreateServiceValidatorTests
 
         context.Roles.AddRange(new List<Role>
         {
-            new Role { Name = "Admin" , Permissions = ""},
-            new Role { Name = "User" , Permissions = ""}
+            new() { Name = "Admin", Permissions = "" },
+            new() { Name = "User", Permissions = "" }
         });
 
         context.SaveChanges();

@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using RelationshipAnalysis.Dto;
+﻿using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Models.Auth;
-using RelationshipAnalysis.Services.Abstraction;
 using RelationshipAnalysis.Services.CRUD.User.Abstraction;
 using RelationshipAnalysis.Services.Panel.AdminPanelServices.UserDeleteService.Abstraction;
 
@@ -17,7 +15,7 @@ public class UserDeleteService(
     {
         var validateResult = await validator.Validate(user);
         if (validateResult.StatusCode != StatusCodeType.Success) return validateResult;
-        
+
         await userDeleter.DeleteUserAsync(user);
 
         return validateResult;

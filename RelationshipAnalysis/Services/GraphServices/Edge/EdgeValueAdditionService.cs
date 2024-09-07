@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Models.Graph.Edge;
@@ -10,9 +7,9 @@ namespace RelationshipAnalysis.Services.GraphServices.Edge;
 
 public class EdgeValueAdditionService : IEdgeValueAdditionService
 {
-    public async Task AddKvpToValues(ApplicationDbContext context, KeyValuePair<string, object> kvp, Models.Graph.Edge.Edge newEdge)
+    public async Task AddKvpToValues(ApplicationDbContext context, KeyValuePair<string, object> kvp,
+        Models.Graph.Edge.Edge newEdge)
     {
-        
         var newEdgeAttribute = await context.EdgeAttributes.SingleOrDefaultAsync(na =>
             na.EdgeAttributeName == kvp.Key);
         if (newEdgeAttribute == null)

@@ -1,11 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NSubstitute;
 using RelationshipAnalysis.Context;
-using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Models.Graph.Node;
 using RelationshipAnalysis.Services;
@@ -16,8 +14,9 @@ namespace RelationshipAnalysis.Test.Services.GraphServices.Node;
 
 public class ContextNodesAdditionServiceTests
 {
-    private IContextNodesAdditionService _sut;
     private readonly IServiceProvider _serviceProvider;
+    private IContextNodesAdditionService _sut;
+
     public ContextNodesAdditionServiceTests()
     {
         var serviceCollection = new ServiceCollection();
@@ -30,27 +29,30 @@ public class ContextNodesAdditionServiceTests
         serviceCollection.AddScoped(_ => new ApplicationDbContext(options));
 
         _serviceProvider = serviceCollection.BuildServiceProvider();
-
     }
-    
+
     [Fact]
     public async Task AddToContext_ShouldReturnSuccess_WhenDataIsValid()
     {
         // Arrange
-        
+
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
         var nodeCategory = new NodeCategory { NodeCategoryId = 1 };
-        var objects = new List<dynamic> { new Dictionary<string, object>() {
-            { "UniqueEdge", "TestEdge" },
-            { "SourceNode", "acc1" },
-            { "TargetNode", "acc2" },
-            { "Attribute1", "Value1" }
-        } };
+        var objects = new List<dynamic>
+        {
+            new Dictionary<string, object>
+            {
+                { "UniqueEdge", "TestEdge" },
+                { "SourceNode", "acc1" },
+                { "TargetNode", "acc2" },
+                { "Attribute1", "Value1" }
+            }
+        };
 
         var singleNodeAdditionService = Substitute.For<ISingleNodeAdditionService>();
-        
+
         _sut = new ContextNodesAdditionService(new MessageResponseCreator(), singleNodeAdditionService);
         // Act
         var result = await _sut.AddToContext("UniqueEdge", context, objects, nodeCategory);
@@ -58,6 +60,7 @@ public class ContextNodesAdditionServiceTests
         // Assert
         Assert.Equal(StatusCodeType.Success, result.StatusCode);
     }
+
     [Fact]
     public async Task AddToContext_ShouldReturnBadRequestAndRollBack_WhenDbFailsToAddData()
     {
@@ -74,10 +77,10 @@ public class ContextNodesAdditionServiceTests
             .ThrowsAsync(new Exception("Custom exception message"));
         _sut = new ContextNodesAdditionService(new MessageResponseCreator(), additionServiceMock.Object);
 
-        
+
         using var scope = _serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        var newNodeCategory = new NodeCategory()
+        var newNodeCategory = new NodeCategory
         {
             NodeCategoryId = 1,
             NodeCategoryName = "Account"
@@ -85,7 +88,7 @@ public class ContextNodesAdditionServiceTests
         context.NodeCategories.Add(newNodeCategory);
         await context.SaveChangesAsync();
         // Act
-        var result = await _sut.AddToContext("AccountID", context, new List<dynamic>()
+        var result = await _sut.AddToContext("AccountID", context, new List<dynamic>
         {
             new Dictionary<string, object>
             {
@@ -100,11 +103,9 @@ public class ContextNodesAdditionServiceTests
                 { "IBAN", "IR033880987114000000028" }
             }
         }, newNodeCategory);
-        
+
         // Assert
         Assert.Equal(0, context.Nodes.Count());
         Assert.Equal("Custom exception message", result.Data.Message);
     }
-    
-    
 }

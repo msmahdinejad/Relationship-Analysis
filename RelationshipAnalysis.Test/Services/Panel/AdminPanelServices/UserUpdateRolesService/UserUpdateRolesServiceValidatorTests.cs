@@ -41,8 +41,8 @@ public class UserUpdateRolesServiceValidatorTests
 
         context.Roles.AddRange(new List<Role>
         {
-            new Role { Id = 1, Name = "Admin" , Permissions = ""},
-            new Role { Id = 2, Name = "User" , Permissions = ""}
+            new() { Id = 1, Name = "Admin", Permissions = "" },
+            new() { Id = 2, Name = "User", Permissions = "" }
         });
 
         context.SaveChanges();

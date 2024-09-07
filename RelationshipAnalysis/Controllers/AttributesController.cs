@@ -1,7 +1,5 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Services.GraphServices.Abstraction;
 
 namespace RelationshipAnalysis.Controllers;
@@ -9,7 +7,9 @@ namespace RelationshipAnalysis.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class AttributesController([FromKeyedServices("node")] IAttributesReceiver nodeAttributeReceiver,[FromKeyedServices("edge")] IAttributesReceiver edgeAttributeReceiver) : ControllerBase
+public class AttributesController(
+    [FromKeyedServices("node")] IAttributesReceiver nodeAttributeReceiver,
+    [FromKeyedServices("edge")] IAttributesReceiver edgeAttributeReceiver) : ControllerBase
 {
     [HttpGet("nodes")]
     public async Task<IActionResult> GetNodeAttributes(string nodeCategoryName)
@@ -17,6 +17,7 @@ public class AttributesController([FromKeyedServices("node")] IAttributesReceive
         var result = await nodeAttributeReceiver.GetAllAttributes(nodeCategoryName);
         return Ok(result);
     }
+
     [HttpGet("edges")]
     public async Task<IActionResult> GetEdgeAttributes(string edgeCategoryName)
     {

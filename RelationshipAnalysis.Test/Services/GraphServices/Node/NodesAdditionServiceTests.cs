@@ -1,9 +1,7 @@
-using System.Runtime.InteropServices.JavaScript;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using NSubstitute;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto;
@@ -20,10 +18,12 @@ namespace RelationshipAnalysis.Test.Services.GraphServices.Node;
 
 public class NodesAdditionServiceTests
 {
+    private readonly IContextNodesAdditionService _contextAdditionServiceMock =
+        Substitute.For<IContextNodesAdditionService>();
+
+    private readonly IMessageResponseCreator _responseCreator = new MessageResponseCreator();
     private readonly IServiceProvider _serviceProvider;
     private INodesAdditionService _sut;
-    private readonly IContextNodesAdditionService _contextAdditionServiceMock = Substitute.For<IContextNodesAdditionService>();
-    private readonly IMessageResponseCreator _responseCreator = new MessageResponseCreator();
 
     public NodesAdditionServiceTests()
     {
@@ -39,9 +39,10 @@ public class NodesAdditionServiceTests
         _serviceProvider = serviceCollection.BuildServiceProvider();
 
         _contextAdditionServiceMock.AddToContext(Arg.Any<string>(), Arg.Any<ApplicationDbContext>(),
-            Arg.Any<List<dynamic>>(),Arg.Any<NodeCategory>()).Returns(_responseCreator.Create(StatusCodeType.Success, Resources.SuccessfulNodeAdditionMessage));
+                Arg.Any<List<dynamic>>(), Arg.Any<NodeCategory>())
+            .Returns(_responseCreator.Create(StatusCodeType.Success, Resources.SuccessfulNodeAdditionMessage));
 
-        
+
         SeedDatabase();
     }
 
@@ -57,8 +58,7 @@ public class NodesAdditionServiceTests
         context.SaveChanges();
     }
 
-    
-    
+
     [Fact]
     public async Task AddNodes_ShouldReturnBadRequest_WhenUniqueHeaderIsInvalid()
     {
@@ -78,7 +78,8 @@ public class NodesAdditionServiceTests
         validatorMock.Validate(fileToBeSend, "SomeHeaderThatDoesntExist")
             .Returns(expected);
         var processorMock = Substitute.For<ICsvProcessorService>();
-        _sut = new NodesAdditionService(_serviceProvider, validatorMock, processorMock, _responseCreator, _contextAdditionServiceMock);
+        _sut = new NodesAdditionService(_serviceProvider, validatorMock, processorMock, _responseCreator,
+            _contextAdditionServiceMock);
         // Act
         var result = await _sut.AddNodes(new UploadNodeDto
         {
@@ -107,7 +108,8 @@ public class NodesAdditionServiceTests
 
         var validatorMock = Substitute.For<ICsvValidatorService>();
         var processorMock = Substitute.For<ICsvProcessorService>();
-        _sut = new NodesAdditionService(_serviceProvider, validatorMock, processorMock, _responseCreator, _contextAdditionServiceMock);
+        _sut = new NodesAdditionService(_serviceProvider, validatorMock, processorMock, _responseCreator,
+            _contextAdditionServiceMock);
 
         // Act
         var result = await _sut.AddNodes(new UploadNodeDto
@@ -139,7 +141,8 @@ public class NodesAdditionServiceTests
         validatorMock.Validate(fileToBeSend, "AccountID").Returns(expected);
         var processorMock = Substitute.For<ICsvProcessorService>();
         processorMock.ProcessCsvAsync(fileToBeSend).Returns(new List<dynamic>());
-        _sut = new NodesAdditionService(_serviceProvider, validatorMock, processorMock, _responseCreator, _contextAdditionServiceMock);
+        _sut = new NodesAdditionService(_serviceProvider, validatorMock, processorMock, _responseCreator,
+            _contextAdditionServiceMock);
 
         // Act
         var result = await _sut.AddNodes(new UploadNodeDto

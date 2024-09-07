@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using RelationshipAnalysis.Dto;
-using RelationshipAnalysis.Dto.Auth;
+﻿using RelationshipAnalysis.Dto;
 using LoginDto = RelationshipAnalysis.Dto.Auth.LoginDto;
 
 namespace RelationshipAnalysis.Services.AuthServices.Abstraction;

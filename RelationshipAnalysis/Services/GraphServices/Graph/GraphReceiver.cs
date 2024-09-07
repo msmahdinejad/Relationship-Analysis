@@ -1,10 +1,6 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Dto.Graph;
-using RelationshipAnalysis.Services.GraphServices.Abstraction;
 using RelationshipAnalysis.Services.GraphServices.Graph.Abstraction;
 using IGraphDtoCreator = RelationshipAnalysis.Services.GraphServices.Graph.Abstraction.IGraphDtoCreator;
 
@@ -22,5 +18,4 @@ public class GraphReceiver(IServiceProvider serviceProvider, IGraphDtoCreator gr
 
         return graphDtoCreator.CreateResultGraphDto(contextNodes, contextEdges);
     }
-
 }

@@ -7,10 +7,9 @@ namespace RelationshipAnalysis.Test.Services.CRUD.Permissions;
 
 public class PermissionsReceiverTests
 {
-    private readonly PermissionsReceiver _sut;
-    private readonly Mock<IRoleReceiver> _roleReceiverMock;
-
     private readonly List<string> _expectedPermissions = ["Read", "Write", "Delete"];
+    private readonly Mock<IRoleReceiver> _roleReceiverMock;
+    private readonly PermissionsReceiver _sut;
 
     public PermissionsReceiverTests()
     {

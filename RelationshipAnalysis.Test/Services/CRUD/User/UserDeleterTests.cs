@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Services.CRUD.User;
-using RelationshipAnalysis.Services.CRUD.User.Abstraction;
 
 namespace RelationshipAnalysis.Test.Services.CRUD.User;
 
@@ -35,12 +34,12 @@ public class UserDeleterTests
 
         context.Users.AddRange(new List<Models.Auth.User>
         {
-            new Models.Auth.User
+            new()
             {
                 Id = 1, Username = "user1", Email = "user1@example.com", PasswordHash = "hash1", FirstName = "User",
                 LastName = "One"
             },
-            new Models.Auth.User
+            new()
             {
                 Id = 2, Username = "user2", Email = "user2@example.com", PasswordHash = "hash2", FirstName = "User",
                 LastName = "Two"

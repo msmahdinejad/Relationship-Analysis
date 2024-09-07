@@ -13,10 +13,13 @@ namespace RelationshipAnalysis.Test.Services.Panel.UserPanelServices.UserUpdateI
 
 public class UserUpdateInfoServiceTests
 {
-    private readonly Mock<IUserUpdateInfoServiceValidator> _validatorMock;
-    private readonly Mock<IUserUpdater> _userUpdaterMock;
     private readonly Mock<IMapper> _mapperMock;
-    private readonly RelationshipAnalysis.Services.Panel.UserPanelServices.UserUpdateInfoService.UserUpdateInfoService _sut;
+
+    private readonly RelationshipAnalysis.Services.Panel.UserPanelServices.UserUpdateInfoService.UserUpdateInfoService
+        _sut;
+
+    private readonly Mock<IUserUpdater> _userUpdaterMock;
+    private readonly Mock<IUserUpdateInfoServiceValidator> _validatorMock;
 
     public UserUpdateInfoServiceTests()
     {
@@ -24,7 +27,8 @@ public class UserUpdateInfoServiceTests
         _userUpdaterMock = new Mock<IUserUpdater>();
         _mapperMock = new Mock<IMapper>();
 
-        _sut = new RelationshipAnalysis.Services.Panel.UserPanelServices.UserUpdateInfoService.UserUpdateInfoService(_validatorMock.Object, _userUpdaterMock.Object, _mapperMock.Object);
+        _sut = new RelationshipAnalysis.Services.Panel.UserPanelServices.UserUpdateInfoService.UserUpdateInfoService(
+            _validatorMock.Object, _userUpdaterMock.Object, _mapperMock.Object);
     }
 
     [Fact]

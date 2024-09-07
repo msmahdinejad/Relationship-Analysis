@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using RelationshipAnalysis.Dto;
+﻿using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Panel.User;
 using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Models.Auth;
@@ -15,9 +14,13 @@ public class UserUpdatePasswordServiceValidator(
 {
     public Task<ActionResponse<MessageDto>> Validate(User user, UserPasswordInfoDto passwordInfoDto)
     {
-        if (user is null) return Task.FromResult(messageResponseCreator.Create(StatusCodeType.NotFound, Resources.UserNotFoundMessage));
+        if (user is null)
+            return Task.FromResult(
+                messageResponseCreator.Create(StatusCodeType.NotFound, Resources.UserNotFoundMessage));
         if (!passwordVerifier.VerifyPasswordHash(passwordInfoDto.OldPassword, user.PasswordHash))
-            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest, Resources.WrongOldPasswordMessage));
-        return Task.FromResult(messageResponseCreator.Create(StatusCodeType.Success, Resources.SuccessfulUpdateUserMessage));
+            return Task.FromResult(messageResponseCreator.Create(StatusCodeType.BadRequest,
+                Resources.WrongOldPasswordMessage));
+        return Task.FromResult(messageResponseCreator.Create(StatusCodeType.Success,
+            Resources.SuccessfulUpdateUserMessage));
     }
 }
