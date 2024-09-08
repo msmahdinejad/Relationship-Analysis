@@ -4,49 +4,51 @@ using RelationshipAnalysis.Dto.Graph;
 using RelationshipAnalysis.Services.GraphServices.Abstraction;
 using RelationshipAnalysis.Services.GraphServices.Graph.Abstraction;
 
-namespace RelationshipAnalysis.Services.GraphServices;
 
-public class ExpansionGraphReceiver(IServiceProvider serviceProvider, IGraphDtoCreator graphDtoCreator)
-    : IExpansionGraphReceiver
+namespace RelationshipAnalysis.Services.GraphServices.Graph
 {
-    public async Task<GraphDto> GetExpansionGraph(int nodeId, string sourceCategoryName, string targetCategoryName,
-        string edgeCategoryName)
+    public class ExpansionGraphReceiver(IServiceProvider serviceProvider, IGraphDtoCreator graphDtoCreator,
+        IExpansionCategoriesValidator expansionCategoriesValidator) : IExpansionGraphReceiver
     {
-        using var scope = serviceProvider.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        var inputNodes = await GetInputNodes(context, sourceCategoryName);
-        var outputNodes = await GetOutputNodes(context, targetCategoryName);
-        var validEdges = await GetValidEdges(nodeId, context, edgeCategoryName, inputNodes, outputNodes);
+        public async Task<GraphDto> GetExpansionGraph(int nodeId, string sourceCategoryName, string targetCategoryName, string edgeCategoryName)
+        {
+            using var scope = serviceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        return graphDtoCreator.CreateResultGraphDto(inputNodes.Union(outputNodes).ToList(), validEdges);
-    }
 
-    private async Task<List<Models.Graph.Edge.Edge>> GetValidEdges(int nodeId, ApplicationDbContext context,
-        string edgeCategoryName, List<Models.Graph.Node.Node> inputNodes,
-        List<Models.Graph.Node.Node> outputNodes)
-    {
-        var validEdges = await context.Edges.Where(e =>
-            (e.EdgeSourceNodeId == nodeId || e.EdgeDestinationNodeId == nodeId) &&
-            e.EdgeCategory.EdgeCategoryName == edgeCategoryName &&
-            inputNodes.Contains(e.NodeSource) &&
-            outputNodes.Contains(e.NodeDestination)).ToListAsync();
-        return validEdges;
-    }
+            var (isValid, graphDto) = await expansionCategoriesValidator.ValidateCategories(sourceCategoryName, targetCategoryName, edgeCategoryName);
+            if (!isValid)
+            {
+                return graphDto;
+            }
 
-    private async Task<List<Models.Graph.Node.Node>> GetOutputNodes(ApplicationDbContext context,
-        string targetCategoryName)
-    {
-        var outputNodes =
-            await context.Nodes.Where(n => n.NodeCategory.NodeCategoryName == targetCategoryName).ToListAsync();
-        return outputNodes;
-    }
+            var allEdges = await context.Edges.ToListAsync(); 
+            var validEdges = GetValidEdges(nodeId, allEdges, edgeCategoryName, sourceCategoryName, targetCategoryName);
+            var validNodes = GetValidNodes(validEdges);
 
-    private async Task<List<Models.Graph.Node.Node>> GetInputNodes(ApplicationDbContext context,
-        string sourceCategoryName)
-    {
-        var inputNodes =
-            await context.Nodes.Where(n => n.NodeCategory.NodeCategoryName == sourceCategoryName).ToListAsync();
-        return inputNodes;
+            return graphDtoCreator.CreateResultGraphDto(validNodes, validEdges);
+        }
+
+        private List<Models.Graph.Node.Node> GetValidNodes(List<Models.Graph.Edge.Edge> validEdges)
+        {
+            var validNodes = new HashSet<Models.Graph.Node.Node>();
+            validEdges.ForEach(e => validNodes.Add(e.NodeSource));
+            validEdges.ForEach(e => validNodes.Add(e.NodeDestination));
+            return validNodes.ToList();
+        }
+
+        private List<Models.Graph.Edge.Edge> GetValidEdges(int nodeId, List<Models.Graph.Edge.Edge> edges,
+            string edgeCategoryName, string sourceCategory, string targetCategory)
+        {
+            var categoryEdges = edges.FindAll(e => e.EdgeCategory.EdgeCategoryName == edgeCategoryName);
+            var inEdges = categoryEdges.FindAll(e =>
+                e.EdgeDestinationNodeId == nodeId && e.NodeSource.NodeCategory.NodeCategoryName == sourceCategory);
+            var outEdges = categoryEdges.FindAll(e =>
+                e.EdgeSourceNodeId == nodeId &&
+                e.NodeDestination.NodeCategory.NodeCategoryName == targetCategory);
+            var resultEdges = inEdges.Union(outEdges).ToList();
+            return resultEdges;
+        }
     }
 }

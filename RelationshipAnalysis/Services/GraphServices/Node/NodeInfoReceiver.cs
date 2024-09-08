@@ -3,7 +3,7 @@ using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Services.GraphServices.Abstraction;
 
-namespace RelationshipAnalysis.Services.GraphServices;
+namespace RelationshipAnalysis.Services.GraphServices.Node;
 
 public class NodeInfoReceiver(IServiceProvider serviceProvider) : IInfoReceiver
 {
