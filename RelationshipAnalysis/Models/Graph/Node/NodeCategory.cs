@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RelationshipAnalysis.Models.Graph.Node;
 
-[Index(nameof(NodeCategoryName), IsUnique = true)]
+//[Index(nameof(NodeCategoryName), IsUnique = true)]
 public class NodeCategory
 {
     [Key] public int NodeCategoryId { get; set; }

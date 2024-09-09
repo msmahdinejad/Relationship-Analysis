@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace RelationshipAnalysis.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -229,22 +229,9 @@ namespace RelationshipAnalysis.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EdgeAttributes_EdgeAttributeName",
-                table: "EdgeAttributes",
-                column: "EdgeAttributeName",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EdgeCategories_EdgeCategoryName",
-                table: "EdgeCategories",
-                column: "EdgeCategoryName",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Edges_EdgeCategoryId_EdgeUniqueString",
+                name: "IX_Edges_EdgeCategoryId",
                 table: "Edges",
-                columns: new[] { "EdgeCategoryId", "EdgeUniqueString" },
-                unique: true);
+                column: "EdgeCategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Edges_EdgeDestinationNodeId",
@@ -262,22 +249,9 @@ namespace RelationshipAnalysis.Migrations
                 column: "EdgeAttributeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EdgeValues_EdgeId_EdgeAttributeId",
+                name: "IX_EdgeValues_EdgeId",
                 table: "EdgeValues",
-                columns: new[] { "EdgeId", "EdgeAttributeId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NodeAttributes_NodeAttributeName",
-                table: "NodeAttributes",
-                column: "NodeAttributeName",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NodeCategories_NodeCategoryName",
-                table: "NodeCategories",
-                column: "NodeCategoryName",
-                unique: true);
+                column: "EdgeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Nodes_NodeCategoryId",
@@ -285,21 +259,14 @@ namespace RelationshipAnalysis.Migrations
                 column: "NodeCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Nodes_NodeUniqueString_NodeCategoryId",
-                table: "Nodes",
-                columns: new[] { "NodeUniqueString", "NodeCategoryId" },
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_NodeValues_NodeAttributeId",
                 table: "NodeValues",
                 column: "NodeAttributeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NodeValues_NodeId_NodeAttributeId",
+                name: "IX_NodeValues_NodeId",
                 table: "NodeValues",
-                columns: new[] { "NodeId", "NodeAttributeId" },
-                unique: true);
+                column: "NodeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Roles_Name",

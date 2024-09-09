@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RelationshipAnalysis.Models.Graph.Node;
 
-[Index(nameof(NodeId), nameof(NodeAttributeId), IsUnique = true)]
+//[Index(nameof(NodeId), nameof(NodeAttributeId), IsUnique = true)]
 public class NodeValue
 {
     [Key] public int ValueId { get; set; }

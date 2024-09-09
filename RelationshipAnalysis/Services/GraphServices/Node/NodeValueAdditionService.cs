@@ -24,7 +24,7 @@ public class NodeValueAdditionService : INodeValueAdditionService
         };
 
         await context.AddAsync(newNodeValue);
-        await context.SaveChangesAsync();
+        // await context.SaveChangesAsync();
     }
 
     private async Task<NodeValue?> GetNodeValue(ApplicationDbContext context, Models.Graph.Node.Node newNode,
@@ -39,16 +39,18 @@ public class NodeValueAdditionService : INodeValueAdditionService
     private async Task<NodeAttribute> GetNewNodeAttribute(ApplicationDbContext context,
         KeyValuePair<string, object> kvp)
     {
-        var newNodeAttribute = await context.NodeAttributes.SingleOrDefaultAsync(na =>
-            na.NodeAttributeName == kvp.Key);
+        
+        var newNodeAttribute = await context.NodeAttributes.FirstOrDefaultAsync(na => na.NodeAttributeName == kvp.Key);
+        
         if (newNodeAttribute == null)
         {
             newNodeAttribute = new NodeAttribute
             {
+                NodeAttributeId = ++context.LastNodeAttribute,
                 NodeAttributeName = kvp.Key
             };
             await context.AddAsync(newNodeAttribute);
-            await context.SaveChangesAsync();
+            // await context.SaveChangesAsync();
         }
 
         return newNodeAttribute;

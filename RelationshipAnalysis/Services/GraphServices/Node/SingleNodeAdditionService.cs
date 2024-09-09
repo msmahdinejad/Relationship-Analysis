@@ -29,13 +29,14 @@ public class SingleNodeAdditionService(INodeValueAdditionService nodeValueAdditi
         {
             newNode = new Models.Graph.Node.Node
             {
+                NodeId = ++context.LastNode,
                 NodeUniqueString = (string)record[uniqueHeaderName],
                 NodeCategoryId = nodeCategoryId
             };
 
 
             await context.AddAsync(newNode);
-            await context.SaveChangesAsync();
+            // await context.SaveChangesAsync();
         }
 
         return newNode;

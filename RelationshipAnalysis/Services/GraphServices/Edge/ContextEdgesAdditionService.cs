@@ -31,6 +31,7 @@ public class ContextEdgesAdditionService(
                         sourceCategory.NodeCategoryId, targetCategory.NodeCategoryId);
                 }
 
+                await context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
             catch (Exception e)
@@ -40,6 +41,6 @@ public class ContextEdgesAdditionService(
             }
         }
 
-        return responseCreator.Create(StatusCodeType.Success, Resources.SuccessfulNodeAdditionMessage);
+        return responseCreator.Create(StatusCodeType.Success, Resources.SuccessfulEdgeAdditionMessage);
     }
 }

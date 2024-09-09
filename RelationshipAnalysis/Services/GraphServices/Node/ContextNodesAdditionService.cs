@@ -25,6 +25,7 @@ public class ContextNodesAdditionService(
                         nodeCategory.NodeCategoryId);
                 }
 
+                await context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }
             catch (Exception e)

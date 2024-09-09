@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RelationshipAnalysis.Models.Graph.Edge;
 
-[Index(nameof(EdgeCategoryName), IsUnique = true)]
+//[Index(nameof(EdgeCategoryName), IsUnique = true)]
 public class EdgeCategory
 {
     [Key] public int EdgeCategoryId { get; set; }

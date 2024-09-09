@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RelationshipAnalysis.Models.Graph.Edge;
 
-[Index(nameof(EdgeId), nameof(EdgeAttributeId), IsUnique = true)]
+//[Index(nameof(EdgeId), nameof(EdgeAttributeId), IsUnique = true)]
 public class EdgeValue
 {
     [Key] public int ValueId { get; set; }

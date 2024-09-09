@@ -10,16 +10,16 @@ public class EdgeValueAdditionService : IEdgeValueAdditionService
     public async Task AddKvpToValues(ApplicationDbContext context, KeyValuePair<string, object> kvp,
         Models.Graph.Edge.Edge newEdge)
     {
-        var newEdgeAttribute = await context.EdgeAttributes.SingleOrDefaultAsync(na =>
-            na.EdgeAttributeName == kvp.Key);
+        var newEdgeAttribute = await context.EdgeAttributes.FirstOrDefaultAsync(na => na.EdgeAttributeName == kvp.Key);
         if (newEdgeAttribute == null)
         {
             newEdgeAttribute = new EdgeAttribute
             {
+                EdgeAttributeId = ++context.LastEdgeAttribute,
                 EdgeAttributeName = kvp.Key
             };
             await context.AddAsync(newEdgeAttribute);
-            await context.SaveChangesAsync();
+            // await context.SaveChangesAsync();
         }
 
         var value = await context.EdgeValues.SingleOrDefaultAsync(nv =>
@@ -36,6 +36,6 @@ public class EdgeValueAdditionService : IEdgeValueAdditionService
         };
 
         await context.AddAsync(newEdgeValue);
-        await context.SaveChangesAsync();
+        // await context.SaveChangesAsync();
     }
 }

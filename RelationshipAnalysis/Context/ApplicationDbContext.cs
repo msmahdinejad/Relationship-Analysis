@@ -7,11 +7,22 @@ namespace RelationshipAnalysis.Context;
 
 public class ApplicationDbContext : DbContext
 {
+
+    public int LastNode { get; set; }
+    public int LastNodeAttribute { get; set; }
+    public int LastEdge { get; set; }
+    public int LastEdgeAttribute { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
+        LastNode = Nodes?.Count() ?? 0;
+        LastNodeAttribute = NodeAttributes?.Count() ?? 0;
+        LastEdge = Edges?.Count() ?? 0;
+        LastEdgeAttribute = EdgeAttributes?.Count() ?? 0;
     }
 
+
+    
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
