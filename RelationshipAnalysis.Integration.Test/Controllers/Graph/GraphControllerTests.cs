@@ -9,7 +9,7 @@ using RelationshipAnalysis.Models.Auth;
 using RelationshipAnalysis.Models.Graph.Edge;
 using RelationshipAnalysis.Models.Graph.Node;
 using RelationshipAnalysis.Services.AuthServices;
-using RelationshipAnalysis.Settings.JWT;
+using RelationshipAnalysis.Settings.Authentication;
 
 namespace RelationshipAnalysis.Integration.Test.Controllers.Graph;
 

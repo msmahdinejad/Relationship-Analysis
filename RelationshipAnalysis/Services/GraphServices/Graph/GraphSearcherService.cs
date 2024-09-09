@@ -5,6 +5,7 @@ using RelationshipAnalysis.Enums;
 using RelationshipAnalysis.Services.GraphServices.Abstraction;
 using RelationshipAnalysis.Services.GraphServices.Edge.Abstraction;
 using RelationshipAnalysis.Services.GraphServices.Graph.Abstraction;
+using RelationshipAnalysis.Services.GraphServices.Node.Abstraction;
 using ApplicationDbContext = RelationshipAnalysis.Context.ApplicationDbContext;
 
 namespace RelationshipAnalysis.Services.GraphServices.Graph

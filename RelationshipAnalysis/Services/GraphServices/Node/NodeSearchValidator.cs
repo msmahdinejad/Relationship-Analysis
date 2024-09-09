@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RelationshipAnalysis.Context;
 using RelationshipAnalysis.Services.GraphServices.Abstraction;
+using RelationshipAnalysis.Services.GraphServices.Node.Abstraction;
 
 namespace RelationshipAnalysis.Services.GraphServices.Node;
 

@@ -42,7 +42,9 @@ using RelationshipAnalysis.Services.Panel.UserPanelServices.UserUpdateInfoServic
 using RelationshipAnalysis.Services.Panel.UserPanelServices.UserUpdateInfoService.Abstraction;
 using RelationshipAnalysis.Services.Panel.UserPanelServices.UserUpdatePasswordService;
 using RelationshipAnalysis.Services.Panel.UserPanelServices.UserUpdatePasswordService.Abstraction;
-using RelationshipAnalysis.Settings.JWT;
+using RelationshipAnalysis.Settings.Authentication;
+using RelationshipAnalysis.Settings.DbContext;
+using RelationshipAnalysis.Settings.Services;
 using EdgeAttributesReceiver = RelationshipAnalysis.Services.GraphServices.Edge.EdgeAttributesReceiver;
 using NodeAttributesReceiver = RelationshipAnalysis.Services.GraphServices.Node.NodeAttributesReceiver;
 
@@ -53,111 +55,16 @@ builder.Configuration
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration["CONNECTION_STRING"]).UseLazyLoadingProxies());
 
-builder.Services.AddSingleton<ICookieSetter, CookieSetter>()
-    .AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>()
-    .AddSingleton<ILoginService, LoginService>()
-    .AddSingleton<IPermissionService, PermissionService>()
-    .AddSingleton<IPasswordHasher, CustomPasswordHasher>()
-    .AddSingleton<IAllUserService, AllUserService>()
-    .AddSingleton<IUserUpdateInfoService, UserUpdateInfoService>()
-    .AddSingleton<IUserDeleteService, UserDeleteService>()
-    .AddSingleton<IUserReceiver, UserReceiver>()
-    .AddSingleton<IUserUpdatePasswordService, UserUpdatePasswordService>()
-    .AddSingleton<IUserInfoService, UserInfoService>()
-    .AddSingleton<IPasswordVerifier, PasswordVerifier>()
-    .AddSingleton<IRoleReceiver, RoleReceiver>()
-    .AddSingleton<ILogoutService, LogoutService>()
-    .AddSingleton<IUserCreateService, UserCreateService>()
-    .AddSingleton<IUserUpdateRolesService, UserUpdateRolesService>()
-    .AddSingleton<INodeCategoryReceiver, NodeCategoryReceiver>()
-    .AddSingleton<IEdgeCategoryReceiver, EdgeCategoryReceiver>()
-    .AddSingleton<ICreateNodeCategoryService, CreateNodeCategoryService>()
-    .AddSingleton<ICreateEdgeCategoryService, CreateEdgeCategoryService>()
-    .AddSingleton<IGraphReceiver, GraphReceiver>()
-    .AddSingleton<IUserUpdateRolesService, UserUpdateRolesService>()
-    .AddSingleton<IGraphReceiver, GraphReceiver>()
-    .AddSingleton<INodesAdditionService, NodesAdditionService>()
-    .AddSingleton<ISingleNodeAdditionService, SingleNodeAdditionService>()
-    .AddSingleton<ICsvProcessorService, CsvProcessorService>()
-    .AddSingleton<ISingleEdgeAdditionService, SingleEdgeAdditionService>()
-    .AddSingleton<IEdgesAdditionService, EdgesAdditionService>()
-    .AddSingleton<IMessageResponseCreator, MessageResponseCreator>()
-    .AddSingleton<IUserUpdatePasswordServiceValidator, UserUpdatePasswordServiceValidator>()
-    .AddSingleton<IUserUpdateInfoServiceValidator, UserUpdateInfoServiceValidator>()
-    .AddSingleton<IUserOutputInfoDtoCreator, UserOutputInfoDtoCreator>()
-    .AddSingleton<IUserInfoServiceValidator, UserInfoServiceValidator>()
-    .AddSingleton<IUserUpdateRolesServiceValidator, UserUpdateRolesServiceValidator>()
-    .AddSingleton<IUserDeleteServiceValidator, UserDeleteServiceValidator>()
-    .AddSingleton<IUserCreateServiceValidator, UserCreateServiceValidator>()
-    .AddSingleton<ICreateUserDtoMapper, CreateUserDtoMapper>()
-    .AddSingleton<IAllUserServiceValidator, AllUserServiceValidator>()
-    .AddSingleton<IAllUserDtoCreator, AllUserDtoCreator>()
-    .AddSingleton<IPermissionsReceiver, PermissionsReceiver>()
-    .AddSingleton<IRoleReceiver, RoleReceiver>()
-    .AddSingleton<IUserAdder, UserAdder>()
-    .AddSingleton<IUserDeleter, UserDeleter>()
-    .AddSingleton<IUserReceiver, UserReceiver>()
-    .AddSingleton<IUserUpdater, UserUpdater>()
-    .AddSingleton<IUserRolesAdder, UserRolesAdder>()
-    .AddSingleton<IUserRolesRemover, UserRolesRemover>()
-    .AddSingleton<ICsvValidatorService, CsvValidatorService>()
-    .AddSingleton<ICsvValidatorService, CsvValidatorService>()
-    .AddSingleton<IGraphDtoCreator, GraphDtoCreator>()
-    .AddSingleton<IContextNodesAdditionService, ContextNodesAdditionService>()
-    .AddSingleton<INodeValueAdditionService, NodeValueAdditionService>()
-    .AddSingleton<IEdgeValueAdditionService, EdgeValueAdditionService>()
-    .AddSingleton<IContextEdgesAdditionService, ContextEdgesAdditionService>()
-    .AddSingleton<IContextNodesAdditionService, ContextNodesAdditionService>()
-    .AddSingleton<ICsvValidatorService, CsvValidatorService>()
-    .AddSingleton<IExpansionGraphReceiver, ExpansionGraphReceiver>()
-    .AddSingleton<IGraphDtoCreator, GraphDtoCreator>()
-    .AddSingleton<IGraphSearcherService, GraphSearcherService>()
-    .AddSingleton<IExpansionCategoriesValidator, ExpansionCategoriesValidator>()
-    .AddSingleton<IClauseValidatorService, ClauseValidatorService>()
-    .AddSingleton<ISearchEdgeValidator,EdgeSearchValidator>()
-    .AddSingleton<ISearchNodeValidator, NodeSearchValidator>()
-    .AddKeyedSingleton<ICategoryNameValidator, NodeCategoryNameValidator>("node")
-    .AddKeyedSingleton<ICategoryNameValidator, EdgeCategoryNameValidator>("edge")
-    .AddKeyedSingleton<IInfoReceiver, NodeInfoReceiver>("node")
-    .AddKeyedSingleton<IInfoReceiver, EdgeInfoReceiver>("edge")
-    .AddKeyedSingleton<IAttributesReceiver, NodeAttributesReceiver>("node")
-    .AddKeyedSingleton<IAttributesReceiver, EdgeAttributesReceiver>("edge");
+
+builder.Services.AddApplicationDbContext(builder.Configuration);
+builder.Services.AddCustomServices();
 
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddAutoMapper(typeof(UserUpdateInfoMapper));
 
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
-        };
-
-        options.Events = new JwtBearerEvents
-        {
-            OnMessageReceived = context =>
-            {
-                var cookie = context.Request.Cookies[jwtSettings.CookieName];
-                if (!string.IsNullOrEmpty(cookie)) context.Token = cookie;
-                return Task.CompletedTask;
-            }
-        };
-    });
-
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

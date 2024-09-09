@@ -9,7 +9,7 @@ using RelationshipAnalysis.Dto.Panel.Admin;
 using RelationshipAnalysis.Dto.Panel.User;
 using RelationshipAnalysis.Models.Auth;
 using RelationshipAnalysis.Services.AuthServices;
-using RelationshipAnalysis.Settings.JWT;
+using RelationshipAnalysis.Settings.Authentication;
 
 namespace RelationshipAnalysis.Integration.Test.Controllers.Panel;
 

@@ -10,7 +10,7 @@ using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Graph.Node;
 using RelationshipAnalysis.Models.Auth;
 using RelationshipAnalysis.Services.AuthServices;
-using RelationshipAnalysis.Settings.JWT;
+using RelationshipAnalysis.Settings.Authentication;
 
 namespace RelationshipAnalysis.Integration.Test.Controllers.Graph;
 

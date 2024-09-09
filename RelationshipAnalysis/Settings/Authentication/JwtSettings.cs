@@ -1,4 +1,4 @@
-﻿namespace RelationshipAnalysis.Settings.JWT;
+﻿namespace RelationshipAnalysis.Settings.Authentication;
 
 public class JwtSettings
 {

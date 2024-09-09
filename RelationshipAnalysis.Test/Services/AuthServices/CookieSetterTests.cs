@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using Moq;
 using RelationshipAnalysis.Services.AuthServices;
-using RelationshipAnalysis.Settings.JWT;
+using RelationshipAnalysis.Settings.Authentication;
 
 namespace RelationshipAnalysis.Test.Services.AuthServices;
 

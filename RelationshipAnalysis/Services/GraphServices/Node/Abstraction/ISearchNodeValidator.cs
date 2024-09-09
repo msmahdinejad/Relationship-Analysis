@@ -1,4 +1,4 @@
-namespace RelationshipAnalysis.Services.GraphServices.Abstraction;
+namespace RelationshipAnalysis.Services.GraphServices.Node.Abstraction;
 
 public interface ISearchNodeValidator
 {

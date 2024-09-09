@@ -7,7 +7,7 @@ using RelationshipAnalysis.Dto;
 using RelationshipAnalysis.Dto.Graph.Edge;
 using RelationshipAnalysis.Models.Auth;
 using RelationshipAnalysis.Services.AuthServices;
-using RelationshipAnalysis.Settings.JWT;
+using RelationshipAnalysis.Settings.Authentication;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace RelationshipAnalysis.Integration.Test.Controllers.Graph;

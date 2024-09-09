@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using RelationshipAnalysis.Services.AuthServices.Abstraction;
-using RelationshipAnalysis.Settings.JWT;
+using RelationshipAnalysis.Settings.Authentication;
 
 namespace RelationshipAnalysis.Services.AuthServices;
 
