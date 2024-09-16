@@ -37,7 +37,7 @@ public class ContextEdgesAdditionService(
             catch (Exception e)
             {
                 await transaction.RollbackAsync();
-                return responseCreator.Create(StatusCodeType.BadRequest, e.Message);
+                return responseCreator.Create(StatusCodeType.BadRequest, e.Message + e.InnerException);
             }
         }
 

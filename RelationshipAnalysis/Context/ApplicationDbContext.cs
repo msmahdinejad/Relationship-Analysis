@@ -8,20 +8,26 @@ namespace RelationshipAnalysis.Context;
 public class ApplicationDbContext : DbContext
 {
 
-    public int LastNode { get; set; }
-    public int LastNodeAttribute { get; set; }
-    public int LastEdge { get; set; }
-    public int LastEdgeAttribute { get; set; }
+    public int LastNode => this.Nodes.Count() + this.ChangeTracker
+        .Entries<Node>()
+        .Count(e => e.State == EntityState.Added);
+
+    public int LastNodeAttribute => this.NodeAttributes.Count() + this.ChangeTracker
+        .Entries<NodeAttribute>()
+        .Count(e => e.State == EntityState.Added);
+
+    public int LastEdge => this.Edges.Count() + this.ChangeTracker
+        .Entries<Edge>()
+        .Count(e => e.State == EntityState.Added);
+
+    public int LastEdgeAttribute=> this.EdgeAttributes.Count() + this.ChangeTracker
+        .Entries<EdgeAttribute>()
+        .Count(e => e.State == EntityState.Added);
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
-        LastNode = Nodes?.Count() ?? 0;
-        LastNodeAttribute = NodeAttributes?.Count() ?? 0;
-        LastEdge = Edges?.Count() ?? 0;
-        LastEdgeAttribute = EdgeAttributes?.Count() ?? 0;
+        
     }
-
-
     
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }

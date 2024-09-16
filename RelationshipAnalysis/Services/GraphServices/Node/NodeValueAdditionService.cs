@@ -46,7 +46,7 @@ public class NodeValueAdditionService : INodeValueAdditionService
         {
             newNodeAttribute = new NodeAttribute
             {
-                NodeAttributeId = ++context.LastNodeAttribute,
+                NodeAttributeId = context.LastNodeAttribute + 1,
                 NodeAttributeName = kvp.Key
             };
             await context.AddAsync(newNodeAttribute);

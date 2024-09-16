@@ -9,7 +9,6 @@ public static class DbContextExtensions
     {
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration["CONNECTION_STRING"]).UseLazyLoadingProxies());
-            
         return services;
     }
 }

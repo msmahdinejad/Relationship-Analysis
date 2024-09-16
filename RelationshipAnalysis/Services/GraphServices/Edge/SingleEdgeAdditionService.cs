@@ -13,11 +13,20 @@ public class SingleEdgeAdditionService(IEdgeValueAdditionService edgeValueAdditi
         string uniqueSourceHeaderName,
         string uniqueTargetHeaderName, int edgeCategoryId, int sourceNodeCategoryId, int targetNodeCategoryId)
     {
-        if (((string)record[uniqueHeaderName]).IsNullOrEmpty()) throw new Exception(Resources.FailedAddRecordsMessage);
+        if (((string)record[uniqueHeaderName]).IsNullOrEmpty())
+        {
+            throw new Exception(Resources.FailedAddRecordsMessage);
+        }
+
         if (((string)record[uniqueSourceHeaderName]).IsNullOrEmpty())
+        {
             throw new Exception(Resources.FailedAddRecordsMessage);
+        }
+
         if (((string)record[uniqueTargetHeaderName]).IsNullOrEmpty())
+        {
             throw new Exception(Resources.FailedAddRecordsMessage);
+        }
 
         var source = await GetSourceNode(context, record, uniqueSourceHeaderName, sourceNodeCategoryId);
         if (source == null)
@@ -60,7 +69,7 @@ public class SingleEdgeAdditionService(IEdgeValueAdditionService edgeValueAdditi
         {
             newEdge = new Models.Graph.Edge.Edge
             {
-                EdgeId = ++context.LastEdge,
+                EdgeId = context.LastEdge + 1,
                 EdgeUniqueString = (string)record[uniqueHeaderName],
                 EdgeSourceNodeId = source.NodeId,
                 EdgeDestinationNodeId = target.NodeId,

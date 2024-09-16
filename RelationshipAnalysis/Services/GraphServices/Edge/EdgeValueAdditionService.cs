@@ -15,7 +15,7 @@ public class EdgeValueAdditionService : IEdgeValueAdditionService
         {
             newEdgeAttribute = new EdgeAttribute
             {
-                EdgeAttributeId = ++context.LastEdgeAttribute,
+                EdgeAttributeId = context.LastEdgeAttribute + 1,
                 EdgeAttributeName = kvp.Key
             };
             await context.AddAsync(newEdgeAttribute);

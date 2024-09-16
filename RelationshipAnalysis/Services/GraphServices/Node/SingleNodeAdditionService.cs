@@ -29,7 +29,7 @@ public class SingleNodeAdditionService(INodeValueAdditionService nodeValueAdditi
         {
             newNode = new Models.Graph.Node.Node
             {
-                NodeId = ++context.LastNode,
+                NodeId = context.LastNode + 1,
                 NodeUniqueString = (string)record[uniqueHeaderName],
                 NodeCategoryId = nodeCategoryId
             };
