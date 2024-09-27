@@ -22,7 +22,7 @@ The front-end portion of this project was developed by a two-person team consist
 - [**Arash Azarpoor**](https://github.com/Arash-Azarpoor)(Front-end)
 - [**Armin Moradi**](https://github.com/Arminmow)(Front-end)
 
-You can find the front-end repository [here](https://github.com/Star-Academy/Summer1403-Project-Group04-Frontend).
+You can find the **front-end repository** [here](https://github.com/Star-Academy/Summer1403-Project-Group04-Frontend).
 
 ---
 
