@@ -64,9 +64,6 @@ Visualization is one of the most effective ways to analyze data. By representing
 
    ![Introduction Image](readme-media/expand.gif)
 
-### 5. Sanitizer Middleware
-- To enhance security and data integrity, sanitizer middleware was integrated to ensure all input data is properly sanitized before processing. This prevents injection attacks and ensures that the data conforms to expected formats.
-
 ---
 
 ## Challenges, Benefits, and Key Learnings
